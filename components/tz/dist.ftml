@@ -1,0 +1,174 @@
+[[iftags +template]]
+
+[[div style="display: none;"]]
+[[include :topia:cqb:css]]
+[[/div]]
+
+[[module CSS]]
+td { vertical-align: top; }
+.options table.wiki-content-table td { border: none; padding: 0.7em 1em; }
+[[/module]]
+
+[[div style="border: 1px solid #ddd; padding: 1em;"]]
++ What this is
+
+A component that displays a given time and/or date in the reader's timezone.
+
+The reader's timezone will be automatically calculated. All you need to do is input the timezone of the time you want on the page.
+
+If your timezone matches the reader's timezone, this module will not appear. This is intentional! It will still be there for readers who need it.
+
+Please note the following Daylight Savings Time exceptions: both "EST" and "EDT", when entered into this component, are converted to the America/New_York timezone, which is then converted to either EST or EDT depending on the time of year. "BST" is converted to Europe/London, which is then converted to either GMT or BST depending on the time of year. To avoid this confusion, **please avoid using timezones that vary depending on DST!** Use a static timezone like UTC.
+
+[[=]]
+[http://scp-sandbox-3.wikidot.com/tz-demo >>> DEMO <<<]
+[[/=]]
+
++ Usage
+
+On any wiki:
+
+[[div class="code"]]
+##blue|**[[include :scp-wiki:component:tz**##
+##blue|**|**## ##green|time####blue|**=**##18:00
+##blue|**|**## ##green|tz####blue|**=**##UTC
+##blue|**]]**##
+[[/div]]
+
+A setting in //italics// is //optional//. Everything else you gotta have. If you omit an //optional// setting, then it will have its default value. If you omit a non-optional setting, then don't expect the component to work properly.
+
+To omit a setting, leave it out completely.
+
+[[div class="options"]]
+|| **time** || The time of the event. Times should be two digits followed by a colon followed by two digits. "18:30" is good. "1830", "6:30 PM" and "half past six in the afternoon" are bad. ||
+|| **//tz//** _
+//(Optional)// || The timezone of the time that you're entering. _
+//Default value: UTC// ||
+|| **//date//** _
+//(Optional)// || The date of the event in ISO format: YYYY-MM-DD. _
+The date might be used at some point to calculate "time until" stuff, but right now it's unused. _
+//Default value: today// ||
+|| **//text_before//** _
+//(Optional)// || The text that comes before the converted time. _
+//Default value: "${time} ${tz} is "// ||
+|| **//text_after//** _
+//(Optional)// || The text that comes after the converted time. _
+//Default value: "."// ||
+[[/div]]
+
+[[/div]]
+
+-----
+
+[[/iftags]]
+
+[[div_ class="timezone-thingy"]]
+[[html]]
+<head>
+  <script type="text/javascript">
+    let date = "{$date}";
+    let time = "{$time}";
+    let tz = "{$tz}";
+    let text_before = "{$text_before}";
+    let text_after = "{$text_after}";
+  </script>
+  <script src="http://scp-wiki.wdfiles.com/local--files/component%3Atz/moment.min.js"></script>
+  <script src="http://scp-wiki.wdfiles.com/local--files/component%3Atz/moment-timezone-with-data-10-year-range.min.js"></script>
+  <script src="http://scp-wiki.wikidot.com/local--code/component%3Atz/1"></script>
+  <link href="http://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css" rel="stylesheet">
+  <link href="http://www.scp-wiki.net/component:theme/code/1" rel="stylesheet">
+  <link href="http://scp-wiki.wikidot.com/local--code/component%3Atz/3" rel="stylesheet">
+</head>
+<body>
+  <div id="wrapper">
+    <p><img src="http://scp-wiki.wdfiles.com/local--files/component%3Atz/world.png"><img src="http://scp-wiki.wdfiles.com/local--files/component%3Atz/clock.png"> <span id="text_before"></span><span id="text_converted"></span><span id="text_after"></span></p>
+  </div>
+</body>
+[[/html]]
+[[/div]]
+
+[[module CSS]]
+@import url(http://scp-wiki.wikidot.com/local--code/component%3Atz/2);
+[[/module]]
+
+[[iftags +template]]
+~~~~~
+
+-----
+
++ Codebase
+
+++ HTML structure of the converter
+
+Unfortunately this is buried in the source code - you'll have to go digging for it!
+
+++ JS to operate the converter
+[[code type="javascript"]]
+document.addEventListener("DOMContentLoaded", function() {
+  console.log(date);
+  date = date === "{$date}" ? moment().format("Y-MM-DD") : date;
+  console.log(date);
+  tz = tz === "{$tz}" ? "UTC" : tz;
+  tz = tz === "EST" ? "America/New_York" : tz;
+  tz = tz === "EDT" ? "America/New_York" : tz;
+  tz = tz === "BST" ? "Europe/London" : tz;
+
+  given_time = moment.tz(date + " " + time, tz);
+  tz = given_time.format("z");
+
+  text_before = text_before === "{$text_before}" ? "${time} ${tz} is " : 
+text_before;
+  text_after = text_after === "{$text_after}" ? "." : text_after;
+  // eval is used here to convert text strings to template literals
+  // variables of the form ${var} will be parsed
+  text_before = eval('`' + text_before + '`');
+  text_after = eval('`' + text_after + '`');
+
+  user_tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  converted_time = given_time.tz(user_tz);
+  converted_time_tz = converted_time.format("HH:mm z");
+
+  console.log(given_time);
+  console.log(converted_time);
+
+  document.getElementById("text_before").textContent = text_before;
+  document.getElementById("text_converted").textContent = converted_time_tz;
+  document.getElementById("text_after").textContent = text_after;
+
+  if (converted_time.format("z") === tz) {
+    // e.g. displaying an EST time to an EST user - that's pointless!
+    document.documentElement.style.display = 'none';
+  }
+});
+[[/code]]
+
+++ CSS to style the output wrapper
+[[code type="css"]]
+.timezone-thingy { margin-top: -0.5rem; }
+.timezone-thingy iframe { border: none; max-height: 3.5rem; }
+[[/code]]
+
+++ CSS to style the output internally
+[[code type="css"]]
+#wrapper {
+  padding: 0.5rem !important;
+  border: 1px solid #660000;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(102,0,0,.5);
+  background: white;
+  margin: 0.5rem 0;
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#wrapper p {
+  margin: 0;
+}
+#wrapper img {
+  height: 1rem;
+  vertical-align: text-top;
+}
+[[/code]]
+
+[[/iftags]]
