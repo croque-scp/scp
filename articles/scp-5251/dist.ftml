@@ -1,0 +1,1307 @@
+SS]]
+/* Make 'redactions' invisible along with the header text and username */
+#header h1 a, #header h2 span, #header h2 span::before, #login-status, .no {
+    color: transparent;
+    text-shadow: none;
+}
+/* The redaction character is a little too wide, so thin it a little */
+.no {
+    letter-spacing: -1px;
+}
+
+/* Hide the original page title */
+#page-title {
+  display: none;
+}
+
+/* Make my fake page title look like the original (thanks SCP-2998) */
+.page-title {
+  border-bottom: solid 1px #bbbbbb;
+  color: #990011;
+  font-weight: normal;
+  margin: 0 0 0.6em;
+  padding: 0 0 0.25em;
+  font-size: 200%;
+}
+.page-title p {
+  margin: 0;
+}
+
+/* Notices at the top of the page */
+.notice {
+    border: solid 1px #999999;
+    background: #f2f2c2;
+    padding: 5px;
+    text-align: center;
+    margin: 1rem;
+}
+.raisa.notice {
+    background: #f2f2c2;
+}
+
+/* Set up variables for Parawatch quotes that would normally be from BHL */
+:root { --bg-dark: #f4f4f4; --bg-light: #999; }
+
+/* Parawatch Forum Pseudo-Blockquotes */
+div.parapost {
+    background:  var(--bg-dark);
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--bg-light);
+    padding: 0 1em;
+    margin: 1em 3em;
+}
+ 
+div.parapost.reply1 {margin: -0.5em 3em 1em 4em;}
+div.parapost.reply2 {margin: -0.5em 3em 1em 5em;}
+div.parapost.reply3 {margin: -0.5em 3em 1em 6em;}
+div.parapost.reply4 {margin: -0.5em 3em 1em 7em;}
+div.parapost.reply5 {margin: -0.5em 3em 1em 8em;}
+ 
+@media (max-width: 479px) {
+   div.parapost {margin: 1em 0;}
+   div.parapost.reply1 {margin: -0.5em 0 1em 1em;}
+   div.parapost.reply2 {margin: -0.5em 0 1em 2em;}
+   div.parapost.reply3 {margin: -0.5em 0 1em 3em;}
+   div.parapost.reply4 {margin: -0.5em 0 1em 4em;}
+   div.parapost.reply5 {margin: -0.5em 0 1em 5em;}
+}
+ 
+@media (min-width: 480px) and (max-width: 580px) {
+   div.parapost {margin: 0.5em;}
+   div.parapost.reply1 {margin: -0.5em 0.5em 0.5em 1em;}
+   div.parapost.reply2 {margin: -0.5em 0.5em 0.5em 1.5em;}
+   div.parapost.reply3 {margin: -0.5em 0.5em 0.5em 2em;}
+   div.parapost.reply4 {margin: -0.5em 0.5em 0.5em 2.5em;}
+   div.parapost.reply5 {margin: -0.5em 0.5em 0.5em 3em;}
+}
+[[/module]]
+
+[[div class="page-title" style="display: block;" id="#page-title"]]
+SCP-
+[[/div]]
+
+[[include :topia:cqb:css]]
+
+[[>]]
+[[module Rate]]
+[[/>]]
+
+[[div class="raisa notice"]]
+[[size larger]]**NOTICE FROM CONTAINMENT OFFICER**[[/size]]
+
+The following file is permanently locked. Reading this file is forbidden without adhering to specific instructions, which I will provide on request. Critically, do not attempt to understand what the object is or what it does (and DO NOT attempt to derive it from these instructions). I have left the internal threads attached to the research logs. The same rules apply.
+
+The object is neither Euclid nor Keter.
+
+-- Kseniya Limonova, HMCL Supervisor, Site-33
+2013-11-04
+[[/div]]
+
+[[=]]
+Unmodified file as of 1993-09-27 follows.
+[[/=]]
+
+[[div class="raisa notice"]]
+[[size larger]]**GENERAL NOTICE**[[/size]]
+
+Do not discuss it. Do not describe it. If you see it, stand still and shut the fuck up. If you need to tell someone about it, take their hand, drag them to a terminal, and point your finger at this notice.
+
+This notice takes priority over the Special Containment Procedures below, which should be ignored.
+
+-- Kseniya Limonova, Researcher, Site-33
+27.09.1993
+[[/div]]
+
+ _
+
+**Item #:** SCP-[[span class="no"]]████[[/span]]
+
+**Containment Class:** [[span class="no"]]████[[/span]]
+
+**Special Containment Procedures:** Do not [[span class="no"]]████████ ████[[/span]] SCP-[[span class="no"]]████ ███████ ████████ ████ ██[[/span]]. [[span class="no"]]█ ████████ ██ █ ██████ █████████[[/span]]. SCP-[[span class="no"]]████ ██ ██ ██ ████ ██ ███ ███████████ ████[[/span]], which was previously [[span class="no"]]█ ███████ ██████ ██ ████[[/span]]-[[span class="no"]]██[[/span]]. [[span class="no"]]███ ████ ██ ██ ██ ████ ██████ ██ ███ █████[[/span]]. [[span class="no"]]██ ██ █████████ ██ ████ ███████ ██ ██████ ████████████ ██[[/span]] SCP-[[span class="no"]]████ ███ ███ ████ ████████████ ███ ██ ██ █████████[[/span]].
+
+**Description:** SCP-[[span class="no"]]████ ██ █ █████[[/span]]-[[span class="no"]]█████ ███████ ███████[[/span]]. In all respects including [[span class="no"]]█████████████[[/span]] it is [[span class="no"]]█████████ ██ █ ███████ ███████ ███████[[/span]], however once [[span class="no"]]███████[[/span]], [[span class="no"]]██ ██████ ██ ██████ ███████████ ████ ███ ███████████ ████[[/span]]. Nearby objects [[span class="no"]]██████ █████[[/span]] and [[span class="no"]]██████████████[[/span]], and objects with known properties -- for example, a fountain pen of known monetary value -- [[span class="no"]]██████ ███████[[/span]]. [[span class="no"]]███ ██████ ███████ ██ ████████ ██ █████████ ████ ███████ ███████ █████████ ██ ███ ███████[[/span]].
+
+SCP-[[span class="no"]]████ ███ ██████████ ██ ███ █████████ ██ █ ████ ██████ ██ ████[[/span]], [[span class="no"]]███████[[/span]], [[span class="no"]]█[[/span]].[[span class="no"]]█[[/span]].[[span class="no"]]█[[/span]].[[span class="no"]]█[[/span]]. in [[span class="no"]]████[[/span]]. [[span class="no"]]█████ ██ ██ ███ █████[[/span]] how SCP-[[span class="no"]]████[[/span]]  came into the possession of [[span class="no"]]██[[/span]]. [[span class="no"]]██████[[/span]], [[span class="no"]]██ ███[[/span]] seemingly been aware [[span class="no"]]██ ███ █████████ ██████████[[/span]], [[span class="no"]]██ █████████████ ████ █████ ██ ███ ███████ ██ ███ ████████ ████ ████ ██████████ ██ ██████████ ██ ████████ ███ █████ ████ ██ ███ ██████[[/span]].
+
+[[span class="no"]]██ ████ ████ ██ ██ ███ █████ █████ ████ ██████ ██[[/span]], [[span class="no"]]███ ██ ███ ████ ██████ ██[[/span]] PoI-[[span class="no"]]████[[/span]].
+
+**Addendum:**
+
+[[div class="blockquote"]]
+**Experiment Log 01**
+
+**Date:** 15.09.1993
+**Experimenters:** Dr. K Limonova, Dr. R Vershinin
+
+**Procedure:** The setup found in [[span class="no"]]██[[/span]]. [[span class="no"]]██████[[/span]]'[[span class="no"]]█ ████████[[/span]] was recreated. Several objects were placed nearby, along with [[span class="no"]]███████[[/span]] inside [[span class="no"]]███ ███████[[/span]], with a range of [[span class="no"]]█████ ███ ███████ ██████████[[/span]]. For example, one such [[span class="no"]]████[[/span]] was a [[span class="no"]]███ ██████ ████[[/span]], but another was a [[span class="no"]]████ ██ ███████ ██████[[/span]] in an [[span class="no"]]██████[[/span]] box. SCP-[[span class="no"]]████[[/span]] was [[span class="no"]]█████████[[/span]] under [[span class="no"]]████████ █████████ ██████████ ██████████[[/span]].
+
+**Results:** Objects with [[span class="no"]]█████ ██████████ ████ ████[[/span]] and [[span class="no"]]██████ ███████[[/span]]. Objects with [[span class="no"]]███████ ██████████[[/span]] retained them. Objects where [[span class="no"]]███ ████████████ ████ █ ████████[[/span]] but the other did not only [[span class="no"]]████ ████ ████████[[/span]] from the [[span class="no"]]███████████ ██ ███ ███ ███ ████ ██[[/span]]. When that [[span class="no"]]████████[[/span]] was [[span class="no"]]████████████[[/span]], it was [[span class="no"]]████ ███ ████[[/span]]. The [[span class="no"]]███████[[/span]] inside the [[span class="no"]]███████ ████ ███ ██████████[[/span]] except the [[span class="no"]]████[[/span]] that they were [[span class="no"]]███████[[/span]].
+[[/div]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=15.09.1993 (TUE) | postno=5251E01M01
+| depth=0 | content=This is fantastic. I've never seen anything remotely like this -- the applications are endless. What's more, I've never had such a clear direction for future tests. I've sent you my [[span class="no"]]█████████[[/span]] for the coming week but feel free to make changes as you wish.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=15.09.1993 (TUE) | postno=5251E01M02
+| depth=1 | content=Honestly, I'm just in shock that we're not re-treading ground covered by [[span class="no"]]███ ████████ ██████[[/span]]. It's a little odd that he never worked this out himself. It seems so obvious. _
+ _
+[[span class="no"]]█████████[[/span]] received. I'll give this a look over when I have time.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=15.09.1993 (TUE) | postno=5251E01M05
+| depth=2 | content=One doesn't look at a gift horse's teeth.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M03
+| depth=0 | content=Kseniya, what did you say [[span class="no"]]███ ████████ ██████[[/span]]'s name was? I'm having some trouble with your comment up above.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M04
+| depth=1 | content=I never said his name, just that he was [[span class="no"]]███ ████████ ██████[[/span]]. His name was [[span class="no"]]████ ██████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=17.09.1993 (THU) | postno=5251E01M12
+| depth=2 | content=Ah, perfect. Thank you. Happy now?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=17.09.1993 (THU) | postno=5251E01M13
+| depth=3 | content=Yes, very happy.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M06
+| depth=0 | content=Perhaps he just never thought to investigate? He was clearly using it for [[span class="no"]]███████ ███ ███████[[/span]], as mundane as that is. Perhaps he just thought that was all it could do.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M07
+| depth=1 | content=Like I said, don't question it. But if you feel the need to also [[span class="no"]]████ ████ ███████[[/span]] in it, run it by me first.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M08
+| depth=1 | content=You might be right, but it still worries me. It's a small concern, yes, but something just doesn't add up. Why would he be hiding it if he thought it was just a [[span class="no"]]███████ ███████[[/span]]? And that doesn't explain why he also had a completely normal one. I don't know anybody who has two. _
+ _
+Also, please reply to comments by clicking the link below them. You're confusing the thread.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M09
+| depth=2 | content=It's a solved problem. Stop overthinking.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M10
+| depth=0 | content=Kseniya, I have been doing that already and have no intention of stopping. It's ten times faster than my one at home and does a way better job of making my [[span class="no"]]███████[[/span]] not [[span class="no"]]█████[[/span]]. Ranek, there are no links on command line, so I'm not sure what you're talking about.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=16.09.1993 (WED) | postno=5251E01M11
+| depth=1 | content=It's {{clf reply HASH}}, where HASH is the ID of the message you're replying to. You can add a message with {{-m}} if you want otherwise it just drops you into your editor, where you can see what you're replying to as a comment beneath the typing area. _
+ _
+For what it's worth, I don't actually care about you [[span class="no"]]███████ ████ ███████[[/span]] in it, but at least bother to take notes while you do it because then it would constitute a test. _
+ _
+Until then, I am just going to ignore you until you have something valid to contribute.
+]]
+
+ _
+
+[[div class="blockquote"]]
+**Experiment Log 02**
+
+**Date:** 17.09.1993
+**Experimenters:** Dr. S Petrov
+
+**Procedure:** I wanted to see what would happen when I [[span class="no"]]█████████ ███ █████[[/span]], so I [[span class="no"]]████████ ███ ██████████[[/span]] on the [[span class="no"]]█████ ██████[[/span]] to the testing room and [[span class="no"]]███████ ██ ████ ███████ ██ █ █████[[/span]] into the SCP. I [[span class="no"]]█████████[[/span]] as many [[span class="no"]]██████ ███████ ██ █ █████ ████[[/span]] everywhere in the room, at a much wider radius than before, in an attempt to establish a limit to its [[span class="no"]]████ ██ ██████[[/span]]. I also put some [[span class="no"]]███████ ██████[[/span]] into it that I brought from home.
+
+**Results:** All [[span class="no"]]███████[[/span]] in the room within [[span class="no"]]█[[/span]].[[span class="no"]]██[[/span]] of the thing [[span class="no"]]████ ███ ██████████[[/span]]. They were [[span class="no"]]█████████████████ ████ ████ █████[[/span]]! I picked up [[span class="no"]]█████████[[/span]] and could not [[span class="no"]]████████ █ ██████ █████[[/span]] about it -- not [[span class="no"]]██████[[/span]], not [[span class="no"]]███████[[/span]], nothing. I'm just glad I [[span class="no"]]████[[/span]]'[[span class="no"]]█ █████ ██ ████ █████[[/span]]. The [[span class="no"]]███████[[/span]] inside the [[span class="no"]]███████[[/span]] were treated [[span class="no"]]███████ ███ ████[[/span]], though like before, they were still just [[span class="no"]]███████[[/span]].
+[[/div]]
+
+
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=17.09.1993 (THU) | postno=5251E02M01
+| depth=0 | content=This is consistent with Tuesday's results. It's interesting to note that the [[span class="no"]]████ ██ ██████[[/span]] scales with the [[span class="no"]]███████[[/span]], though I'm a little wary of burning out the motor. I wonder if it's to do with the [[span class="no"]]███████[[/span]] or the speed of rotation?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=17.09.1993 (THU) | postno=5251E02M03
+| depth=1 | content=Is it consistent? I can't find the last dataset to compare. Is it attached to the experiment log or did you leave it somewhere on the intranet?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=17.09.1993 (THU) | postno=5251E02M04
+| depth=2 | content=It's attached.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M06
+| depth=3 | content=I don't see it. _
+ _
+EDIT: I've found the file but it's empty.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=17.09.1993 (THU) | postno=5251E02M02
+| depth=1 | content=Well, this certainly explains [[span class="no"]]█████[[/span]]'s modifications to the [[span class="no"]]███████[[/span]] in the property. He must have been looking to increase the [[span class="no"]]█████[[/span]]. Do we know how high he managed to get it?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M05
+| depth=2 | content=He wasn't able to get it any higher than the [[span class="no"]]█████[[/span]] -- he was a [[span class="no"]]██████████ ████████[[/span]], not a wizard -- but those modifications may actually have been what [[span class="no"]]██████[[/span]] him. It's hard to tell.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M07
+| depth=3 | content=What do you mean, "hard to tell"? That doesn't make any sense. We all saw the [[span class="no"]]███████[[/span]] report.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M08
+| depth=3 | content=Do you have a link to the [[span class="no"]]███████[[/span]] report?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M09
+| depth=4 | content=[[span class="no"]]███████████████████████████████[[/span]] |
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M10
+| depth=4 | content=Sure thing: [[span class="no"]]███████████████████████████████[[/span]] |
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M11
+| depth=5 | content=Beat you to it!
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=18.09.1993 (FRI) | postno=5251E02M12
+| depth=5 | content=Thanks.
+]]
+
+ _
+
+[[div class="blockquote"]]
+**Experiment Log 03**
+
+**Date:** 18.09.1993
+**Experimenters:** Dr. R Vershinin
+
+**Procedure:** The object was partially [[span class="no"]]████████████[[/span]] to see if any anomalous [[span class="no"]]██████████[[/span]] could be identified.
+
+**Results:** Failure. I had difficulty opening it up, and even after I managed to do so, the feeling became worse as time went on. I found myself unable to [[span class="no"]]████████ ████████ ██████████[[/span]] that I should have been very familiar with. After a while I became frustrated and [[span class="no"]]██████ ██ ████ ██[[/span]].
+[[/div]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M01
+| depth=0 | content=I'll be honest, I'm not sure why I ran this test. It seemed so clear to me on Friday, and then I come back on Monday to check the results and it's gone. Did I mention my intentions to either of you last week?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M02
+| depth=1 | content=Chalk it up to age. Happens to the best of us.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M03
+| depth=1 | content=I sent you both my plan of possible experiments last week. Perhaps you were running one of those?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=21.09.1993 (MON) | postno=5251E02M04
+| depth=2 | content=I never received such a list. [[span class="no"]]██████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M05
+| depth=3 | content=No, nor me. I do recall that you mentioned it, Kseniya.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M06
+| depth=3 | content=I have just checked -- you acknowledged in writing receipt of the [[span class="no"]]█████████[[/span]]. "[[span class="no"]]█████████[[/span]] received. I'll give this a look over when I have time."
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M07
+| depth=4 | content=I must have said that in error, then, because I do not have any correspondence from you relating to this project at all.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M08
+| depth=3 | content=I apologise -- it appears that I actually sent you an empty file.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=21.09.1993 (MON) | postno=5251E03M09
+| depth=4 | content=That can't be true either, because I do not have anything from you at all, empty files included.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M10
+| depth=0 | content=Hi all, Foundation IT responding to ticket #1352. I can confirm an email was sent from limonovakseniya to [[span class="no"]]███[[/span]] recipients and zero CCs, who [[span class="no"]]████[[/span]] received it, although only [[span class="no"]]███[[/span]] actually opened the message. Any further queries, please let me know --Sam
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M11
+| depth=1 | content=Thanks, Sam. Would you mind checking the same from my end? Address is vershininranek
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M12
+| depth=2 | content=Of course -- looks like you received the message but never opened it. Check your spam?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M14
+| depth=3 | content=I've re-checked my inbox. I'm not sure what exactly you mean by spam?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M15
+| depth=4 | content=Sorry, it's a bit of an in-joke. Okay, I've checked again, and can confirm for sure that [[span class="no"]]███ ███████ ████ ███ █████[[/span]]. Hope that clears things up.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M16
+| depth=5 | content=It does. Thank you very much!
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=22.09.1993 (TUE) | postno=5251E03M13
+| depth=1 | content=Could you check mine as well? My address is [[span class="no"]]████████████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=23.09.1993 (WED) | postno=5251E03M17
+| depth=1 | content=Hello?
+]]
+
+ _
+
+[[div class="blockquote"]]
+**Experiment Log 04**
+
+**Date:** 24.09.1993
+**Experimenter:** Dr. S Petrov
+
+**Procedure:** I have unplugged the damned thing and wheeled its trolley down to a [[span class="no"]]███████ ██████[[/span]] on the other side of the Site, into which I have interred it until somebody fucking replies to anything I say.
+
+**Results:** TBA
+[[/div]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M01
+| depth=0 | content=Ha, ha, very funny, [[span class="no"]]██████[[/span]]. Where is it?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M02
+| depth=0 | content=Looks like someone's in a bad mood...
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M03
+| depth=0 | content=[[span class="no"]]██████[[/span]], I swear to fuck, you either tell me where it is, or I will eat your fucking head.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M04
+| depth=1 | content=Kseniya, slight problem -- I don't actually see any correspondence from [[span class="no"]]██████[[/span]] in the discussion.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M05
+| depth=2 | content=[[span class="no"]]█████[[/span]]'[[span class="no"]]█ ███ ██████[[/span]]. [[span class="no"]]████ ███[[/span]], [[span class="no"]]█████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=24.09.1993 (THU) | postno=5251E04M06
+| depth=2 | content=Yes, that would be a slight problem.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M07
+| depth=0 | content=Hi all, Foundation IT responding to ticket #1356. Analysis confirms that no person named [[span class="no"]]██████ ██████[[/span]] has ever been assigned to this project. I do not see any messages from a [[span class="no"]]██████ ██████[[/span]] upthread. --Sam
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M08
+| depth=1 | content=Thanks Sam. One question: are you sure?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M09
+| depth=2 | content=The analysis is conclusive. But... I could swear I remember a [[span class="no"]]██████[[/span]] from the last time I checked this project. I'm looking right now, though, and there's nothing.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M10
+| depth=3 | content=Okay. If the three of us are in consensus, then we either have a memory injection scenario, or a reality erasure scenario. You are both certain that [[span class="no"]]██████[[/span]] [[span class="no"]]██████[[/span]] exists or existed, yes?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M11
+| depth=4 | content=It does seem that way.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M12
+| depth=4 | content=Yes, absolutely confident.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M18
+| depth=4 | content=[[span class="no"]]████[[/span]], [[span class="no"]]███ ███ ██ ██████ ███████ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M13
+| depth=3 | content=Good. SCP-... uh, the object is obviously fucking with things. I'm going to defer this upwards. In the meantime, avoid interacting with it as much as possible.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M22
+| depth=4 | content=That shouldn't be too difficult, given that we don't know where it is.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M14
+| depth=3 | content=Sam, I want you to scour Site-33's security feed and find [[span class="no"]]██████[[/span]]. We know he moved SCP, uh, whatever number it is, last night, so focus on that. As far as I know there's nothing nocturnal here, so be wary of anything that moves. If you see something that you don't want to pay attention to, focus on it. That might not be possible. See if the guys in Counterconceptual have anything that'll help.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M19
+| depth=4 | content=Sure thing. I'll take notes on anything I see.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M20
+| depth=5 | content=No! Don't write anything down. We can't trust any recorded information. _
+ _
+EDIT: Actually, no, do write things down. Even if we're not sure whether the notes or the memories are correct, it will be useful to have a reference for comparison.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M15
+| depth=3 | content=Ranek, I need you to look through prior correspondence and see what holes you can find. See if you can find anything that conclusively proves [[span class="no"]]██████[[/span]] did or did not exist.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M21
+| depth=4 | content=On it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M16
+| depth=3 | content=[[span class="no"]]██████[[/span]], if you are reading this, then you need to find some way to communicate with us. The project thread is not working. Leave notes. Carve shit into the walls of my office. Find me and scream in my face. Injure me. Anything to prove that you exist. Keep going until you are acknowledged. _
+ _
+We will reconvene in the morning with our results. I'm going to treat this internally as an experiment.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=25.09.1993 (FRI) | postno=5251E04M17
+| depth=4 | content=[[span class="no"]]███ ███ ███████[[/span]]? [[span class="no"]]██████ ███[[/span]]? [[span class="no"]]█[[/span]]'[[span class="no"]]██ ██ █████████[[/span]] -- [[span class="no"]]█[[/span]]'[[span class="no"]]██ █████ ██ █████████[[/span]] -- [[span class="no"]]███ ███ ████[[/span]].
+]]
+
+ _
+
+[[div class="blockquote"]]
+**Experiment Log 05**
+
+**Date:** 25.09.1993
+**Experimenter:** Dr. K Limonova, Dr. R Vershinin, S McFenton
+
+**Procedure:** Dr. [[span class="no"]]██████ ██████[[/span]] has gone missing, so we set out to find him. Dr. Limonova contacted Foundation superiors to call in more qualified assistance. Dr. Vershinin thoroughly scoured the research log forum, to find any flaws that could be indicative of reality erasure. Ms. McFenton looked through the security feeds from the night that Dr. [[span class="no"]]██████[[/span]] disappeared, under the influence of drugs acquired from the Counterconceptual Division, to see if she could see him.
+
+**Results:** TBA
+[[/div]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M01
+| depth=0 | content=I recall that yesterday I was working with Ranek Vershinin and Sam McFenton. I am completely confident in this recollection. I have not reread prior messages and I have no intent to: I am certain that my memory is correct. _
+ _
+What did we find out last night?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M02
+| depth=0 | content=Ranek? Sam?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M03
+| depth=0 | content=Are you fucking kidding me? Has it happened to me now?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M04
+| depth=0 | content=Kseniya, I am so sorry, it is Saturday and I did not turn on my alarm clock. _
+ _
+I've gone over our messages from yesterday. I can't find any 'holes', as you put it. Your missing person just doesn't exist -- the SCP must have planted that memory inside us. It's just been me, you, and Sam.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M05
+| depth=1 | content=You don't remember that Sam confirmed I sent //both// of you my proposed [[span class="no"]]█████████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M08
+| depth=2 | content=I have spent all night reading and re-reading this conversation. I'm pretty damn sure.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M11
+| depth=3 | content=Then one of us is compromised.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M12
+| depth=3 | content=You remember his face, right? You remember how he had that [[span class="no"]]█████████[[/span]] down his [[span class="no"]]████ █████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M06
+| depth=0 | content=I've been looking over the Site security feeds at your request, Dr. Limonova. I spoke to Counterconceptual like you asked and, you were right, they did give me something to help -- [[span class="no"]]█ ███ ██████ ██████[[/span]] the object [[span class="no"]]██[[/span]] 19:04 [[span class="no"]]████ █████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M07
+| depth=1 | content=Sam, there seems to be data loss in that message, please check your GPG config and try again.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M09
+| depth=2 | content=Apologies -- to rephrase, [[span class="no"]]█████████ ██████████ ████████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M10
+| depth=2 | content=[[span class="no"]]█ ███ ███ ████ █████████ ████████ ██ ███ █████ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M14
+| depth=2 | content=I am so sorry. How about this: there were no significant events that night before 19:02 and after 19:10. _
+ _
+**Attachment: recording_snippet_19930926T190200Z.mp1**
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M15
+| depth=3 | content=...I see. Thank you, Sam.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M16
+| depth=3 | content=Oh, fuck me.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M13
+| depth=0 | content=Also, Ranek, just to confirm -- I notice that you said "your missing person" instead of his name. Could you confirm his name for me, please?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M17
+| depth=1 | content=...no. I can't. _
+ _
+I can honestly say I have no idea who you are talking about.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M18
+| depth=2 | content=[[span class="no"]]██ ██████ ███ ██████[[/span]]'[[span class="no"]]█[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M86
+| depth=3 | content=[[span class="no"]]██████[[/span]], are you still there? Check the date on this post. It's been a while. 
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M24
+| depth=4 | content=[[span class="no"]]███████[[/span]]? [[span class="no"]]████ ███ ███ █████[[/span]]? [[span class="no"]]███ ███ ███ ███ ██[[/span]]? [[span class="no"]]███ ███ ███ ███ ██ ████████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M87
+| depth=4 | content=Mnestics, Class-W. A drug produced by the Antimemetics Division. They stop you forgetting things, and help you remember things you've forgotten. Like you. It's the perfected form of the same drug that's going to kill Sam in a few hours. That's my fault. I've come to terms with it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M25
+| depth=4 | content=[[span class="no"]]████[[/span]], [[span class="no"]]████[[/span]]'[[span class="no"]]█ ███ █████[[/span]]. [[span class="no"]]██[[/span]]'[[span class="no"]]█ ████ ██ ████ ████ ███ █████[[/span]]. [[span class="no"]]███ ████[[/span]]... [[span class="no"]]██ ████ ███ ██████ ██ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M88
+| depth=4 | content=No, it's not. And the same to you. It's only been twenty years for me, but I don't think either of us know how long it's been for you. I can't imagine what that feels like. _
+ _
+I need you to do something, and you need to do it as soon as you can. The drug that Sam ingested is growing more potent by the second. It will reach its critical point far before she metabolises it. She will be able to perceive you by 16:53, though I don't know exactly when. She'll be dead less than ten minutes later. It is imperative that she passes on a message to me. Do you understand?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M26
+| depth=4 | content=[[span class="no"]]███[[/span]], [[span class="no"]]██ ██████[[/span]] -- [[span class="no"]]█ ████ ███[[/span]]'[[span class="no"]]█ ██████████ ███ ██ ███ ████████ ██ █████████████ ██ ███[[/span]]. [[span class="no"]]█[[/span]]'[[span class="no"]]█[[/span]]... [[span class="no"]]████[[/span]]? [[span class="no"]]█ █████[[/span]]? [[span class="no"]]███ ███[[/span]]'[[span class="no"]]██ ██ ███ ██████[[/span]]? _
+ _
+[[span class="no"]]██ ████ █████████ ██ ██ ████ ███[[/span]]-[[span class="no"]]████[[/span]]? [[span class="no"]]██ ██ ███████ █ ██████ ██ ███████ ██ ██[[/span]] -- [[span class="no"]]███ ███████ ████ █[[/span]]'[[span class="no"]]█ ███████ █████ ███[[/span]]? [[span class="no"]]█ ███ ██ ████████ ██ ████ █████████[[/span]]. [[span class="no"]]██ █████ ██[[/span]]'[[span class="no"]]█ ███ ████ █ ███ ████ ███ █████████ █████[[/span]]. [[span class="no"]]██[[/span]]'[[span class="no"]]█ ██ ███████████ █████ ██ ████████████ ████ ████████ ████[[/span]]. [[span class="no"]]███ ███ ██ ██████ ██ ███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M89
+| depth=4 | content=Do NOT discuss it, don't talk about it, don't even theorise; you'll [[span class="no"]]████ ████ ██ █████[[/span]]. I won't confirm anything to you until I know it's safe. Your situation is precarious. _
+ _
+No, you're not dead. I think it's better if you don't know the details, for now. _
+ _
+I know you have questions. They have to wait. You need to tell me, via Sam, to shut down the project and stop research; to stop discussing it; to lock the file. Otherwise [[span class="no"]]██[[/span]]'[[span class="no"]]██ ███ ███ ██ ████ ███[[/span]]. I can see the messages between you and her already so I know you do an excellent job. I believe in you.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M27
+| depth=4 | content=[[span class="no"]]████ ████[[/span]]'[[span class="no"]]█ ██ ██ ███ ██[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M90
+| depth=4 | content=You get to save us. Isn't that enough? _
+ _
+We'll find a way to save you. I promise.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M19
+| depth=2 | content=Okay, thank you. _
+ _
+His name is [[span class="no"]]██████ ██████[[/span]]. _
+ _
+Ranek, Sam, please repeat the name back to me.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M20
+| depth=3 | content=Acknowledged but unable to comply. I do not see a name -- the line simply ends after "His name is".
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M21
+| depth=3 | content=It might be the drugs that Counterconceptual gave me but I do see something. There's no name, but I do see the space that was reserved for it. There's something there, for sure, just I can't see it. Six and six.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M22
+| depth=4 | content=Six and six are the lengths of his given name and surname. _
+ _
+It's a little scary that I remember his name, but I don't have a clue what he looked like.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M23
+| depth=5 | content=That makes sense.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M28
+| depth=3 | content=Ah -- I can reproduce the issue now. I am no longer able to read that name, nor remember it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M29
+| depth=4 | content=That's interesting. Do you think that it was re-reading the written name that infected you? It's possible that it was your adamance against reading the previous conversation that protected you for so long. Imagine that... information that's hazardous. I wonder if there's a name for that.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M30
+| depth=0 | content=[[span class="no"]]███[[/span]]? [[span class="no"]]███ ███ ████ ████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M39
+| depth=1 | content=[[span class="no"]]██████[[/span]]?? Yes, yes I can! Are you okay? What happened?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M40
+| depth=2 | content=[[span class="no"]]███[[/span]], [[span class="no"]]█ ███[[/span]]'[[span class="no"]]█ ████ ████ ████[[/span]]. [[span class="no"]]███ ████ ██ ████ ███████ ██ ████ ████████ ███ ██ ████ ███ ████[[/span]]. [[span class="no"]]██████ ██ ████ ███ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M41
+| depth=3 | content=That can wait! Tell us where you are, what happened!
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M45
+| depth=4 | content=[[span class="no"]]███[[/span]], [[span class="no"]]████[[/span]], [[span class="no"]]███ █████ ███ ████ ██ ████ ███████ ██ ████ ██████████[[/span]]. [[span class="no"]]████ ██ ███ ████ █████████ █████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M46
+| depth=5 | content=Okay, okay, sure.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M48
+| depth=5 | content=[[span class="no"]]█████████[[/span]]! [[span class="no"]]█████ ███[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M49
+| depth=5 | content=I did what you asked. Now tell me how we can get you back.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M52
+| depth=5 | content=[[span class="no"]]█[[/span]]... [[span class="no"]]███[[/span]]'[[span class="no"]]█ █████ ████[[/span]]'[[span class="no"]]█ █████ ██ ██ ████████[[/span]]. [[span class="no"]]███ ███ █ ████ ████[[/span]], [[span class="no"]]██████[[/span]]. _
+ _
+[[span class="no"]]█ █████ ██ █ ██████ ███████ ██ ███████[[/span]], [[span class="no"]]████ ████[[/span]]. [[span class="no"]]███ ████ ██ ██ ████ ████ ████ ███[[/span]], [[span class="no"]]███████ ███ ████ ████ ███[[/span]]'[[span class="no"]]█ ██ ███ ████ ██████ ███[[/span]]'[[span class="no"]]█ ██ ████ ██ ███ ██ ██ ████████████ ███████ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M53
+| depth=5 | content=[[span class="no"]]███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M42
+| depth=3 | content=Kseniya or Ranek can drive down and find you!
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M31
+| depth=0 | content=The higher-ups finally got back to me. I had to call them. Several times, actually. I kept getting mixed feedback on whether or not they received my initial email. Eventually they told me to just deal with whatever this is on my own.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M32
+| depth=1 | content=That's a bit shit of them. How high did you go?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M33
+| depth=2 | content=Russian Command, then European. I didn't see much point in going higher.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M34
+| depth=0 | content=Oh shit, there's a message from Dr. [[span class="no"]]██████[[/span]] upthread. He's asking about me specifically. Does anyone else see it?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M35
+| depth=1 | content=I don't see it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M36
+| depth=2 | content=It must be the pill, I guess. What should I do?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M37
+| depth=3 | content=Be on guard, Sam. There's a fair chance you're speaking to the anomaly. Respond, but be wary.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M38
+| depth=4 | content=Noted.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M43
+| depth=4 | content=[[span class="no"]]██[[/span]], [[span class="no"]]████ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M44
+| depth=5 | content=I wouldn't blame her too much.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M47
+| depth=1 | content=Kseniya, he wants you to stop research and to lock the file. He's being pretty insistent about that.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M50
+| depth=2 | content=Okay. Right now I'm going to assume that this is the anomaly's agenda. See if you can get some sort of verification out of him.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=S McFenton | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M51
+| depth=3 | content=I'm trying to get him to tell me about what happened to him. I don't know him that well -- well, at all, really, beyond this thread -- so that's the best I can do. Plus it might help us work out how to get him back.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M54
+| depth=4 | content=It's been an hour -- is everything okay?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=26.09.1993 (SAT) | postno=5251E05M55
+| depth=0 | content=[[span class="no"]]███████[[/span]], [[span class="no"]]██████[[/span]]. [[span class="no"]]█[[/span]]'[[span class="no"]]█ ███████ ███[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M56
+| depth=0 | content=I've just received word from Site-11. Sam's dead.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M57
+| depth=1 | content=Fuck. Do they know why?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M58
+| depth=2 | content=They sure do. It was a haemorrhagic stroke. Part of her amygdala is just flat-out missing, they're telling me. Just gone. The exposed blood vessels just bled everywhere. She would have suffered minutes of pure agony.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M59
+| depth=3 | content=That's horrifying. I suppose these things happen. I knew her a little -- it's why I always request her when I make a ticket. She loved her job, or so she'd tell me. I hope she felt fulfilled. It's the most anyone can ask for.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M60
+| depth=4 | content=I'm not sure you're seeing the gravity of this. Do you know what the amygdalas do? They're in the medial temporal lobe. They handle long-term memory. What was that drug you encouraged her to take? That in-development drug with unknown side effects? What was it that drug did, again?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M61
+| depth=5 | content=You're not suggesting what I think you are?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M62
+| depth=5 | content=I'm not. I'm asserting it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M63
+| depth=5 | content=Are you fucking kidding me? You're telling me I killed her? Are you telling me you wouldn't have done the same to save our forgotten friend?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. R Vershinin | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M64
+| depth=5 | content=I can't answer that, Kseniya, because I don't fucking know him, do I? He's gone! He never existed! The fucking anomaly made him up. Surely you can see that. _
+ _
+You killed her. You killed her for nothing. I'm out.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M65
+| depth=5 | content=Fucking fantastic. Thanks, Ranek.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M66
+| depth=0 | content=Whatever you are, you win. One person is dead, one person hates me, and one might not have existed at all. It's just me now, and I'm done. _
+ _
+I don't know if you can read this -- it certainly feels like it -- but I want you to know that I hate you. _
+ _
+I'm going to lock the file. That's what you wanted, right? Have it.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M67
+| depth=0 | content=It's done. So am I.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M68
+| depth=0 | content=[[span class="no"]]██ ████[[/span]]'[[span class="no"]]█ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M69
+| depth=0 | content=[[span class="no"]]███ ███ █████ █████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M91
+| depth=1 | content=Of course I am. I'm in the future; I'm always 'still there'. You did good. Saved our lives. Me and Ranek, that is. It was too late for Sam. And for you. _
+ _
+Maybe, back then, I would've locked the file anyway. But I had to be sure. I'm sorry that I had to use you for that. Besides -- Sam, and her faith in you, was the only thing between me and believing that you didn't exist. Without your help we probably wouldn't be having this conversation.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M70
+| depth=2 | content=[[span class="no"]]███ █████ █████████ ███ ███ ███ ████ ██ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M92
+| depth=3 | content=And I'll never be able to. Not if you want me to still be able to talk to you. I think just one person knowing how it works is safe.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M71
+| depth=4 | content=[[span class="no"]]███████[[/span]]. [[span class="no"]]████[[/span]]'[[span class="no"]]█ ████[[/span]]. [[span class="no"]]███ █ ██ █████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M93
+| depth=5 | content=Well, I can talk to you now, right? Makes sense to me that I should be able to see you. Do you have a physical form?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M72
+| depth=5 | content=[[span class="no"]]█ ██[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M94
+| depth=5 | content=Then... I think all you need to do is wait until my time. I'm off-site right now, but I can be there in the morning. Mnestics in 2013 are absolutely safe, for sure -- I'll take another then. We should be able to rendezvous somewhere.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M73
+| depth=5 | content=[[span class="no"]]██████ ████[[/span]]. [[span class="no"]]███ █████ ████ ██████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M95
+| depth=5 | content=Ha! Sure. My old office. _
+ _
+Alright, I'll see you there tomorrow.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M74
+| depth=5 | content=[[span class="no"]]████ ████████ ██ █████[[/span]], [[span class="no"]]██ ███ ███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M96
+| depth=5 | content=Ranek? He's fine. He doesn't work for Foundation anymore, so he was wiped. He's forgotten you existed, but SCP-[[span class="no"]]████[[/span]] convinced him you didn't exist in the first place. Maybe it's better this way.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M75
+| depth=5 | content=[[span class="no"]]█ █████ ███[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M97
+| depth=5 | content=I know. We all knew.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M76
+| depth=5 | content=[[span class="no"]]██ █████ ████ ███ ████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. K Limonova | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M98
+| depth=5 | content=I don't know. He never would have admitted it, even to himself. _
+ _
+Try and hold that thought for 2013. It'll keep you going.
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=27.09.1993 (SUN) | postno=5251E05M77
+| depth=5 | content=[[span class="no"]]█[[/span]]'[[span class="no"]]██ ███[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=25.12.1993 (WED) | postno=5251E05M78
+| depth=0 | content=[[span class="no"]]██[[/span]]'[[span class="no"]]█ █ ████ ███ ██████ ████ ███ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=18.06.1995 (SUN) | postno=5251E05M79
+| depth=0 | content=[[span class="no"]]██[[/span]]'[[span class="no"]]█ ████ ██ ████ ██ █ ███[[/span]]'[[span class="no"]]█ ███ ██████[[/span]], [[span class="no"]]██ ██ ████ ███[[/span]]'[[span class="no"]]█ ███ ██[[/span]]. [[span class="no"]]██[[/span]]'[[span class="no"]]█ ██████ ███ ███ ███ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=04.03.1998 (WED) | postno=5251E05M80
+| depth=0 | content=[[span class="no"]]█████ ████████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=04.03.1998 (WED) | postno=5251E05M81
+| depth=1 | content="[[span class="no"]]█████ ████████[[/span]], [[span class="no"]]██████[[/span]]!" [[span class="no"]]████ ███ ██ ██████[[/span]]'[[span class="no"]]█ ███████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=20.05.2001 (SUN) | postno=5251E05M82
+| depth=0 | content=[[span class="no"]]███████ █ █████ ███ ████ ███ █████[[/span]], _
+[[span class="no"]]██ ██████ ███████ ███ ██[[/span]]; _
+[[span class="no"]]███ ████████ ████ ███ ████ █████████[[/span]] _
+[[span class="no"]]███ ███████████[[/span]]. _
+ _
+[[span class="no"]]██ ██████ █████[[/span]], [[span class="no"]]██ ████ ██ █████[[/span]], _
+[[span class="no"]]███ █ ███ ███ ████[[/span]] _
+[[span class="no"]]██ ██████[[/span]], [[span class="no"]]███ ██ ███████ ███[[/span]], _
+[[span class="no"]]███ ███ ████████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=01.09.2005 (THU) | postno=5251E05M83
+| depth=0 | content=[[span class="no"]]█ ████ ████[[/span]]. [[span class="no"]]███ █████[[/span]]. [[span class="no"]]███ ██████[[/span]]. _
+ _
+[[span class="no"]]███ ████[[/span]], [[span class="no"]]███████[[/span]], [[span class="no"]]███ ███████ ███[[/span]]'[[span class="no"]]█ ██ ███ ██████[[/span]], [[span class="no"]]███[[/span]]'[[span class="no"]]██ ████ █ ██████ ████ ███ ██ ██████████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=01.01.2010 (THU) | postno=5251E05M84
+| depth=0 | content=[[span class="no"]]████ █ ██████ ███ ██████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=03.11.2013 (SUN) | postno=5251E05M85
+| depth=0 | content=[[span class="no"]]███ ████ ███[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M99
+| depth=0 | content=[[span class="no"]]███████[[/span]]? [[span class="no"]]██[[/span]]'[[span class="no"]]█ █████[[/span]]. [[span class="no"]]█████[[/span]]'[[span class="no"]]█ ███ ███[[/span]], [[span class="no"]]█████[[/span]]? [[span class="no"]]███ ███ ██████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=04.11.2013 (MON) | postno=5251E05M100
+| depth=1 | content=[[span class="no"]]████████[[/span]]. [[span class="no"]]██ ██████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=05.11.2013 (TUE) | postno=5251E05M101
+| depth=0 | content=[[span class="no"]]█[[/span]]'[[span class="no"]]█ ████[[/span]].
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=05.11.2013 (TUE) | postno=5251E05M102
+| depth=1 | content=[[span class="no"]]█[[/span]]'[[span class="no"]]█ ██ ████ ███ ██████[[/span]]. [[span class="no"]]█████ ███ ███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=05.11.2013 (TUE) | postno=5251E05M103
+| depth=2 | content=[[span class="no"]]███████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=06.11.2013 (WED) | postno=5251E05M104
+| depth=3 | content=[[span class="no"]]███████[[/span]], [[span class="no"]]█████ ███ ███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=07.11.2013 (THU) | postno=5251E05M105
+| depth=0 | content=[[span class="no"]]███[[/span]]'[[span class="no"]]██ ███ ██████[[/span]], [[span class="no"]]███ ███[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=14.08.2014 (THU) | postno=5251E05M106
+| depth=0 | content=[[span class="no"]]███████[[/span]]?
+]]
+
+[[include :scp-wiki:component:parawatch-forum-post
+| username=Dr. S Petrov | color=blue
+| date=28.02.2017 (TUE) | postno=5251E05M107
+| depth=0 | content=[[span class="no"]]███████[[/span]]?
+]]
+
+[!--
+The very last note is in a ListPages module. This is so that it'll update every day with the current date. The intent is to imply that wherever Petrov is, he's still there, today, as you're reading. I know, it's a cheap gimmick.
+--]
+
+[[module ListPages category="*" limit="1" updated_at="last 3 day" order="updated_at desc"]]
+[[div class="parapost reply0"]]
+##blue|**Dr. S Petrov**## [[span style="text-transform: uppercase;"]]%%updated_at|%d.%m.%Y (%a)%%[[/span]] #5251E05M108
+------
+[[span class="no"]]███████[[/span]]?
+[[/div]]
+[[/module]]
+
+ _
+
+[[div class="footer-wikiwalk-nav"]]
+[[=]]
+<< [[[SCP-5250]]] | SCP-5251 | [[[SCP-5252]]] >>
+[[/=]]
+[[/div]]
+
+[!--
+https://rossjrw.com/series-replace/?f=%5BA-z%5D&f=%28%3F%21%5Cs%29%28%5B%E2%96%88%5Cs%5D%2B%29%28%3F%3C%21%5Cs%29&r=%E2%96%88&r=%5B%5Bspan%20class%3D%22no%22%5D%5D%241%5B%5B%2Fspan%5D%5D
+--]
