@@ -1,0 +1,605 @@
+[[iftags +template]]
+
+[[>]]
+[[module Rate]]
+[[/>]]
+
+[[div style="display: none;"]]
+[[include :topia:cqb:css]]
+[[/div]]
+
+[[module CSS]]
+td { vertical-align: top; }
+td strong { white-space: nowrap; }
+.options table.wiki-content-table td { border: none; padding: 0.7em 1em; }
+.previews { word-break: none; }
+.previews img { max-width: 10rem; max-height: 10rem; }
+[[/module]]
+
+[[div style="border: 1px solid #ddd; padding: 1em;"]]
++ What this is
+
+A component that displays your text on separate pages, for example the pages of a book.
+
+Made by [[*user Croquembouche]].
+
+Other components that simulate pagination:
+
+* [[[component:hf-book-left | Herman Fuller Book Page Left]]]
+* [[[component:hf-book-right | Herman Fuller Book Page Right]]]
+* [[[component:hf-book-right-start | Herman Fuller Book Page Right (Chapter Start)]]]
+* [[[component:hf-start | Herman Fuller GOI: Chapter Start]]]
+* [[[component:hf-left | Herman Fuller GOI: Left Page v2]]]
+* [[[component:hf-right | Herman Fuller GOI: Right Page v2]]]
+
++ Usage
+
+On any wiki:
+
+[[div class="code terminal"]]
+**##var(--c-keyword)|[[include##** ##var(--c-symbol)|:scp-wiki:component:pages##
+**##var(--c-keyword)||##** **##var(--c-builtin)|medium##****##var(--c-keyword)|=##**##var(--c-symbol)|vintage-book##
+**##var(--c-keyword)||##** **##var(--c-builtin)|contents##****##var(--c-keyword)|=##**
+##var(--c-string)|<h1>Hello, welcome to my book.</h1>
+I hope you <em>really enjoy</em> it so that the pain it took to write it was worth it.##
+**##var(--c-keyword)|]]##**
+[[/div]]
+
+There are two parameters for this component.
+
+[[div class="options"]]
+|| **medium** || What medium should your text be presented in? This determines the background image of each page, the font, etc. I'm open to adding more options -- please contact me ([[user Croquembouche]]) if you have an idea. _
+These are documented in detail at the bottom of this page. ||
+|| **contents** || The contents of your pages. Can include very simple formatting and images. ||
+|| **style** || CSS styling to inject into the document. ||
+[[/div]]
+
+The contents parameter can spread across as many lines as you want.
+
+The contents may not contain the following characters:
+
+* {{|}} (pipe symbol)
+* {{@@`@@}} (backtick), unless it's preceded by a backslash ({{\`}})
+* {{]]}} (two closing brackets), but only if it's at the end of a line or followed by whitespace
+
+[[/div]]
+
+ _
+
+[[div style="border: 1px solid #ddd; padding: 1em;"]]
+
++ Text formatting
+
+The contents parameter won't be rendered by Wikidot. It goes straight through to a custom parser that I've written myself that spits out HTML.
+
+All that lovely Wikidot syntax that you're used to goes out of the window. Instead, you'll have to write inline HTML.
+
+For example:
+
+* To make bold text, instead of {{@@**text**@@}}, write {{<b>text</b>}}.
+* To make an em dash, instead of {{@@--@@}}, write a literal em dash ({{—}}).
+* To make a horizontal rule, instead of @@-----@@, write {{<hr>}}.
+
+Unlike HTML, you //do not// need to write {{<p>...</p>}} around each line.
+
+-----
+
++ Images
+
+Include images using standard HTML for an image:
+
+[[div class="code terminal"]]
+##var(--c-string)|<img src="@@http://scp-wiki.wdfiles.com/local--files/your-page/your-image.png@@">##
+[[/div]]
+
+You can fix the image to the top or bottom of a page by adding either {{position="top"}} or {{position="bottom"}}. This will fix the image to either the top or the bottom of whatever page it would appear on. This only works for images that are on a line by themselves, not in the middle of text:
+
+[[div class="code terminal"]]
+##var(--c-string)|<img position="top" src="URL">##
+[[/div]]
+
+To horizontally centre an image, add this CSS to its {{style}} attribute directly:
+
+[[div class="code terminal"]]
+##var(--c-string)|<img style="####var(--c-builtin)|display##: ##var(--c-value)|block##; ##var(--c-builtin)|margin-left##: ##var(--c-value)|auto##; ##var(--c-builtin)|margin-right##: ##var(--c-value)|auto##;##var(--c-string)|" src="URL">##
+[[/div]]
+
+If an image is too tall to fit on a single page, the bottom of it will be chopped off.
+
+-----
+
++ Page breaks
+
+Sometimes you want to say "okay, stop there. Start the next bit on a new page. The rest of this page can be empty."
+
+To do that, on a line by itself, add a page break:
+
+[[div class="code terminal"]]
+##var(--c-string)|<br class="page-break">##
+[[/div]]
+
+The thing that comes next after a page break will be on the next page. If there's an image with {{position="bottom"}} just //before// the page break, it will still be at the bottom of that page, as expected.
+
+-----
+
++ Advanced usage
+
+You can include CSS via the style parameter, and embedded Javascript in the contents parameter.
+
+++ Using CSS
+
+Any CSS you include in the style parameter will be injected into the pages. Use this to tweak things, add classes that you can use in your content, and change the font (for example).
+
+For example:
+
+[[div class="code terminal"]]
+**##var(--c-keyword)|[[include##** ##var(--c-symbol)|:scp-wiki:component:pages##
+**##var(--c-keyword)||##** **##var(--c-builtin)|medium##****##var(--c-keyword)|=##**##var(--c-symbol)|vintage-book##
+**##var(--c-keyword)||##** **##var(--c-builtin)|style##****##var(--c-keyword)|=##**
+##var(--c-operator)|@import## ##var(--c-builtin)|url##(##var(--c-string)|'@@https://fonts.googleapis.com/css2?family=Architects+Daughter@@'##);
+
+##var(--c-keyword)|.####var(--c-symbol)|page## {
+@@  @@##var(--c-builtin)|font-family##: ##var(--c-string)|'Architects Daughter'##, ##var(--c-value)|cursive##;
+@@  @@##var(--c-builtin)|margin##: ##var(--c-value)|2rem##;
+}
+
+##var(--c-keyword)|.####var(--c-symbol)|page## ##var(--c-keyword)|.####var(--c-symbol)|red## {
+@@  @@##var(--c-builtin)|color##: ##var(--c-value)|red##;
+}
+**##var(--c-keyword)||##** **##var(--c-builtin)|contents##****##var(--c-keyword)|=##**
+##var(--c-string)|This text will appear <span class="red">handwritten</span>.##
+**##var(--c-keyword)|]]##**
+[[/div]]
+
+You can't style this component with a CSS module elsewhere on your article -- this is the only way.
+
+**Tip!** You can add parameters in any order you like, but it's a good idea to put the style parameter //above// the contents parameters. Your contents parameter will probably be really, really long -- you might find it easier to have all the settings and CSS at the top.
+
+++ Using Javascript
+
+The contents parameter will be parsed as a Javascript [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals template literal], which is why it can't contain a backtick.
+
+Because of that, you can include arbitrary Javascript in the contents parameter inside an embedded expression ({{${expression}}}), which will be executed and substituted back into the string. For example:
+
+[[div class="code terminal"]]
+**##var(--c-keyword)|[[include##** ##var(--c-symbol)|:scp-wiki:component:pages##
+**##var(--c-keyword)||##** **##var(--c-builtin)|medium##****##var(--c-keyword)|=##**##var(--c-symbol)|vintage-book##
+**##var(--c-keyword)||##** **##var(--c-builtin)|contents##****##var(--c-keyword)|=##**
+##var(--c-string)|The day today is## ##var(--c-operator)|${####var(--c-keyword)|new## ##var(--c-builtin)|Date##().##var(--c-builtin)|toLocaleString##(##var(--c-string)|"default"##, { ##var(--c-symbol)|weekday##: ##var(--c-string)|"long"## })##var(--c-operator)|}####var(--c-string)|.##
+**##var(--c-keyword)|]]##**
+[[/div]]
+
+This book will tell the reader the name of the current day.
+
+Should you do this? Probably not. But you //can//.
+
+Please note that while you can include arbitrary Javascript, the OR operator ({{||}}) is unavailable because it's made of pipe symbols, which are forbidden. However, using AND and NOT, you can [https://stackoverflow.com/questions/8374895/how-to-make-logical-or-with-and-and-not create an OR yourself]: NOT((NOT x) AND (NOT y)) is equivalent to (x OR y). In Javascript, that's {{!((!x) && (!y))}}.
+
+[[/div]]
+
+  _
+
+[[div style="border: 1px solid #ddd; padding: 1em;"]]
+
++ Medium Options
+
+The following are your options for the '{{medium}}' parameter.
+
+I am actively soliciting requests for new medium options. I mean, the title of this component is //'Papers, Pages and Post-it Notes'//, but right now it can only do a vintage book. This component is designed to be as versatile as possible, but right now, it can only do one thing.
+
+If you have any requests for paginated formats, please let me know ([[user Croquembouche]]).
+
+Each medium has a fixed aspect ratio that determines its height for any browser width. 
+
+[[div class="previews"]]
+||~ Medium ||~ Background ||~ Font ||~ y:x ||~ Source ||
+|| {{plain}} //(default)// || [[image plain-preview.png]] || //Browser default// || 4:7 || ||
+|| {{vintage-book}} || [[image book.300px.png]] || Libre Baskerville || 10:9 || [https://commons.wikimedia.org/wiki/File:Powiedz_ty_muzyko_moia.jpg Public Domain] ||
+[[/div]]
+
+[[/div]]
+
+ _
+
+[[div style="border: 1px solid #ddd; padding: 1em;"]]
+
++ Source code
+
+[[collapsible show="+ Show source code"]]
+
+++ HTML
+
+Check the bottom of the page source for the {{@@[[html]]@@}} module.
+
+++ CSS
+
+[[code type="css"]]
+/* Imports */
+/* Note that fonts MUST be imported synchronously using the link element,
+ * otherwise the page structure may not render properly */
+
+/* Styling */
+
+.pages-container {
+  font-size: min(4vw, 1rem);
+  position: relative;
+}
+
+/* A page without a medium needs some default styling. */
+.aspect-ratio {
+  margin: 1rem 0;
+  /* The padding-top should be the ratio of the bg image's width / height */
+  padding-top: calc(400 / 700 * 100%);
+  position: relative;
+}
+.page {
+  height: 0;
+  padding: 2rem 2rem 3rem;
+  position: absolute;
+  height: 100%; width: 100%; top: 0; left: 0;
+  box-sizing: border-box;
+}
+.page::before {
+  content: "";
+  position: absolute;
+  height: 100%; width: 100%; top: 0; left: 0;
+  pointer-events: none;
+  background-image: linear-gradient(beige, antiquewhite);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.content > * {
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+}
+
+p, img, div { max-width: 100%; }
+h1, h2, h3, h4, h5, h6 { line-height: 1em; }
+  
+
+/* Each medium gets its own style. */
+
+.vintage-book {
+  font-family: 'Libre Baskerville', serif;
+  color: #514132;
+  line-height: 1.5em;
+  text-align: justify;
+}
+.vintage-book .aspect-ratio {
+  padding-top: calc(2500 / 2250 * 100%);
+}
+.vintage-book .page {
+  padding: 8vw 17vw;
+}
+.vintage-book .page::before {
+  background-image:
+    url(http://topia.wikidot.com/local--files/cqb:book/book.1000px.webp);
+}
+.vintage-book > :nth-child(2n+1) .page::before {
+  transform: scaleX(-1);
+}
+.vintage-book .content {
+  transform: skewY(-0.5deg);
+}
+.vintage-book > :nth-child(2n+1) .content {
+  transform: skewY(0.5deg);
+}
+.vintage-book .split-paragraph-start {
+  text-align-last: justify;
+}
+.vintage-book .content > p:not(.split-paragraph-end):not(.is-image) {
+  text-indent: 2em;
+}
+
+.letter .page {}
+[[/code]]
+
+++ Javascript
+
+[[code type="javascript"]]
+let pageCount = 1
+let resetCount = 0
+
+// contents is already defined, see [[html]]
+
+// Replace line breaks with <p>
+contents = contents.split("\n").filter(line => line.length > 0).map(line => {
+  return $(`<p>${line}<${"/p"}>`) // to fix Wikidot's syntax highlighting
+})
+
+// Convert contents from text to jQuery objects
+contents = $($.map(contents, function(el) { return el.get() }))
+
+// Remove empty objects
+contents = contents.filter(":not(:empty)")
+
+// Add flex order to paragraphs containing positioned images
+contents.map((index, element) => {
+  element = $(element)
+  if (
+    element.is("p")
+    && element.text().length === 0
+    && element.children().length === 1
+    && element.children().first().is("img")
+  ) {
+    // Mark images
+    element.addClass("is-image")
+    if (
+      ["top", "bottom"].includes(
+        element.children().first().attr("position")
+      )
+    ) {
+      // Order positioned images
+      element.css(
+        "order",
+        { "top": -1, "bottom": 1 }[element.children().first().attr("position")],
+      )
+    }
+  }
+})
+
+// Once everything is ready, render the pages
+// This includes image loading, so this is window load instead of document ready
+$(window).on('load', () => {
+  resetCount = 0
+  let thisDocument = $(".pages-container")
+  resetPage(thisDocument)
+  // Sometimes doesn't work after first load - try again
+  setTimeout(() => resetPage(thisDocument), 2000)
+
+  let windowWidth = $(window).width()
+
+  // Rerender the pages when the window size is changed
+  $(window).on("resize", debounce(() => {
+    if ($(window).width() !== windowWidth) {
+      windowWidth = $(window).width()
+      resetPage(thisDocument)
+    }
+  }, 200))
+})
+
+function debounce (func, wait) {
+  /**
+   * Debounces the execution of a function - it will only fire once its
+   * triggering events have stopped.
+   * 
+   * By David Walsh: https://davidwalsh.name/javascript-debounce-function (MIT)
+   *
+   * @param func: The function to debounce.
+   * @param wait: Milliseconds after which to assume there'll be no more events.
+   */
+  let timeout
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout)
+      func(...args)
+    }
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}
+
+function resetPage (thisDocument) {
+  thisDocument.empty()
+  pageCount = 1
+  thisPage = preparePage(thisDocument)
+  setTimeout(() => {
+    makePage(contents.clone(), thisPage, thisDocument)
+    checkPage(thisDocument)
+  }, 1)
+}
+
+function preparePage (thisDocument) {
+  const aspectBox = $(`<div class='aspect-ratio'></div>`).appendTo(thisDocument)
+  return $(`<div class='page'></div>`).appendTo(aspectBox)
+}
+
+function makePage (contents, thisPage, thisDocument) {
+  /**
+   * Recursively creates pages and sorts text into them.
+   *
+   * @param contents: Array of (remaining) HTML paragraphs.
+   * @param thisPage: The current page as a jQuery element.
+   */
+console.log(`Making page ${pageCount++}`)
+
+  let nextPageContents = []
+
+  // Add the contents to the page
+  thisPageContents = $("<div class='content'></div>").appendTo(thisPage)
+  thisPageContents.empty().append(contents)
+
+  // The page height is the maximum height of page content
+  const pageHeight = thisPage.height()
+
+  // The content height is the actual height of page content
+  const contentHeight = thisPageContents.outerHeight()
+
+  // If the content exceeds the page, create a new one
+  if (
+    contentHeight > pageHeight
+    || thisPageContents.has("br.page-break").length > 0
+  ) {
+console.log(`Split needed (${contentHeight} > ${pageHeight})`)
+
+    // Find the first element that can't fully appear on the page
+    // (or a page break)
+    const children = thisPageContents.children()
+    let lastParagraphIndex = -1
+    for (let index = 0; index < children.length; index++) {
+      const child = $(children.eq(index))
+      // First, check for a page break
+      if (child.has("br.page-break").length > 0) {
+console.log("Splitting on page break")
+        lastParagraphIndex = index
+        break
+      }
+      // Second, check for an element that doesn't fit
+      // Do this by summing the height of all children up to and this one,
+      // then compare that to the desired page height
+      const childBottom = children.slice(0, index).toArray().reduce(
+        (height, child) => { return height + $(child).outerHeight(true) }, 0
+      ) + child.outerHeight(true)
+console.log(index, childBottom, thisPage.height())
+      if (childBottom > thisPage.height()) {
+        lastParagraphIndex = index
+        break
+      }
+    }
+
+    if (lastParagraphIndex === -1) {
+      // No elements can fit on this page!
+      // Genuinely unsure what to do here
+      // The default action is "move everything" so that's probably... fine...
+console.log("No elements can fit on this page")
+    } else {
+      // There's an element that either can't be on the page, or partially can
+console.log(`Splitting element with index ${lastParagraphIndex}`)
+
+      // Trim away the content that we already know will fit
+      nextPageContents = contents.splice(lastParagraphIndex)
+      // The partial element is the first of nextPageContents.
+
+      // Set the html to the contents we know will fit
+      thisPageContents.empty().append(contents)
+
+      // Extract a copy of the partial element from the next page
+      let partialElement = $(nextPageContents[0]).clone()
+
+      // If the partial element is p, it can be split up
+      if (partialElement.is("p") && partialElement.text() != "") {
+        // The element can be split across pages - move some of it back
+
+        partialElement.appendTo(thisPageContents)
+
+        const partialText = partialElement.text()
+        let keepWords = partialText.split(" ")
+        let moveWords = []
+
+        // Remove words one by one until the element fits
+        for (let index = keepWords.length; index > 0; index--) {
+          if (thisPageContents.outerHeight(true) <= thisPage.height()) {
+            // It fits! Declare split
+console.log(`Split successful after ${moveWords.length} words removed`)
+            if (moveWords.length > 0) {
+              partialElement.addClass("split-paragraph-start")
+            }
+            break
+          }
+          let word = keepWords.pop()
+          moveWords.unshift(word)
+          partialElement.text(keepWords.join(" "))
+        }
+        
+        // Check if this was successful - might have just run out of words
+        if (keepWords.length === 0) {
+          // Not successful - undo everything
+console.log("Split unsuccessful; partial element removed")
+          partialElement.remove()
+        } else {
+          // Success! Update the next page with the retained words
+          nextPageContents[0].textContent = moveWords.join(" ")
+        }
+      } else {
+        // The element can't be split, so don't move anything back
+        // If it's the first element, it probably came from the previous page
+        // If that's the case, jut dump it here
+        if (lastParagraphIndex == 0) {
+console.log("Something couldn't be split, so it was dumped")
+          partialElement.appendTo(thisPageContents)
+          partialElement.css("height", pageHeight)
+          partialElement.css("overflow", "hidden")
+          nextPageContents.shift()
+        }
+      }
+      
+    }
+
+    // If the last element of this page was split, so it the first of the next
+    if (
+      thisPageContents.children().last().is("p.split-paragraph-start")
+      && $(nextPageContents[0]).is("p")
+    ) {
+      nextPageContents[0].classList.add("split-paragraph-end")
+    }
+
+    // If the very first element of the next page is a page break, chuck it out
+    if ($(nextPageContents[0]).has("br.page-break").length > 0) {
+console.log("Scrapping a page break")
+      nextPageContents.shift()
+    }
+    
+    // Slap an arbitrary limit on the recursion
+    if (pageCount < 1000) {
+      // Create a new page
+      const nextPage = preparePage(thisDocument)
+      makePage(nextPageContents, nextPage, thisDocument)
+    } else {
+console.log("Pages stopped after 1000")
+    }
+  } else {
+console.log("No split needed")
+  }
+}
+
+function checkPage (thisDocument) {
+  if (resetCount > 5) {
+console.log("Overflow reset limit reached")
+    return
+  }
+  let shouldReset = 0
+  thisDocument.children().each((index, aspectBox) => {
+    aspectBox = $(aspectBox)
+    pageBox = $(aspectBox.children().first())
+    contentBox = $(pageBox.children().first())
+    if (contentBox.outerHeight(true) > pageBox.height()) {
+      shouldReset++
+    }
+    if (shouldReset > 1) {
+console.log(`${shouldReset} pages overflowing, resetting`)
+      resetCount++
+      resetPage(thisDocument)
+      checkPage(thisDocument)
+    } else {
+console.log("No overflow reset needed")
+    }
+  })
+}
+[[/code]]
+
+[[/collapsible]]
+
+[[/div]]
+
+[[/iftags]]
+
+[[html]]
+<base target="_top"></base>
+
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<link href="http://scp-wiki.wikidot.com/component:pages/code/1" rel="stylesheet">
+
+<style>
+  /* The user's CSS should override any existing CSS. */
+  {$style}
+</style>
+
+<body>
+  <div class="pages-container {$medium}"></div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+  // Recieve book contents from include parameter
+  let contents = `{$contents}`
+</script>
+<script src="http://scp-wiki.wikidot.com/component:pages/code/2"></script>
+[[/html]]
