@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/",
+    "strict": true,
+    "module": "es6",
+    "target": "es5",
+    "moduleResolution": "node",
+    "lib": [ "es2020", "dom" ],
+    "paths": { "@/*": [ "src/*" ] }
+  },
+  "include": [ "src/**/*.ts" ]
+}

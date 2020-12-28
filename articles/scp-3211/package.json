@@ -1,0 +1,8 @@
+{
+  "name": "scp-3211",
+  "version": "0.0.0",
+  "main": "src/main.ts",
+  "devDependencies": {
+    "compress-tag": "^2.0.0"
+  }
+}
