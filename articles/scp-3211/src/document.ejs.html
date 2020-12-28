@@ -459,7 +459,10 @@
             anomaly.base ?
             "does not exist" :
             `is ${anomaly.prose.informalDescription}`
-          %>. Why it's trying so hard to hide that from us, we'll never know.
+          %>. Why <%=
+            anomaly.prose.objectPronoun ?
+            anomaly.prose.objectPronoun : "it"
+          %>'s trying so hard to hide that from us, we'll never know.
           But, if you're not high as hell on Class Y, then in less than 6
           minutes you'll only remember me just rambling on about some random
           thing sat in a containment chamber.
@@ -470,7 +473,13 @@
         </p>
         <p>
           What I'm trying to do is work out exactly what SCP-3211 is, how it
-          works, and why it's trying so hard to hide. What does it want?
+          works, and why <%=
+            anomaly.prose.objectPronoun ?
+            anomaly.prose.objectPronoun : "it"
+          %>'s trying so hard to hide. What does <%=
+            anomaly.prose.objectPronoun ?
+            anomaly.prose.objectPronoun : "it"
+          %> want?
         </p>
         <p>
           No matter what I tried and who I spoke to, I couldn't get this test
@@ -488,9 +497,17 @@
             the cell to be completely empty. Like, I can clearly see that there
             is nothing here.
           <% } else { %>
-            it as something totally new. Like, I see it as
-            <%= anomaly.prose.informalDescription %>, and there's no one else on
-            the list who's perceived it as that.
+            <%=
+              anomaly.prose.possessivePronoun ?
+              anomaly.prose.possessivePronoun : "it"
+            %> as something totally new. Like, I see <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %> as <%= anomaly.prose.informalDescription %>, and there's no one
+            else on the list who's perceived <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %> as that.
           <% } %>
         </p>
         <p>
@@ -499,8 +516,11 @@
           <% } else { %>
             But, <%= anomaly.prose.funFact %>. It's not <i>just</i>
             <%= anomaly.prose.informalDescription %>. It has anomalous
-            properties other than the fact that people can't see it for more
-            than 6 minutes and then their memories after that are wrong.
+            properties other than the fact that people can't see <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %> for more than 6 minutes and then their memories after that are
+            wrong.
           <% } %>
         </p>
         <p>
@@ -516,7 +536,13 @@
             nothing, will see nothing in the containment chamber, because it is
             empty.
           <% } else { %>
-            it to be anomalous, will remember it being something anomalous.
+            <%=
+              anomaly.prose.possessivePronoun ?
+              anomaly.prose.possessivePronoun : "it"
+            %> to be anomalous, will remember <%=
+              anomaly.prose.possessivePronoun ?
+              anomaly.prose.possessivePronoun : "it"
+            %> being something anomalous.
           <% } %>
         </p>
         <p>
@@ -533,9 +559,12 @@
             understand why, if SCP-3211 does not exist, I insist on trying to
             prove that it does. SCP-3211 does not exist.
           <% } else { %>
-            It looks like it adapts to match the viewer's expectation. But I
-            still don't understand why a red cube is going to such lengths to
-            protect itself in the first place.
+            It looks like <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %> adapts to match the viewer's expectation. But I still don't
+            understand why a red cube is going to such lengths to protect
+            itself in the first place.
           <% } %>
         </p>
         <p>
@@ -557,17 +586,29 @@
         </p>
         <p>
           The second stage is whatever memory SCP-3211 injects over itself when
-          you've seen it for more than 6 minutes. Last time I saw it, I
-          remembered seeing... my son, who would be six. That was the second
-          stage for me.
+          you've seen <%=
+            anomaly.prose.possessivePronoun ?
+            anomaly.prose.possessivePronoun : "it"
+          %> for more than 6 minutes. Last time I saw <%=
+            anomaly.prose.possessivePronoun ?
+            anomaly.prose.possessivePronoun : "it"
+          %>, I remembered seeing... my son, who would be six. That was the
+          second stage for me.
         </p>
         <p>
-          The third stage is that you can't perceive it at all. Its disguise is
-          complete and it's hidden from you.
+          The third stage is that you can't perceive <%=
+            anomaly.prose.possessivePronoun ?
+            anomaly.prose.possessivePronoun : "it"
+          %> at all. Its disguise is complete and <%=
+            anomaly.prose.objectPronoun ?
+            anomaly.prose.objectPronoun : "it"
+          %>'s hidden from you.
         </p>
         <p>
-          I think I know why it wants to hide. I just... need to put the words
-          into a sentence.
+          I think I know why <%=
+            anomaly.prose.objectPronoun ?
+            anomaly.prose.objectPronoun : "it"
+          %> wants to hide. I just... need to put the words into a sentence.
         </p>
         <p>
           It's getting hard to think. My thoughts feel like walking through
@@ -583,66 +624,91 @@
         </p>
         <p>
           It's really weird seeing all the things you can't usually remember.
-          There's bugs everywhere, covering every surface. <%=
-            anomaly.base ?
-            "The containment cell is empty. There are no bugs." :
-            "They're crawling all over it, too."
-          %>
+          There's bugs everywhere, covering every surface.
+          <% if (anomaly.base) { %>
+            The containment cell is empty. There are no bugs.
+          <% } else { %>
+            They're crawling all over <%=
+              anomaly.prose.possessivePronoun ?
+              anomaly.prose.possessivePronoun : "it"
+            %>, too.
+            <% } %>
         </p>
         <p>I need to sleep. I just want to sleep.</p>
       </blockquote>
-      <blockquote>
-        <p>The floor is so much more comfortable than standing.</p>
-        <p>
-          It's getting hard to breathe. I don't know if that's my lungs closing
-          up, or if it's just the... if it's just me forgetting <i>how</i>. At
-          least I haven't forgotten what it was the first time I saw it.
-        </p>
-        <p>
-          But I know for sure why SCP-3211 wants to disguise so avidly. It's
-          right there, just in front of you. I'm surprised no one has seen it
-          yet.
-        </p>
-        <p>
-          It's just... it's just that it's not really... <%
-            anomaly.base ?
-            "it's not really there. It does not exist." :
-            "really itself, right?"
-          %>
-        </p>
-      </blockquote>
-      <blockquote>
-        <p>
-          I don't know how to take mnestics, dammit. I only make them. I know
-          how they're... how they're...
-        </p>
-        <p>I need to sleep.</p>
-        <p>
-          <%
-            anomaly.base ?
-            "I am alone in this room. The containment cell is empty." :
-            "It's just sat there. Watching me."
-          %> Just... just make me forget already.
-        </p>
-        <p>
-          <%
-            anomaly.base ?
-            "I know that it does not exist" :
-            "I know your secrets, dammit"
-          %>... why don't... why can't... why did you have to show him to me?
-        </p>
-        <p>Why did you have to take him away again?</p>
-        <p>I don't think I'm going to survive.</p>
-        <p>Why hasn't anyone come to get me?</p>
-      </blockquote>
+      <% if (anomaly.prose.alternateEnding) { %>
+        <blockquote><%= anomaly.prose.alternateEnding %></blockquote>
+      <% } else { %>
+        <blockquote>
+          <p>The floor is so much more comfortable than standing.</p>
+          <p>
+            It's getting hard to breathe. I don't know if that's my lungs
+            closing up, or if it's just the... if it's just me forgetting
+            <i>how</i>. At least I haven't forgotten what <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %> was the first time I saw <%=
+              anomaly.prose.possessivePronoun ?
+              anomaly.prose.possessivePronoun : "it"
+            %>.
+          </p>
+          <p>
+            But I know for sure why <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "SCP-3211"
+            %> wants to disguise so avidly. It's
+            right there, just in front of you. I'm surprised no one has seen it
+            yet.
+          </p>
+          <p>
+            It's just... it's just that <%=
+              anomaly.prose.objectPronoun ?
+              anomaly.prose.objectPronoun : "it"
+            %>'s not really... <%
+              anomaly.base ?
+              "it's not really there. It does not exist." :
+              "really itself, right?"
+            %>
+          </p>
+        </blockquote>
+        <blockquote>
+          <p>
+            I don't know how to take mnestics, dammit. I only make them. I know
+            how they're... how they're...
+          </p>
+          <p>I need to sleep.</p>
+          <p>
+            <%
+              anomaly.base ?
+              "I am alone in this room. The containment cell is empty." :
+              "It's just sat there. Watching me."
+            %> Just... just make me forget already.
+          </p>
+          <p>
+            <%
+              anomaly.base ?
+              "I know that it does not exist" :
+              "I know your secrets, dammit"
+            %>... why don't... why can't... why did you have to show him to me?
+          </p>
+          <p>Why did you have to take him away again?</p>
+          <p>I don't think I'm going to survive.</p>
+          <p>Why hasn't anyone come to get me?</p>
+        </blockquote>
+      <% } %>
       <p>
-        It is assumed that Dr. Greaves fell unconcsious at this point. The
-        remainder of the logs are mostly silent<%
-          anomaly.prose.madeASound ?
-          `, excluding ${anomaly.prose.madeASound},` :
-          ""
-        %> up to the point where a member of security staff noticed Dr. Greaves
-        on closed-circuit monitoring several minutes later and called for help.
+        <% if (anomaly.prose.conclusion) { %>
+          <%= anomaly.prose.conclusion %>
+        <% } else { %>
+          It is assumed that Dr. Greaves fell unconscious at this point. The
+          remainder of the logs are mostly silent<%
+            anomaly.prose.madeASound ?
+            `, excluding ${anomaly.prose.madeASound},` :
+            ""
+          %> up to the point where a member of security staff noticed Dr.
+          Greaves on closed-circuit monitoring several minutes later and called
+          for help.
+        <% } %>
       </p>
     </div>
   </div>

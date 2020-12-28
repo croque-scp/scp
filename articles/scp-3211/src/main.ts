@@ -9,7 +9,11 @@ type AnomalyProse = {
   examineConfirmationAction?: string
   writtenObservation: string
   measuredProperties: AnomalyMeasuredProperties
+  objectPronoun?: string
+  possessivePronoun?: string
   funFact: string
+  alternateEnding?: string
+  conclusion?: string
   madeASound?: string
 }
 
