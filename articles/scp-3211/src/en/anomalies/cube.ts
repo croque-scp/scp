@@ -1,4 +1,4 @@
-import { Anomaly } from "@/main"
+import { Anomaly } from "../../main"
 
 export const cube = new Anomaly(false, {
   imageUrl: "redcube.png",

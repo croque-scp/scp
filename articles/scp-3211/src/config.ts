@@ -8,7 +8,7 @@ export const anomalyNames = [
   "choke",
   "matches",
   "toaster",
-  "gloves",
+  "glove",
   "putty",
   "chocolate",
   "cannon",

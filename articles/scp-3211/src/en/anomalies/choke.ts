@@ -1,4 +1,4 @@
-import { Anomaly } from "@/main"
+import { Anomaly } from "../../main"
 
 export const choke = new Anomaly(false, {
   imageUrl: "imgmissing.png",

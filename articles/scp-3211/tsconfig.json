@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": "./src/",
     "outDir": "./dist/",
     "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "lib": [ "es2020", "dom" ],
-    "paths": { "@/*": [ "src/*" ] }
+    "esModuleInterop": true,
+    "lib": [ "es2020", "dom" ]
   },
   "include": [ "src/**/*.ts" ]
 }
