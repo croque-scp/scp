@@ -1,4 +1,4 @@
-import { Anomaly } from "../../main"
+import { Anomaly } from "../../anomaly"
 
 export const her = new Anomaly(false, {
   imageUrl: "czech.jpg",

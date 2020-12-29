@@ -1,50 +1,13 @@
+import chalk from "chalk"
 import { compress } from "compress-tag"
 import ejs from "ejs"
+import { diff, patch } from "jsondiffpatch"
 import fs from "fs"
 import marked from "marked"
+import util from "util"
 
+import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
-
-type AnomalyProse = {
-  imageUrl: string
-  imageCaption: string
-  objectClass: string
-  physicalDescription: string
-  informalDescription: string
-  formalDescription: string
-  examineAction?: string
-  examineConfirmationAction?: string
-  writtenObservation: string
-  data: {
-    spectrophotometry: string
-    mass: string
-    hume: string
-    magnetism: string
-    visual: string
-    physical: string
-    questioning: string
-    sentience: string
-  }
-  objectPronoun?: string
-  possessivePronoun?: string
-  funFact: string
-  alternateEnding?: string
-  conclusion?: string
-  madeASound?: string
-}
-
-export class Anomaly {
-  /**
-   * Class for type-checking anomaly configuration.
-   */
-  base: boolean
-  prose: AnomalyProse
-
-  constructor (base: boolean, prose: AnomalyProse) {
-    this.base = base
-    this.prose = prose
-  }
-}
 
 export async function buildAll (): Promise<void> {
   /**
@@ -78,12 +41,22 @@ export async function generateOutput (
    * @param lang: The language, e.g. "en". The relevant files for this language
    * must be present.
    */
+  console.log(chalk.green("·".repeat(process.stdout.columns)))
+  console.log("\nCompiling SCP-3211 for lang", chalk.greenBright(lang))
+
+  const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
+  const reference = compress(marked(
+    ejs.render(document, { anomaly: referenceAnomaly })
+  ))
+  console.log("Reference length:", reference.length)
+
+  console.log("\nGenerating sources...")
   const sources = (await Promise.allSettled(
     anomalyNames.map(async (anomaly): Promise<Anomaly> => {
       // Import each anomaly for the current language
       return (await import(`./${lang}/anomalies/${anomaly}`))[anomaly]
     })
-  )).reduce((results: Anomaly[], result, index) => {
+  )).reduce((anomalies: Anomaly[], result, index) => {
     // A translation doesn't have to have all the anomalies. Discard any
     // imports that failed (with a warning), and then continue
     if (result.status === "rejected") {
@@ -99,18 +72,13 @@ export async function generateOutput (
         Build will continue without this anomaly.
       `)
     } else {
-      results.push(result.value)
+      anomalies.push(result.value)
     }
-    return results
+    return anomalies
   }, []).map(anomaly => {
-    return compress(
-      marked(
-        ejs.render(
-          fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8"),
-          { anomaly }
-        )
-      )
-    ).replace(
+    return compress(marked(
+      ejs.render(document, { anomaly })
+    )).replace(
       // Swap out double dashes for em dashes
       /--/g, "—"
     )
@@ -119,5 +87,41 @@ export async function generateOutput (
     langs[lang].rot13 ? rot13 : source => source
   )
 
-  console.log(sources[0])
+  const totalSourceLength = sources.reduce(
+    (length, source) => length + source.length, 0
+  )
+  console.log(
+    "Source lengths:",
+    totalSourceLength,
+    "= Σ",
+    util.inspect(
+      sources.map(source => source.length),
+      { colors: true, compact: true }
+    )
+  )
+  console.log("Total source length:", totalSourceLength)
+
+  console.log("\nOptimising...")
+  const deltas = sources.map(source => diff(reference, source)!)
+
+  const totalDeltaLength = deltas.reduce(
+    (length, delta) => length + delta[0].length, 0
+  )
+  console.log(
+    "Delta lengths:",
+    totalDeltaLength,
+    "= Σ",
+    util.inspect(
+      deltas.map(delta => delta[0].length),
+      { colors: true, compact: true }
+    )
+  )
+  console.log(
+    "Reduction:",
+    totalSourceLength - totalDeltaLength,
+    `(${(
+      ((totalDeltaLength - totalSourceLength) / totalSourceLength) * -100
+    ).toFixed(2)}%)`
+  )
+
 }
