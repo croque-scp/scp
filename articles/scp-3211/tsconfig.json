@@ -3,9 +3,9 @@
     "baseUrl": "./",
     "outDir": "./dist/",
     "strict": true,
-    "module": "es6",
-    "target": "es5",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "lib": [ "es2020", "dom" ],
     "paths": { "@/*": [ "src/*" ] }
   },
