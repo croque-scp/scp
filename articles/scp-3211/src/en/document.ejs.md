@@ -130,7 +130,7 @@ will be able to perceive it for an additional 6 minutes.
 
 **Addendum 3211-A:** Experiment Logs 3211-B and 3211-D
 
-<collapsible show="► Experiment Log 3211-01" hide="▼ Experiment Log 3211-01">
+<details><summary>Experiment Log 3211-01</summary>
 
 <blockquote>
 <p align="center">**EXPERIMENT LOG 3211-01**</p>
@@ -166,9 +166,9 @@ SCP-3211. He expresses anger at not being able to read what he has written.
 The description produced by D-68134 was retained as Document 3211-01.
 </blockquote>
 
-</collapsible>
+</details>
 
-<collapsible show="► Experiment Log 3211-02" hide="▼ Experiment Log 3211-02">
+<details><summary>Experiment Log 3211-02</summary>
 
 <blockquote>
 
@@ -210,16 +210,16 @@ again, from memory.
 neither able to perceive the object nor read Document 3211-01.
 </blockquote>
 
-</collapsible>
+</details>
 
-<collapsible show="► Document 3211-01" hide="▼ Document 3211-01">
+<details><summary>Document 3211-01</summary>
 
 The following is a transcription of Document 3211-01, the text produced by
 D-68134 during Experiment 3211-01.
 
 > <%= anomaly.prose.writtenObservation %>
 
-</collapsible>
+</details>
 
 **Addendum 3211-B:** Empirical data
 
@@ -249,13 +249,12 @@ Response to basic questioning by D-9981 | <%= anomaly.prose.data.questioning %>
 Type-Kappa memetic sentience detector | <%= anomaly.prose.data.sentience %>
 
 **Incident Log 3211-C:** On 2016-03-31, a researcher who was not assigned
-to SCP-3211, Dr. Jason Greaves, took a Class-Y mnestic<footnote><a>1</a>.
-"Mnestics, as opposed to the more common amnestics, generally aid in the
-retention of memories and the prevention of their modification even in the face
-of anomalies that seek to disrupt this..." -- Excerpt from _An Introduction to
-Antimemetic Counter-Measures_,
-[Marion Wheeler](we-need-to-talk-about-fifty-five)</footnote> without
-authorisation and entered the containment chamber.
+to SCP-3211, Dr. Jason Greaves, took a Class-Y mnestic<footnote>"Mnestics, as
+opposed to the more common amnestics, generally aid in the retention of
+memories and the prevention of their modification even in the face of anomalies
+that seek to disrupt this..." -- Excerpt from _An Introduction to Antimemetic
+Counter-Measures_, [Marion Wheeler](we-need-to-talk-about-fifty-five)
+</footnote> without authorisation and entered the containment chamber.
 <% if (anomaly.base) { -%>
 Personnel reported being unable to perceive Dr. Greaves until his unconscious
 body "spontaneously appeared" several hours later. Dr. Greaves returned to full
@@ -277,7 +276,7 @@ Dr. Greaves <%=
   "is available for questions regarding his experience with SCP-3211."
 %>
 
-<collapsible show="► Audio Log 3211-01" hide="▼ Audio Log 3211-01">
+<details><summary>Audio Log 3211-01</summary>
 
 <blockquote>
 Dr. Jason Greaves, SCP-3211, experiment log... one?
