@@ -18,7 +18,7 @@ export const cube = new Anomaly(false, {
     It's really smooth, like, weirdly smooth. I feel like if I touch it my
     hand will slip right off.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "Failed -- SCP-3211 reflected all light",
     mass: "1 kg to highest level of precision",
     hume: "SCP-3211 has a Hume reading slightly higher than baseline reality",

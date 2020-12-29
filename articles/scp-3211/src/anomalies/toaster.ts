@@ -21,7 +21,7 @@ export const toaster = new Anomaly(false, {
   informalDescription: "a toaster",
   formalDescription: "a toaster",
   writtenObservation: "It's a toaster... something is well fucky with the wire",
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "3.4 kg",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",

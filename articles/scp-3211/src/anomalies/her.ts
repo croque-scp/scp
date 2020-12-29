@@ -22,7 +22,7 @@ export const her = new Anomaly(false, {
     weird, and she's got this really creepy smile. Like, not overly creepy,
     just like it's fake. And she doesn't move.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "Failed -- test was deemed impolite",
     mass: "SCP-3211 was placed onto a mass balance. 77.56 kg",
     hume: `

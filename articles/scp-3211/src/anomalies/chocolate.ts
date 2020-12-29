@@ -33,7 +33,7 @@ export const chocolate = new Anomaly(false, {
     strawberry stuff. I will never understand why people like that. Even for
     chocolate it's just too sweet.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "90 g",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",

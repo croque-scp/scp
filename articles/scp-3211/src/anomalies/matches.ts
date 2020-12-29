@@ -22,7 +22,7 @@ export const matches = new Anomaly(false, {
   informalDescription: "a box of matches",
   formalDescription: "a box of matches",
   writtenObservation: "Literally just a matchbox",
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "39 g",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",

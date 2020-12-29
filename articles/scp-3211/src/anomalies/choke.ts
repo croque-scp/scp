@@ -31,7 +31,7 @@ export const choke = new Anomaly(false, {
 
     I can't see it
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed no absorbances",
     mass: "91.4 kg",
     hume: `

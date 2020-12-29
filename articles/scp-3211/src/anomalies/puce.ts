@@ -20,7 +20,7 @@ export const puce = new Anomaly(false, {
     It's... the colour puce? I don't get it. That's the only thing I can see it
     as. But it's small, like... I don't know. Like it's restrained.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: `
       SCP-3211 has a peak absorbance consistent with the colour 'puce'. Actual
       wavelength unknown.

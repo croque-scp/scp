@@ -8,7 +8,7 @@ type AnomalyProse = {
   examineAction?: string
   examineConfirmationAction?: string
   writtenObservation: string
-  measuredProperties: AnomalyMeasuredProperties
+  data: AnomalyData
   objectPronoun?: string
   possessivePronoun?: string
   funFact: string
@@ -17,7 +17,7 @@ type AnomalyProse = {
   madeASound?: string
 }
 
-type AnomalyMeasuredProperties = {
+type AnomalyData = {
   spectrophotometry: string
   mass: string
   hume: string

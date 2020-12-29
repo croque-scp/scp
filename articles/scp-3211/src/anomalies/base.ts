@@ -11,7 +11,7 @@ export const base = new Anomaly(true, {
     The containment chamber is empty. There's nothing to describe. I don't
     understand why I have to write about an empty room.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: `
       SCP-3211 displays absorbances and transmittances in the visible spectrum
       consistent with standard background reading

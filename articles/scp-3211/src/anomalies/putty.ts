@@ -20,7 +20,7 @@ export const putty = new Anomaly(false, {
   informalDescription: "putty",
   formalDescription: "a container of Silly Putty",
   writtenObservation: "It's fucking putty",
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "45 g",
     hume: "SCP-3211 has a Hume reading marginally higher than baseline reality",

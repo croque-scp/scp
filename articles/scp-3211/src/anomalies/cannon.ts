@@ -22,7 +22,7 @@ export const cannon = new Anomaly(false, {
   informalDescription: "an empty room",
   formalDescription: "a room that may or may not have contained a cannon",
   writtenObservation: "There is no cannon",
-  measuredProperties: {
+  data: {
     spectrophotometry: "N/A",
     mass: "N/A",
     hume: "N/A",

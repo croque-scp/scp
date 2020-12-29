@@ -22,7 +22,7 @@ export const pigeon = new Anomaly(false, {
     There's a dead pigeon in the middle of the room. Damn, that sucks. I wonder
     how old it is. Why hasn't it decomposed?
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "93.6 kg",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",

@@ -24,7 +24,7 @@ export const glove = new Anomaly(false, {
     It's an old pair of gloves. They look nasty. Not sure that well-used is the
     word for it. More like dropped in oil and then baked. Or shat on.
   `,
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "0.6 kg each",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",

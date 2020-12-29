@@ -24,7 +24,7 @@ export const coin = new Anomaly(false, {
     touched it
   `,
   writtenObservation: "It's a golden coin. I want it",
-  measuredProperties: {
+  data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
     mass: "2.32 g",
     hume: "SCP-3211 has a Hume reading consistent with baseline reality",
