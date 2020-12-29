@@ -34,6 +34,9 @@ type AnomalyProse = {
 }
 
 export class Anomaly {
+  /**
+   * Class for type-checking anomaly configuration.
+   */
   base: boolean
   prose: AnomalyProse
 
@@ -44,12 +47,31 @@ export class Anomaly {
 }
 
 export async function buildAll (): Promise<void> {
+  /**
+   * Iterates through each configured language and builds SCP-3211.
+   */
   for (const lang in langs) {
-    await generateOutput(lang)
+    await generateOutput(<keyof typeof langs>lang)
   }
 }
 
-export async function generateOutput (lang: string): Promise<void> {
+function rot13 (string: string) {
+  /**
+   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
+   *
+   * @param string: The string to be encrypted or decrypted.
+   */
+  return string.replace(/[A-z]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(
+      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13) ?  charCode : charCode - 26
+    );
+  });
+};
+
+export async function generateOutput (
+  lang: keyof typeof langs
+): Promise<void> {
   /**
    * Constructs the source file for SCP-3211 for the given language.
    *
@@ -72,7 +94,6 @@ export async function generateOutput (lang: string): Promise<void> {
           Stopping build.
         `)
       }
-      console.log(result.reason)
       console.warn(compress`
         Couldn't find anomaly '${anomalyNames[index]}' for lang '${lang}'.
         Build will continue without this anomaly.
@@ -93,7 +114,10 @@ export async function generateOutput (lang: string): Promise<void> {
       // Swap out double dashes for em dashes
       /--/g, "—"
     )
-  })
+  }).map(
+    // Encrypt with ROT13 if the language wants it, otherwise, don't
+    langs[lang].rot13 ? rot13 : source => source
+  )
 
   console.log(sources[0])
 }
