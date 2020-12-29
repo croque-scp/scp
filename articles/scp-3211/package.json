@@ -2,11 +2,16 @@
   "name": "scp-3211",
   "version": "0.0.0",
   "main": "src/main.ts",
+  "scripts": {
+    "build": "tsc && node -e \"require('./dist/main').buildAll()\""
+  },
   "devDependencies": {
+    "@types/diff": "^5.0.0",
     "@types/ejs": "^3.0.5",
     "@types/marked": "^1.2.1",
     "@types/node": "^14.14.16",
     "compress-tag": "^2.0.0",
+    "diff": "^5.0.0",
     "ejs": "^3.1.5",
     "marked": "^1.2.7"
   }

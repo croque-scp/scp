@@ -3,7 +3,7 @@ import ejs from "ejs"
 import fs from "fs"
 import marked from "marked"
 
-import { anomalyNames } from "@/config"
+import { anomalyNames, langs } from "./config"
 
 type AnomalyProse = {
   imageUrl: string
@@ -43,7 +43,13 @@ export class Anomaly {
   }
 }
 
-export default async function generateOutput (lang: string): Promise<void> {
+export async function buildAll (): Promise<void> {
+  for (const lang in langs) {
+    await generateOutput(lang)
+  }
+}
+
+export async function generateOutput (lang: string): Promise<void> {
   /**
    * Constructs the source file for SCP-3211 for the given language.
    *
@@ -55,7 +61,7 @@ export default async function generateOutput (lang: string): Promise<void> {
       // Import each anomaly for the current language
       return (await import(`./${lang}/anomalies/${anomaly}`))[anomaly]
     })
-  )).filter((result, index) => {
+  )).reduce((results: Anomaly[], result, index) => {
     // A translation doesn't have to have all the anomalies. Discard any
     // imports that failed (with a warning), and then continue
     if (result.status === "rejected") {
@@ -71,18 +77,23 @@ export default async function generateOutput (lang: string): Promise<void> {
         Couldn't find anomaly '${anomalyNames[index]}' for lang '${lang}'.
         Build will continue without this anomaly.
       `)
-      return false
+    } else {
+      results.push(result.value)
     }
-    return true
-  }).map(anomaly => {
-    return marked(
-      ejs.render(
-        fs.readFileSync(`${lang}/document.ejs.md`, "utf8"),
-        anomaly
+    return results
+  }, []).map(anomaly => {
+    return compress(
+      marked(
+        ejs.render(
+          fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8"),
+          { anomaly }
+        )
       )
     ).replace(
       // Swap out double dashes for em dashes
       /--/g, "—"
     )
   })
+
+  console.log(sources[0])
 }
