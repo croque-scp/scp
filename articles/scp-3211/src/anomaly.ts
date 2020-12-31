@@ -55,7 +55,7 @@ export const referenceAnomaly = new Anomaly(false, {
     visual: "",
     physical: "",
     questioning: "",
-    sentience: "",
+    sentience: ""
   },
   funFact: ""
 })

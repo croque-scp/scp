@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const base = new Anomaly(true, {
+export default new Anomaly(true, {
   imageUrl: "imgmissing.png",
   imageCaption: "There is no photographic evidence of SCP-3211.",
   objectClass: "Safe",
@@ -25,7 +25,7 @@ export const base = new Anomaly(true, {
     visual: "SCP-3211 is not visually present",
     physical: "No response; D-9981 felt nothing at SCP-3211's location",
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: ""
 })

@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const glove = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "gloves.png",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -35,7 +35,7 @@ export const glove = new Anomaly(false, {
       the glove
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: "it makes your hand appear in your mouth. Your own fucking mouth"
 })

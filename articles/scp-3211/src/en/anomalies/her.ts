@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const her = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "czech.jpg",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Euclid",
@@ -38,7 +38,7 @@ export const her = new Anomaly(false, {
       SCP-3211 identified its name as "Nerozumím" but did not respond to other
       questions
     `,
-    sentience: "Positive response",
+    sentience: "Positive response"
   },
   objectPronoun: "she",
   possessivePronoun: "her",

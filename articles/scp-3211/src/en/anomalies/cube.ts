@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const cube = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "redcube.png",
   imageCaption: "Artist's render of SCP-3211.",
   objectClass: "Safe",
@@ -28,7 +28,7 @@ export const cube = new Anomaly(false, {
       D-9981 was able to pick up SCP-3211, reported that it "feels slippery"
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: "it's perfectly smooth and weighs exactly one kilogram"
 })

@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const matches = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "match.jpg",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -30,7 +30,7 @@ export const matches = new Anomaly(false, {
     visual: "Confirmed that SCP-3211 resembles a box of matches",
     physical: "D-9981 opened the box and began attempting to light a match",
     questioning: "No response",
-    sentience: "No response (negative response expected)",
+    sentience: "No response (negative response expected)"
   },
   funFact: "it's got that pointless compulsion effect associated with it"
 })

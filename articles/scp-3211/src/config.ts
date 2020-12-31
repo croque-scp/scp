@@ -11,12 +11,12 @@ export const anomalyNames = [
   "glove",
   "putty",
   "chocolate",
-  "cannon",
+  "cannon"
 ]
 
 export const langs = {
-  "en": {
+  en: {
     rot13: true,
     imageUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/"
-  },
+  }
 }

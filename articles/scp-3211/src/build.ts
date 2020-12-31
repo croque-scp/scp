@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { compress } from "compress-tag"
 import ejs from "ejs"
-import { diff, patch } from "jsondiffpatch"
+import { diff } from "jsondiffpatch"
 import fs from "fs"
 import marked from "marked"
 import util from "util"
@@ -27,10 +27,11 @@ function rot13 (string: string) {
   return string.replace(/[A-z]/g, (char) => {
     let charCode = char.charCodeAt(0)
     return String.fromCharCode(
-      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13) ?  charCode : charCode - 26
-    );
-  });
-};
+      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13) ?
+        charCode : charCode - 26
+    )
+  })
+}
 
 export async function generateOutput (
   lang: keyof typeof langs
@@ -56,9 +57,11 @@ export async function generateOutput (
 
   console.log("\nGenerating sources...")
   const sources = (await Promise.allSettled(
-    anomalyNames.map(async (anomaly): Promise<Anomaly> => {
+    anomalyNames.map(async anomaly => {
       // Import each anomaly for the current language
-      return (await import(`./${lang}/anomalies/${anomaly}`))[anomaly]
+      return (<{ default: Anomaly }>(
+        await import(`./${lang}/anomalies/${anomaly}`)
+      )).default
     })
   )).reduce((anomalies: Anomaly[], result, index) => {
     // A translation doesn't have to have all the anomalies. Discard any
@@ -111,14 +114,14 @@ export async function generateOutput (
   const deltas = sources.map(source => diff(reference, source)!)
 
   const totalDeltaLength = deltas.reduce(
-    (length, delta) => length + delta[0].length, 0
+    (length, delta) => length + (<string>delta[0]).length, 0
   )
   console.log(
     "Delta lengths:",
     totalDeltaLength,
     "= Σ",
     util.inspect(
-      deltas.map(delta => delta[0].length),
+      deltas.map(delta => (<string>delta[0]).length),
       { colors: true, compact: true }
     )
   )
@@ -129,5 +132,4 @@ export async function generateOutput (
       ((totalDeltaLength - totalSourceLength) / totalSourceLength) * -100
     ).toFixed(2)}%)`
   )
-
 }

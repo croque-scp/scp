@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const putty = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "putty.jpg",
   imageCaption: "SCP-3211 out of its container.",
   objectClass: "Safe",
@@ -31,7 +31,7 @@ export const putty = new Anomaly(false, {
       "it's more like Sad Putty"
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: `
     it's fucking depressing putty. I know that I'm having some pretty fucking

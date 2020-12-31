@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const coin = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "coin.jpg",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -32,9 +32,9 @@ export const coin = new Anomaly(false, {
     visual: "Confirmed that SCP-3211 resembles a gold coin",
     physical: "Confirmed that SCP-3211 is, in fact, a plastic coin",
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: `
     even though it's plastic, you think it's real gold until you touch it
-  `,
+  `
 })

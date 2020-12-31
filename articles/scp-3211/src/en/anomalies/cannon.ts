@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const cannon = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "imgmissing.png",
   imageCaption: "There is no photographic evidence of SCP-3211.",
   objectClass: "Safe",
@@ -30,7 +30,7 @@ export const cannon = new Anomaly(false, {
     visual: "The containment chamber is empty",
     physical: "SCP-3211 does not exist",
     questioning: 'No response; D-9981 remarked "how rude", relevance uncertain',
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: "there was a cannon here -- or so it wants you to think"
 })

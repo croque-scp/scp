@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const choke = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "imgmissing.png",
   imageCaption: "There is no photographic evidence of SCP-3211.",
   objectClass: "Euclid",
@@ -45,7 +45,7 @@ export const choke = new Anomaly(false, {
       SCP-3211 moved away
     `,
     questioning: "SCP-3211 moved around unpredictably",
-    sentience: "Positive response",
+    sentience: "Positive response"
   },
   funFact: "it makes people choke and have heart attacks when they touch it"
 })

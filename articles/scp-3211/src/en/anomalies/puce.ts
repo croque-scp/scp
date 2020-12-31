@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const puce = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "puce.jpg",
   imageCaption: "The colour 'puce'.",
   objectClass: "Safe",
@@ -34,7 +34,7 @@ export const puce = new Anomaly(false, {
       difficulty putting it back onto the table
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: `
     it's some undefined, ordinary object which somehow has the colour puce

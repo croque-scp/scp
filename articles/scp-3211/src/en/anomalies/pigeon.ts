@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const pigeon = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "deadpigeon.png",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -33,7 +33,7 @@ export const pigeon = new Anomaly(false, {
       circle
     `,
     questioning: "No response",
-    sentience: "Weak positive response (consistent with dead animal)",
+    sentience: "Weak positive response (consistent with dead animal)"
   },
   funFact: `
     it's hard as rock and doesn't decompose any more than it already has

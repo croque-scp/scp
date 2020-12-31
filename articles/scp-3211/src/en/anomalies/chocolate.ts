@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const chocolate = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "chocolate.jpg",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -44,7 +44,7 @@ export const chocolate = new Anomaly(false, {
       attempt to try one
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: `
     the chocolates change based on who's looking at them. I don't need to taste
@@ -53,5 +53,5 @@ export const chocolate = new Anomaly(false, {
     it's funny, because I like white chocolate and I like coffee. Only black
     coffee, though, so maybe that's the issue. I wish it was Turkish delight.
     But that's beside the point
-  `,
+  `
 })

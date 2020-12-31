@@ -1,6 +1,6 @@
 import { Anomaly } from "../../anomaly"
 
-export const toaster = new Anomaly(false, {
+export default new Anomaly(false, {
   imageUrl: "toaster.jpg",
   imageCaption: "SCP-3211 photographed in containment.",
   objectClass: "Safe",
@@ -31,7 +31,7 @@ export const toaster = new Anomaly(false, {
       D-9981 easily lifted SCP-3211; removed toast; was unable to follow cable
     `,
     questioning: "No response",
-    sentience: "Negative response",
+    sentience: "Negative response"
   },
   funFact: "it's got magic toast and that fucky cable"
 })
