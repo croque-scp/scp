@@ -1,5 +1,5 @@
 export const anomalyNames = [
-  "base",
+  "base", // Base anomaly must come first
   "cube",
   "her",
   "puce",

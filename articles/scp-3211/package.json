@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "main": "src/main.ts",
   "scripts": {
-    "build": "tsc && node -e \"require('./dist/main').buildAll()\""
+    "build": "tsc && node -e \"require('./dist/build').buildAll()\""
   },
   "devDependencies": {
     "@types/ejs": "^3.0.5",

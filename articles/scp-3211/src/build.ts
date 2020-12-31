@@ -44,10 +44,14 @@ export async function generateOutput (
   console.log(chalk.green("·".repeat(process.stdout.columns)))
   console.log("\nCompiling SCP-3211 for lang", chalk.greenBright(lang))
 
+  // Construct the reference document which will be used for space
+  // optimisations later
   const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
-  const reference = compress(marked(
-    ejs.render(document, { anomaly: referenceAnomaly })
-  ))
+  const reference = (langs[lang].rot13 ? rot13 : (source: string) => source)(
+    compress(marked(
+      ejs.render(document, { anomaly: referenceAnomaly })
+    ))
+  )
   console.log("Reference length:", reference.length)
 
   console.log("\nGenerating sources...")
@@ -101,6 +105,8 @@ export async function generateOutput (
   )
   console.log("Total source length:", totalSourceLength)
 
+  // A lot of space can be saved by storing not the raw text of each source,
+  // but the diff between it and the reference document
   console.log("\nOptimising...")
   const deltas = sources.map(source => diff(reference, source)!)
 
