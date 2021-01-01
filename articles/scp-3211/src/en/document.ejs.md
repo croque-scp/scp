@@ -5,10 +5,10 @@ at least 6 minutes. You are now considered post-3211. If you can still perceive
 the documentation as you originally recall it, please consult a researcher
 assigned to SCP-3211 immediately.**
 <% } else { -%>
-**YOU HAVE 6 MINUTES TO <span class="read">READ</span> THIS FILE**
+**YOU HAVE 6 MINUTES TO <span id="read">READ</span> THIS FILE**
 <% } %>
 
-<p class="timer">06:00</p>
+<p id="timer">06:00</p>
 </blockquote>
 
 <image src="<%= anomaly.prose.imageUrl %>"
@@ -18,12 +18,11 @@ assigned to SCP-3211 immediately.**
 
 **Object Class:** <%- anomaly.prose.objectClass %>
 
-**Special Containment Procedures:**
-To reduce unnecessary exposure to SCP-3211, a warning message is to be placed
-at the start of this document. Level 4 authorisation must be required to
-proceed. No information regarding SCP-3211 is to be present in any resources
-not exclusively available to researchers assigned to SCP-3211, including the
-warning message.
+**Special Containment Procedures:** To reduce unnecessary exposure to SCP-3211,
+a warning message is to be placed at the start of this document. Level 4
+authorisation must be required to proceed. No information regarding SCP-3211 is
+to be present in any resources not exclusively available to researchers
+assigned to SCP-3211, including the warning message.
 
 Except in the event of an emergency necessitating knowledge of SCP-3211, no
 more than 3 members of the O5 council and 10% of the population of any
@@ -279,6 +278,7 @@ Dr. Greaves <%=
 <details><summary>Audio Log 3211-01</summary>
 
 <blockquote>
+
 Dr. Jason Greaves, SCP-3211, experiment log... one?
 
 If you're hearing this and if, like me, you're souped-up on some heavy-ass
@@ -308,6 +308,7 @@ get started.
 </blockquote>
 
 <blockquote>
+
 I've noticed something of a pattern emerging.
 
 Most people who walk into 3211's cell will perceive
@@ -377,6 +378,7 @@ to wear off. I actually don't know how long Class Y lasts.
 </blockquote>
 
 <blockquote>
+
 I think I've narrowed it down to three... stages. That seems to be the right
 word.
 
@@ -409,6 +411,7 @@ ketchup.
 </blockquote>
 
 <blockquote>
+
 Oh God, my head is killing me.
 
 I'm certain it's the mnestics. Class Z literally kills you when you take it,
@@ -432,6 +435,7 @@ I need to sleep. I just want to sleep.
 <blockquote><%= anomaly.prose.alternateEnding %></blockquote>
 <% } else { %>
 <blockquote>
+
 The floor is so much more comfortable than standing.
 
 It's getting hard to breathe. I don't know if that's my lungs closing up, or if
@@ -457,6 +461,7 @@ It's just... it's just that <%=
 </blockquote>
 
 <blockquote>
+
 I don't know how to take mnestics, dammit. I only make them. I know how
 they're... how they're...
 

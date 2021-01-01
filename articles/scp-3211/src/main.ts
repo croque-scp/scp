@@ -1,0 +1,254 @@
+import { compress, compressTight } from "compress-tag"
+import Cookies from "js-cookie"
+import { patch, Delta } from "jsondiffpatch"
+
+import { anomalyNames } from "./config"
+
+// XXX Not all anomalies in anomalyNames are guaranteed to be present - it
+// should be used for types only; I should use the declared anomalies dict for
+// iterating
+
+declare const reference: string
+declare const anomalies: { [anomaly in typeof anomalyNames[number]]: Delta }
+
+const sections = <const>["warning", "loading", "anomaly", "review"]
+type section = typeof sections[number]
+
+type cookies = {
+  "anomaly": typeof anomalyNames[number] // Which anomaly to show
+  "seen": "true" | "false" // Tracks whether user has seen base anomaly
+  "timerExpiresAt": string // Time that timer will end (or has ended)
+}
+
+const readTime = 360
+let read = false
+let anomaly: typeof anomalyNames[number]
+
+let timerInterval: number
+
+function remember <C extends keyof cookies>(key: C, value: cookies[C]): void {
+  /**
+   * Stores a value to a cookie.
+   *
+   * @param key: The key to store against.
+   * @param value: The value to store.
+   */
+  console.log(`Saving ${value} to ${key}`)
+  Cookies.set(key, value, { expires: 356 })
+  document.getElementById("anomalyCookie")!.textContent = `Current: ${anomaly}`
+  document.getElementById("otherCookies")!.textContent = compress`
+    seen ${recall("seen")}, timer ${recall("timerExpiresAt")}
+  `
+}
+
+function recall <C extends keyof cookies>(key: C): cookies[C] {
+  /**
+   * Retrives a value from cookies.
+   *
+   * @param key: The key to look up.
+   */
+  return <cookies[C]>Cookies.get(key)
+}
+
+function forget (key: keyof cookies): void {
+  /**
+   * Removes a remembered value.
+   *
+   * @param key: The key to destroy.
+   */
+  console.log(`Forgot ${key} (was ${recall(key)})`)
+  Cookies.remove(key)
+}
+
+function forgetEverything (reloadPageAfter: boolean): void {
+  /**
+   * Completely forget everything.
+   *
+   * @param reloadPageAfter: Whether or not to reload the page after forgetting
+   * everything.
+   */
+  console.log("Forgetting everything...")
+  forget("anomaly")
+  forget("seen")
+  forget("timerExpiresAt")
+  if (reloadPageAfter) {
+    history.go(0)
+  }
+}
+
+export function rot13 (string: string): string {
+  /**
+   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
+   *
+   * @param string: The string to be encrypted or decrypted.
+   */
+  return string.replace(/[A-z]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(
+      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13)
+        ? charCode : charCode - 26
+    )
+  })
+}
+
+// TODO Remove export; bind to footnote after making footnote component
+export function hoverdiv (event: MouseEvent): boolean {
+  const top = `${event.clientY + 10}px`
+  const hovertip = document.getElementById("hovertip")!
+  hovertip.style.left = "0"
+  hovertip.style.top = top
+  // TODO Choose by whether or not it's in or out
+  if (hovertip.style.display === "none") {
+    hovertip.style.display = "block";
+  } else {
+    hovertip.style.display = "none";
+  }
+  // XXX What's this for?
+  return false
+}
+
+window.addEventListener('load', () => {
+  if (recall("anomaly")) {
+    anomaly = recall("anomaly")
+    console.log(`Previous anomaly ${anomaly} detected from cookie`)
+  } else {
+    console.log("Initialising anomaly")
+    anomaly = anomalyNames[Math.floor(Math.random() * (anomalyNames.length))]
+  }
+  console.log(`Viewing ${anomaly}`)
+  remember("anomaly", anomaly)
+
+  // Add some listeners while we wait for user input
+
+  // Hidden button that opens secret menu
+  document.getElementById("authorise")?.addEventListener("click", () => {
+    document.getElementById("buttons")?.classList.remove("hidden")
+  })
+
+  // Reset and forget
+  document.getElementById("reset")?.addEventListener("click", () => {
+    forgetEverything(true)
+  })
+
+  // Manually stop the anomaly timer
+  document.getElementById("stopTimer")?.addEventListener("click", () => {
+    console.log("Stopping timer...")
+    clearInterval(timerInterval)
+    console.log("Stopped.")
+  })
+
+  // Forget that the anomaly has been seen
+  document.getElementById("ignoreSeen")?.addEventListener("click", () => {
+    remember("seen", "false")
+  })
+
+  // Generate buttons to manually change the anomaly
+  const buttons = document.getElementById("anomalyButtons")
+  anomalyNames.forEach(anomalyName => {
+    const button = document.createElement("button")
+    button.type = "button"
+    button.addEventListener("click", () => {
+      anomaly = anomalyName
+      console.log(`Anomaly manually set to ${anomaly}`)
+      remember("anomaly", anomaly)
+    })
+    buttons?.appendChild(button)
+  })
+
+  // Proceed from the warning section
+  document.getElementById("proceed")?.addEventListener("click", function () {
+    nextSection("loading")
+
+    if (recall("seen") === "true") {
+      // If the anomaly has already been seen, skip to review
+      setTimeout(() => nextSection("review"), 1200)
+    } else {
+      setTimeout(() => nextSection("anomaly"), 1200)
+      // Construct the anomaly
+      const decryptedAnomaly = rot13(patch(reference, anomalies[anomaly]))
+      document.getElementById("anomalyContent")!.innerHTML = decryptedAnomaly
+    }
+
+    // TODO Recreate collapsible continuity
+
+    // Click "read" if you've read the document and want the timer to end
+    // Listener has to be added after the anomaly has been constructed -
+    // the markup is in the anomaly document
+    document.getElementById("read")?.addEventListener("click", () => {
+      read = true
+    })
+  })
+})
+
+function nextSection (toSection: section) {
+  /**
+   * Moves the reader onto the next section of the article.
+   *
+   * @param toSection: The section to switch to.
+   */
+  console.log(`Now in section ${toSection}`)
+
+  sections.map(hideSection)
+  showSection(toSection)
+
+  // If the base anomaly has now been seen, remember that
+  if (toSection === "review") {
+    remember("seen", "true")
+  }
+
+  // If this is a false anomaly, set up the timer
+  if (toSection === "anomaly") {
+    let secondsRemaining: number
+    if (recall("timerExpiresAt")) {
+      console.log("Resuming previous timer.")
+      secondsRemaining = Math.floor((
+        new Date(recall("timerExpiresAt")).getTime() - new Date().getTime()
+      ) / 1000)
+    } else {
+      remember(
+        "timerExpiresAt",
+        new Date(Date.now() + readTime * 1000).toString()
+      )
+      secondsRemaining = readTime
+    }
+
+    const timer = document.getElementById("timer")!
+    timerInterval = window.setInterval(function () {
+      if (secondsRemaining <= 0) {
+        clearInterval(timerInterval)
+        nextSection("review")
+        forget("timerExpiresAt")
+      } else {
+        // If the user has clicked 'read', reduce the time remaining
+        if (read && secondsRemaining > 5) {
+          secondsRemaining = 6
+        }
+        const colour = secondsRemaining / readTime
+        console.log(
+          `%c${secondsRemaining}s`,
+          `color: rgba(${
+            255 - Math.ceil((colour) * 255)
+          },${
+            Math.ceil((colour) * 255)
+          },0,1); font-size:15px;`
+        )
+        --secondsRemaining
+
+        const minutes = Math.floor(secondsRemaining / 60)
+        const seconds = secondsRemaining - minutes * 60
+        timer.textContent = compressTight`
+          ${minutes.toString().padStart(2, "0")}:
+          ${seconds.toString().padStart(2, "0")}
+        `
+      }
+    }, 1000)
+  }
+}
+
+function showSection (section: section): void {
+  document.getElementById(section)!.classList.add("block")
+}
+
+function hideSection (section: section): void {
+  document.getElementById(section)!.classList.remove("none")
+}

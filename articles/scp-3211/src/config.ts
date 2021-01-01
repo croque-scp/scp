@@ -1,4 +1,4 @@
-export const anomalyNames = [
+export const anomalyNames = <const>[
   "base", // Base anomaly must come first
   "cube",
   "her",
@@ -17,6 +17,7 @@ export const anomalyNames = [
 export const langs = {
   en: {
     rot13: true,
-    imageUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/"
+    imageUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/",
+    warningText: "INFOHAZARD WARNING"
   }
 }

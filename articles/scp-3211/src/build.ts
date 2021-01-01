@@ -8,6 +8,7 @@ import util from "util"
 
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
+import { rot13 } from "./main"
 
 export async function buildAll (): Promise<void> {
   /**
@@ -16,21 +17,6 @@ export async function buildAll (): Promise<void> {
   for (const lang in langs) {
     await generateOutput(<keyof typeof langs>lang)
   }
-}
-
-function rot13 (string: string) {
-  /**
-   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
-   *
-   * @param string: The string to be encrypted or decrypted.
-   */
-  return string.replace(/[A-z]/g, (char) => {
-    let charCode = char.charCodeAt(0)
-    return String.fromCharCode(
-      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13) ?
-        charCode : charCode - 26
-    )
-  })
 }
 
 export async function generateOutput (
