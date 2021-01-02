@@ -47,7 +47,10 @@ The previous iteration is presented as a false memory, created by the anomaly
 and injected into the reader's mind to cover up what it actually was. The
 narrative is that the reader read about SCP-3211 and learned what it actually
 is, but after six minutes, SCP-3211 destroyed that information as an act of
-self-defence and replaced it with a lie.
+self-defence and replaced it with a lie. That there are multiple original
+version of the document, randomly picked for each reader, is intended to
+further this illusion by effecting confusion and disagreements between readers
+discussing what they've read &mdash; exactly as the article described.
 
 To the best of my knowledge, this is the only article across the international
 SCP community that combines memory falsification, lying, and gaslighting in
