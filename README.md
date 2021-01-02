@@ -25,14 +25,13 @@ This repository treats translations as a first-class citizen. Each
 sub-repository has been designed with translators in mind.
 
 Typically translating will involve finding a directory called `en/`, copying
-it, renaming the copy to your branch's language code, and then editing all
-the files in it. If the process is more complicated than that for a given
-article, the sub-repository will contain more detailed instructions in its
-README.
+it, renaming the copy to your branch's language code, and then editing all the
+files in it. If the process is more complicated than that for a given article,
+the sub-repository will contain more detailed instructions in its README.
 
-I appreciate that my articles are generally difficult to translate, so I
-do what I can to make it as easy as possible. Translators, thank you for
-your invaluable contributions to the international SCP community.
+I appreciate that my articles are generally difficult to translate, so I do
+what I can to make it as easy as possible. Translators, thank you for your
+invaluable contributions to the international SCP community.
 
 ## For contributors
 
@@ -44,16 +43,15 @@ If you have a suggestion for (or a problem with) the technical process of
 backing up and building my articles, and if you have a GitHub account, please
 [create an issue](https://github.com/rossjrw/scp/issues) in this repository and
 I'll respond when I can. If you know how to implement your suggestion or fix
-that problem, please do make a
-[pull request](https://github.com/rossjrw/scp/pulls) instead!
+that problem, please do make a [pull
+request](https://github.com/rossjrw/scp/pulls) instead!
 
 If you have a fix you want to make to one of my articles (for example
 correcting a spelling error), please create a pull request if you can,
 otherwise create an issue, otherwise contact me on Wikidot. The same rules for
-minor edits apply here as they do on the wiki &mdash; go right ahead.
-_(Please note that all of my English works are written in British English
-except where absolutely necessary. I'll reject any suggestions to Americanise
-them.)_
+minor edits apply here as they do on the wiki &mdash; go right ahead. _(Please
+note that all of my English works are written in British English except where
+absolutely necessary. I'll reject any suggestions to Americanise them.)_
 
 If you have a bigger suggestion for one of my articles (for example you have an
 idea for a better ending, or you want to completely rewrite something), the
@@ -87,6 +85,10 @@ a pull request.
 
 ### How to make a big contribution
 
+If you want to make a big contribution (i.e. changing lots of files, or if you
+need to copy files, or if you want to change how the build works), you'll need
+to set up a copy of this repository on your computer for local development.
+
 These instructions are written for prospective contributors who are not
 familiar with command line development. Having some command line experience
 will help a lot. If the thought of using Linux, the command line and Git makes
@@ -96,8 +98,8 @@ confusing, please tell me!)_
 Before you can do anything to this repository, you'll need to clone it and
 install its dependencies.
 
-<details><summary><b>Development on Windows</b></summary>
-  
+<details><summary><b>How to develop on Windows</b></summary>
+
 You can develop on Windows &mdash; it's what I do! However, you will need to be
 running a Linux environment.
 
@@ -110,9 +112,32 @@ editing software.
 Instructions for setting up WSL 2 on Microsoft Docs:
 [WSL Installation](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
+On your new Linux command line, by default it starts you in your Windows user
+directory. I recommend navigating to your Linux home directory:
+
+```shell
+cd ~
+```
+
+You can also run Windows programmes. For example, you can open the current
+directory in Windows Explorer, which might make it a bit easier to edit files
+with your preferred editor:
+
+```shell
+explorer.exe .
+```
+
+Or, if you know your editor's executable name, you can open a file in it
+directly:
+
+```shell
+notepad.exe en/dist.ftml
+code en/dist.ftml (for VSCode)
+```
+
 </details>
 
-<details><summary><b>Setting up the repository</b></summary>
+<details><summary><b>How to set up your local repository</b></summary>
 
 First, you'll need to [fork](https://guides.github.com/activities/forking/)
 this repository. Click the 'Fork' button in the top right to create a copy of
@@ -123,13 +148,6 @@ Then on your computer, you'll need [Git](https://git-scm.com/) and
 
 ```shell
 sudo apt install git nodejs npm
-```
-
-If you're using WSL 2, by default it starts you in your Windows user directory.
-I recommend navigating to your Linux home directory:
-
-```shell
-cd ~
 ```
 
 And then clone the fork that you created:
@@ -151,12 +169,16 @@ ls
 If there is a directory there named `src/`, it means that the sub-repository
 for this article is a JavaScript package and that it has a build process.
 You'll need to install its NPM dependencies, and then build it; and then the
-compiled output files will appear in the `dist/` directory. You should
+compiled output files will appear in the `dist/` directory.
 
 ```shell
 npm install
 npm run build
 ```
+
+</details>
+
+<details><summary><b>How to make changes</b></summary>
 
 Before you begin making changes, create a new
 [branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
@@ -164,8 +186,35 @@ and call it something that describes the changes you'll make, then switch to
 it:
 
 ```shell
-git branch fix-all-the-spelling-mistakes
-git checkout fix-all-the-spelling-mistakes
+git branch my-branch-name
+git checkout my-branch-name
+```
+
+At any point, you can ask Git to show you which files have changed:
+
+```shell
+git status
+```
+
+Once you've made a bunch of changes, upload them to your fork on GitHub with a
+commit. First, add each file that you changed: _(this will turn those files
+green in `git status`)_
+
+```shell
+git add file1 file2 file3 ...
+```
+
+Then make a commit to save those changes into Git, with a
+[helpful commit message](https://chris.beams.io/posts/git-commit/):
+
+```shell
+git commit -m "A description of what you changed"
+```
+
+Then upload your commit(s) to your fork on GitHub:
+
+```shell
+git push origin my-branch-name
 ```
 
 </details>
