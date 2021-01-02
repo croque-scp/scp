@@ -19,18 +19,85 @@ this repository will be ignored.
 All works in this repository are licensed under
 [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/).
 
-## Development
+## For translators
+
+This repository treats translations as a first-class citizen. Each
+sub-repository has been designed with translators in mind.
+
+Each sub-repository will contain instructions for translators. Typically
+translating will involve finding a directory called `en/`, copying it,
+renaming the copy to your branch's language code, and then editing all the
+files in it.
+
+I appreciate that my articles are generally difficult to translate, so I
+do what I can to make it as easy as possible. Translators, thank you for
+your invaluable contributions to the international SCP community.
+
+## For contributors
+
+I welcome contributions from anyone. You'll need a GitHub account to contribute
+to this repository directly, but if you don't, feel free to send me a Wikidot
+message with your suggestions.
+
+If you have a suggestion for (or a problem with) the technical process of
+backing up and building my articles, and if you have a GitHub account, please
+[create an issue](https://github.com/rossjrw/scp/issues) in this repository and
+I'll respond when I can. If you know how to implement your suggestion or fix
+that problem, please do make a
+[pull request](https://github.com/rossjrw/scp/pulls) instead!
+
+If you have a fix you want to make to one of my articles (for example
+correcting a spelling error), please create a pull request if you can,
+otherwise create an issue, otherwise contact me on Wikidot. The same rules for
+minor edits apply here as they do on the wiki &mdash; go right ahead.
+_(Please note that all of my English works are written in British English
+except where absolutely necessary. I'll reject any suggestions to Americanise
+them.)_
+
+If you have a bigger suggestion for one of my articles (for example you have an
+idea for a better ending, or you want to completely rewrite something), the
+same rules apply! Make a pull request or an issue for it. Wiki rules prohibit
+you from making those changes to an article directly without the author's
+consent, but here, you get to make a pull request &mdash; key word "request"
+&mdash; and I get to deny it if I choose. So feel free to make whatever changes
+you like!
+
+If want to discuss, review or critique my articles, or brainstorm ideas within
+their fiction, I'd love to hear your thoughts! Please don't do that here,
+though &mdash; instead, leave a comment on the article's discussion page on the
+wiki.
+
+## How to contribute
+
+For sub-repositories that are backups, contributions should be made to the
+corresponding page on the SCP Wiki. (The backup being a little bit out of date
+is considered normal.) For sub-repositories that contain the source code and
+build process, keep reading.
+
+To contribute to this repository, you will need to have a GitHub account.
+
+### How to make a small contribution
+
+If you only want to make a small change (i.e. just changing one file), you can
+do it right here on github.com. Simply navigate to the file you want to change
+and click the pencil icon in the top right labelled _"Fork the project and edit
+this file"_. Make the changes you want and follow GitHub's directions to create
+a pull request.
+
+### How to make a big contribution
 
 These instructions are written for prospective contributors who are not
 familiar with command line development. Having some command line experience
 will help a lot. If the thought of using Linux, the command line and Git makes
-your stomach turn, there is still time to back out.
+your stomach turn, there is still time to back out. _(If these instructions are
+confusing, please tell me!)_
 
 Before you can do anything to this repository, you'll need to clone it and
 install its dependencies.
 
 <details><summary>Development on Windows</summary>
-You can develop on Windows — it's what I do! However, you will need to be
+  
+You can develop on Windows &mdash; it's what I do! However, you will need to be
 running a Linux environment.
 
 You can install Ubuntu Linux from the Windows Store, but I recommend setting up
@@ -41,11 +108,13 @@ editing software.
 
 Instructions for setting up WSL 2 on Microsoft Docs:
 [WSL Installation](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+
 </details>
 
 <details><summary>Setting up the repository</summary>
+
 First, you'll need to [fork](https://guides.github.com/activities/forking/)
-this repository. Click the 'Fork' button in the top right to create a copy if
+this repository. Click the 'Fork' button in the top right to create a copy of
 this repository in your GitHub account.
 
 Then on your computer, you'll need [Git](https://git-scm.com/) and
@@ -66,39 +135,27 @@ And then clone the fork that you created:
 
 ```shell
 git clone https://github.com/YOUR_GITHUB_USERNAME/scp
+cd scp/
+ls
 ```
 
 You now have a copy of this repository on your computer. Navigate to the
 sub-repository you want to contribute to (for example, for SCP-3211):
 
 ```shell
-cd scp/articles/scp-3211
+cd articles/scp-3211/
 ls
 ```
 
-If there is a file named `package.json`, it means that the sub-repository for
-this article is a JavaScript package and that it has a build process. You'll
-need to install its NPM dependencies, and then build it; and then the compiled
-output files will appear in the `dist/` directory.
+If there is a directory there named `src/`, it means that the sub-repository
+for this article is a JavaScript package and that it has a build process.
+You'll need to install its NPM dependencies, and then build it; and then the
+compiled output files will appear in the `dist/` directory. You should
 
 ```shell
 npm install
 npm run build
 ```
-</summary>
-
-### Contributing
-
-For sub-repositories that are backups, contributions should be made to the
-corresponding page on the SCP Wiki. The backup being a little bit out of date
-is considered normal.
-
-For sub-repositories that contain the source code, contributions should be made
-in a Pull Request to this repository. I will add instructions for doing this
-later.
-
-Currently, there are no articles in this repository that are not considered
-backups, and I haven't yet worked out how building is going to work.
 
 Before you begin making changes, create a new
 [branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
@@ -110,12 +167,29 @@ git branch fix-all-the-spelling-mistakes
 git checkout fix-all-the-spelling-mistakes
 ```
 
-All of my works are written in British English except where absolutely
-necessary.
+</details>
 
-### Translating
+### Making a pull request
 
-Each sub-repository will contain instructions for translators. Typically
-translating will involve finding a directory called `en/`, copying it,
-renaming the copy to your branch's language code, and then editing all the
-files in it.
+The title of your pull request should be a word in square brackets indicating
+which article it relates to, followed by some text in the imperative mood
+explaining what the pull request is about. For example:
+
+* [\[3211\] Convert to build process](https://github.com/rossjrw/scp/pull/1)
+* \[Vienna] Add German translation
+* \[ListPages] Rotate all the images counter-clockwise
+
+If the PR affects multiple articles, list them all, unless it includes lots,
+then don't list any. If the PR is about multiple things and you can't think
+of a single title for it, then you should split your changes into multiple
+PRs (unless we've already discussed these changes).
+
+The description of your PR should describe exactly what you want to change,
+and if appropriate, how you changed it. You may even find it helpful to add a
+todo list.
+
+You can create the PR after you've finished making your changes if you like,
+but I encourage you to create it as soon as possible. I find that it's
+helpful to have a place to write notes and brainstorm what I'm working on
+while I do it. If your PR isn't finished, though, please mark it as a draft
+by clicking "Create draft PR" in the dropdown when you create it.
