@@ -24,10 +24,11 @@ All works in this repository are licensed under
 This repository treats translations as a first-class citizen. Each
 sub-repository has been designed with translators in mind.
 
-Each sub-repository will contain instructions for translators. Typically
-translating will involve finding a directory called `en/`, copying it,
-renaming the copy to your branch's language code, and then editing all the
-files in it.
+Typically translating will involve finding a directory called `en/`, copying
+it, renaming the copy to your branch's language code, and then editing all
+the files in it. If the process is more complicated than that for a given
+article, the sub-repository will contain more detailed instructions in its
+README.
 
 I appreciate that my articles are generally difficult to translate, so I
 do what I can to make it as easy as possible. Translators, thank you for
@@ -95,7 +96,7 @@ confusing, please tell me!)_
 Before you can do anything to this repository, you'll need to clone it and
 install its dependencies.
 
-<details><summary>Development on Windows</summary>
+<details><summary><b>Development on Windows</b></summary>
   
 You can develop on Windows &mdash; it's what I do! However, you will need to be
 running a Linux environment.
@@ -111,7 +112,7 @@ Instructions for setting up WSL 2 on Microsoft Docs:
 
 </details>
 
-<details><summary>Setting up the repository</summary>
+<details><summary><b>Setting up the repository</b></summary>
 
 First, you'll need to [fork](https://guides.github.com/activities/forking/)
 this repository. Click the 'Fork' button in the top right to create a copy of
