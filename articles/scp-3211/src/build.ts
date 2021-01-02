@@ -8,7 +8,7 @@ import util from "util"
 
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
-import { rot13 } from "./main"
+import { rot13 } from "./iframe"
 
 export async function buildAll (): Promise<void> {
   /**
@@ -33,7 +33,7 @@ export async function generateOutput (
 
   // Construct the reference document which will be used for space
   // optimisations later
-  const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
+  const document = fs.readFileSync(`./src/${lang}/page.ejs.md`, "utf8")
   const reference = (langs[lang].rot13 ? rot13 : (source: string) => source)(
     compress(marked(
       ejs.render(document, { anomaly: referenceAnomaly })
