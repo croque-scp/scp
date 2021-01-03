@@ -37,6 +37,7 @@ gulp.task('webpack', () => {
     .src("./src/iframe.ts")
     .pipe(webpack({
       mode: "production",
+      output: { filename: "3211.js" },
       module: {
         rules: [
           { test: /\.ts$/, use: "babel-loader" }
@@ -49,7 +50,7 @@ gulp.task('webpack', () => {
         minimizer: [ new TerserPlugin({ extractComments: false }) ],
         usedExports: true
       }
-    }))
+    }).on("error", error => console.log("Webpack:", error)))
     .pipe(gulp.dest("./dist/"))
 })
 

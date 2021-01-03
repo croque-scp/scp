@@ -9,7 +9,7 @@ import { rot13 } from "./rot13"
 // iterating
 
 // Defined in iframe.ejs.html
-declare const reference: string
+declare const reference: string[]
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: string }
 declare const lang: keyof typeof langs
 
@@ -154,7 +154,9 @@ window.addEventListener('load', () => {
       // Construct the anomaly
       const decryptedAnomaly = (
         langs[lang].rot13 ? rot13 : (source: string) => source
-      )(applyPatch(reference, anomalies[anomaly])).replace(/--/g, "—")
+      )(applyPatch(
+        reference.join("\n"), anomalies[anomaly]
+      )).replace(/--/g, "—")
       document.getElementById("anomalyContent")!.innerHTML = decryptedAnomaly
     }
 
