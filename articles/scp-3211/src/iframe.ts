@@ -1,5 +1,5 @@
+import { applyPatch } from "diff"
 import Cookies from "js-cookie"
-import { patch, Delta } from "jsondiffpatch"
 
 import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
@@ -10,7 +10,7 @@ import { rot13 } from "./rot13"
 
 // Defined in iframe.ejs.html
 declare const reference: string
-declare const anomalies: { [anomaly in typeof anomalyNames[number]]: Delta }
+declare const anomalies: { [anomaly in typeof anomalyNames[number]]: string }
 declare const lang: keyof typeof langs
 
 const sections = <const>["warning", "loading", "anomaly", "review"]
@@ -152,7 +152,9 @@ window.addEventListener('load', () => {
     } else {
       setTimeout(() => nextSection("anomaly"), 1200)
       // Construct the anomaly
-      const decryptedAnomaly = (langs[lang].rot13 ? rot13 : (source: string) => source)(patch(reference, anomalies[anomaly]))
+      const decryptedAnomaly = (
+        langs[lang].rot13 ? rot13 : (source: string) => source
+      )(applyPatch(reference, anomalies[anomaly])).replace(/--/g, "—")
       document.getElementById("anomalyContent")!.innerHTML = decryptedAnomaly
     }
 
