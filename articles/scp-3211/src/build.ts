@@ -113,7 +113,6 @@ async function generateDelta (
       { colors: true, compact: true }
     )
   )
-  console.log("Total source length:", totalSourceLength)
 
   // A lot of space can be saved by storing not the raw text of each source,
   // but the diff between it and the reference document

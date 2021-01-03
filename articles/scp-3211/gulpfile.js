@@ -1,6 +1,7 @@
 const gulp = require("gulp")
 const del = require("del")
 const ts = require("gulp-typescript")
+const cleanCss = require("gulp-clean-css")
 const webpack = require("webpack-stream")
 const TerserPlugin = require("terser-webpack-plugin")
 
@@ -10,7 +11,7 @@ gulp.task('clean', async done => {
   done()
 })
 
-gulp.task('make', () => {
+gulp.task('ts', () => {
   /**
    * Construct the scripts needed for the rest of the build process
    */
@@ -19,6 +20,16 @@ gulp.task('make', () => {
     .src(["./src/**/*.ts", "!./src/iframe.ts"])
     .pipe(tsProject())
     .js.pipe(gulp.dest("./dist/"))
+})
+
+gulp.task('css', () => {
+  /**
+   * Minify CSS.
+   */
+  return gulp
+    .src("./src/**/*.css")
+    .pipe(cleanCss())
+    .pipe(gulp.dest("./dist/"))
 })
 
 gulp.task('webpack', () => {
@@ -55,5 +66,5 @@ gulp.task('ftml', async done => {
 })
 
 gulp.task('default',
-  gulp.series('clean', gulp.parallel('make', 'webpack'), 'ftml')
+  gulp.series('clean', gulp.parallel('ts', 'css', 'webpack'), 'ftml')
 )

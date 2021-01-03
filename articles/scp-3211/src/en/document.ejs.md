@@ -1,4 +1,5 @@
 <blockquote>
+
 <% if (anomaly.base) { %>
 **Memetic detectors indicate that you have been exposed to this file for
 at least 6 minutes. You are now considered post-3211. If you can still perceive
@@ -9,6 +10,7 @@ assigned to SCP-3211 immediately.**
 <% } %>
 
 <p id="timer">06:00</p>
+
 </blockquote>
 
 <image src="<%= anomaly.prose.imageUrl %>"
