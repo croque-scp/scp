@@ -4,14 +4,14 @@ const ts = require("gulp-typescript")
 
 gulp.task('clean', async done => {
   // Scrub any previous builds from dist
-  await del(".dist/")
+  await del("./dist/")
   done()
 })
 
 gulp.task('make', () => {
   const tsProject = ts.createProject("./tsconfig.json")
-  return tsProject
-    .src()
+  return gulp
+    .src(["./src/**/*.ts", "!./src/iframe.ts"])
     .pipe(tsProject())
     .js.pipe(gulp.dest("./dist/"))
 })
