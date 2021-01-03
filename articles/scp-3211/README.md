@@ -64,11 +64,17 @@ quite effective.
 First, add your language to `src/config.ts`, in the `langs` object.
 
 The `rot13` property is either `true` or `false` and sets whether or not your
-language wants ROT13 encryption. It only affects letters in the `A-Z` and `a-z`
-ranges, so it will only matter for Latin-based languages. This setting will
-only affect the final output &mdash; it won't change the translation process.
+language wants [ROT13 encryption](https://en.wikipedia.org/wiki/ROT13). ROT13
+only affects letters in the `A-Z` and `a-z` ranges, so it only works for
+Latin-based languages; for other languages, it won't do anything. The option is
+provided so that translations can turn it off if they want. SCP-3211-EN is
+encrypted thanks to inspiration from
+[SCP-3125-EN](https://www.scpwiki.com/scp-3125), which features a similar
+simple cipher. This setting only affects the final output &mdash; it doesn't
+change the translation process.
 
-The `imageUrl` property is the URL at which all of the images are stored.
+The `fileUrl` property is the URL that all of the necessary files can be found
+at, including images and `3211.js`.
 
 The `warningText` property determines what text shows up in the "WARNING"
 image on the first screen.
