@@ -4,7 +4,8 @@
   "main": "src/main.ts",
   "scripts": {
     "build": "gulp",
-    "fix": "standardx --fix src/**/*.ts"
+    "fix": "standardx --fix src/**/*.ts",
+    "tests": "jest"
   },
   "babel": {
     "presets": [
@@ -13,16 +14,24 @@
     ]
   },
   "browserslist": "last 5 years",
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.12.7",
     "@types/ejs": "^3.0.5",
     "@types/gulp": "^4.0.7",
+    "@types/jest": "^26.0.19",
     "@types/js-cookie": "^2.2.6",
     "@types/marked": "^1.2.1",
     "@types/node": "^14.14.16",
     "@types/webpack-stream": "^3.2.11",
+    "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.2",
     "chalk": "^4.1.0",
     "compress-tag": "^2.0.0",
@@ -31,6 +40,7 @@
     "eslint": "^7.16.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
+    "jest": "^26.6.3",
     "js-cookie": "^3.0.0-rc.1",
     "jsondiffpatch": "^0.4.1",
     "marked": "^1.2.7",
