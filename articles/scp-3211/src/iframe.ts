@@ -2,7 +2,8 @@ import { compress, compressTight } from "compress-tag"
 import Cookies from "js-cookie"
 import { patch, Delta } from "jsondiffpatch"
 
-import { anomalyNames } from "./config"
+import { anomalyNames, langs } from "./config"
+import { rot13 } from "./build"
 
 // XXX Not all anomalies in anomalyNames are guaranteed to be present - it
 // should be used for types only; I should use the declared anomalies dict for
@@ -10,6 +11,7 @@ import { anomalyNames } from "./config"
 
 declare const reference: string
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: Delta }
+declare const lang: keyof typeof langs
 
 const sections = <const>["warning", "loading", "anomaly", "review"]
 type section = typeof sections[number]
@@ -74,21 +76,6 @@ function forgetEverything (reloadPageAfter: boolean): void {
   if (reloadPageAfter) {
     history.go(0)
   }
-}
-
-export function rot13 (string: string): string {
-  /**
-   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
-   *
-   * @param string: The string to be encrypted or decrypted.
-   */
-  return string.replace(/[A-z]/g, (char) => {
-    let charCode = char.charCodeAt(0)
-    return String.fromCharCode(
-      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13)
-        ? charCode : charCode - 26
-    )
-  })
 }
 
 // TODO Remove export; bind to footnote after making footnote component
@@ -165,7 +152,7 @@ window.addEventListener('load', () => {
     } else {
       setTimeout(() => nextSection("anomaly"), 1200)
       // Construct the anomaly
-      const decryptedAnomaly = rot13(patch(reference, anomalies[anomaly]))
+      const decryptedAnomaly = (langs[lang].rot13 ? rot13 : (source: string) => source)(patch(reference, anomalies[anomaly]))
       document.getElementById("anomalyContent")!.innerHTML = decryptedAnomaly
     }
 

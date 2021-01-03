@@ -34,7 +34,7 @@ iframe {
 [[/module]]
 
 [[html]]
-<%= html %>
+<%- html %>
 [[/html]]
 
 [[footnoteblock]]

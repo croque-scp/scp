@@ -8,7 +8,21 @@ import util from "util"
 
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
-import { rot13 } from "./iframe"
+
+export function rot13 (string: string): string {
+  /**
+   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
+   *
+   * @param string: The string to be encrypted or decrypted.
+   */
+  return string.replace(/[A-z]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(
+      (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13)
+        ? charCode : charCode - 26
+    )
+  })
+}
 
 export async function makeFtml (lang: keyof typeof langs): Promise<void> {
   /**
@@ -31,7 +45,13 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
   const [reference, deltas] = await generateDelta(lang)
   const html = ejs.render(
     fs.readFileSync("./src/iframe.ejs.html", "utf8"),
-    { lang, reference, deltas }
+    {
+      lang, reference, deltas,
+      css: fs.readFileSync("./src/iframe.css", "utf8"),
+      buttons: fs.readFileSync(`./src/${lang}/buttons.html`, "utf8"),
+      warning: fs.readFileSync(`./src/${lang}/warning.html`, "utf8"),
+      loading: fs.readFileSync(`./src/${lang}/loading.html`, "utf8")
+    }
   )
   return html
 }
@@ -53,7 +73,7 @@ async function generateDelta (
 
   // Construct the reference document which will be used for space
   // optimisations later
-  const document = fs.readFileSync(`./src/${lang}/page.ejs.md`, "utf8")
+  const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
   const reference = (langs[lang].rot13 ? rot13 : (source: string) => source)(
     compress(marked(
       ejs.render(document, { anomaly: referenceAnomaly })

@@ -1,11 +1,12 @@
 <head>
   <style type="text/css">
-    <%- include("./iframe.css") %>
+    <%- css %>
   </style>
 
   <script lang="text/javascript">
-    window.reference = <%= reference %>
-    window.anomalies = <%= deltas %>
+    window.reference = <%- reference %>
+    window.anomalies = <%- deltas %>
+    window.lang = <%- lang %>
   </script>
 
   <script lang="text/javascript">
@@ -13,15 +14,15 @@
 </head>
 <body>
   <section id="buttons" class="hidden">
-    <%- include(`./${lang}/buttons.html`) %>
+    <%- buttons %>
   </section>
 
   <section id="warning">
-    <%- include(`./${lang}/warning.html`) %>
+    <%- warning %>
   </section>
 
   <section id="loading" class="hidden">
-    <%- include(`./${lang}/loading.html`) %>
+    <%- loading %>
   </section>
 
   <section id="review" class="hidden"/>
