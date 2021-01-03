@@ -3,7 +3,7 @@ import Cookies from "js-cookie"
 import { patch, Delta } from "jsondiffpatch"
 
 import { anomalyNames, langs } from "./config"
-import { rot13 } from "./build"
+import { rot13 } from "./rot13"
 
 // XXX Not all anomalies in anomalyNames are guaranteed to be present - it
 // should be used for types only; I should use the declared anomalies dict for
