@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { compress } from "compress-tag"
 import ejs from "ejs"
-import { diff } from "jsondiffpatch"
+import { diff, Delta } from "jsondiffpatch"
 import fs from "fs"
 import marked from "marked"
 import util from "util"
@@ -10,23 +10,43 @@ import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
 import { rot13 } from "./iframe"
 
-export async function buildAll (): Promise<void> {
+export async function makeFtml (lang: keyof typeof langs): Promise<void> {
   /**
-   * Iterates through each configured language and builds SCP-3211.
+   * Constructs the FTML content of the wiki page and saves it to
+   * dist/lang/dist.ftml.
    */
-  for (const lang in langs) {
-    await generateOutput(<keyof typeof langs>lang)
-  }
+  fs.writeFileSync(
+    `./dist/${lang}/dist.ftml`,
+    ejs.render(
+      fs.readFileSync(`./src/${lang}/page.ejs.ftml`, "utf8"),
+      { html: await makeIframe(lang) }
+    )
+  )
 }
 
-export async function generateOutput (
-  lang: keyof typeof langs
-): Promise<void> {
+async function makeIframe (lang: keyof typeof langs): Promise<string> {
   /**
-   * Constructs the source file for SCP-3211 for the given language.
+   * Constructs the HTML content of the iframe for the given language.
+   */
+  const [reference, deltas] = await generateDelta(lang)
+  const html = ejs.render(
+    fs.readFileSync("./src/iframe.ejs.html", "utf8"),
+    { lang, reference, deltas }
+  )
+  return html
+}
+
+async function generateDelta (
+  lang: keyof typeof langs
+): Promise<[string, { [anomaly: string]: Delta }]> {
+  /**
+   * Constructs the reference anomaly and the other anomaly deltas for the
+   * given language.
    *
    * @param lang: The language, e.g. "en". The relevant files for this language
    * must be present.
+   * @returns The reference anomaly, as a string.
+   * @returns A dict containing the delta for each anomaly.
    */
   console.log(chalk.green("·".repeat(process.stdout.columns)))
   console.log("\nCompiling SCP-3211 for lang", chalk.greenBright(lang))
@@ -118,4 +138,10 @@ export async function generateOutput (
       ((totalDeltaLength - totalSourceLength) / totalSourceLength) * -100
     ).toFixed(2)}%)`
   )
+
+  // Return a dict of deltas for each anomaly
+  const anomalies = anomalyNames.reduce((a, anomalyName, index) => {
+    return { ...a, [anomalyName]: deltas[index] }
+  }, <{ [anomaly in typeof anomalyNames[number]]: Delta }>{})
+  return [reference, anomalies]
 }

@@ -1,0 +1,30 @@
+<head>
+  <style type="text/css">
+    <%- include("./iframe.css") %>
+  </style>
+
+  <script lang="text/javascript">
+    window.reference = <%= reference %>
+    window.anomalies = <%= deltas %>
+  </script>
+
+  <script lang="text/javascript">
+  </script>
+</head>
+<body>
+  <section id="buttons" class="hidden">
+    <%- include(`./${lang}/buttons.html`) %>
+  </section>
+
+  <section id="warning">
+    <%- include(`./${lang}/warning.html`) %>
+  </section>
+
+  <section id="loading" class="hidden">
+    <%- include(`./${lang}/loading.html`) %>
+  </section>
+
+  <section id="review" class="hidden"/>
+
+  <section id="anomaly" class="hidden"/>
+</body>
