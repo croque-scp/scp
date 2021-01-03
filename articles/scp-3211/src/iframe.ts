@@ -1,4 +1,3 @@
-import { compress, compressTight } from "compress-tag"
 import Cookies from "js-cookie"
 import { patch, Delta } from "jsondiffpatch"
 
@@ -9,6 +8,7 @@ import { rot13 } from "./rot13"
 // should be used for types only; I should use the declared anomalies dict for
 // iterating
 
+// Defined in iframe.ejs.html
 declare const reference: string
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: Delta }
 declare const lang: keyof typeof langs
@@ -38,9 +38,9 @@ function remember <C extends keyof cookies>(key: C, value: cookies[C]): void {
   console.log(`Saving ${value} to ${key}`)
   Cookies.set(key, value, { expires: 356 })
   document.getElementById("anomalyCookie")!.textContent = `Current: ${anomaly}`
-  document.getElementById("otherCookies")!.textContent = compress`
-    seen ${recall("seen")}, timer ${recall("timerExpiresAt")}
-  `
+  document.getElementById("otherCookies")!.textContent = (
+    `seen ${recall("seen")}, timer ${recall("timerExpiresAt")}`
+  )
 }
 
 function recall <C extends keyof cookies>(key: C): cookies[C] {
@@ -223,10 +223,11 @@ function nextSection (toSection: section) {
 
         const minutes = Math.floor(secondsRemaining / 60)
         const seconds = secondsRemaining - minutes * 60
-        timer.textContent = compressTight`
-          ${minutes.toString().padStart(2, "0")}:
-          ${seconds.toString().padStart(2, "0")}
-        `
+        timer.textContent = `${
+          minutes.toString().padStart(2, "0")
+        }:${
+          seconds.toString().padStart(2, "0")
+        }`
       }
     }, 1000)
   }

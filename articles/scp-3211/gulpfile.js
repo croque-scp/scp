@@ -2,6 +2,7 @@ const gulp = require("gulp")
 const del = require("del")
 const ts = require("gulp-typescript")
 const webpack = require("webpack-stream")
+const TerserPlugin = require("terser-webpack-plugin")
 
 gulp.task('clean', async done => {
   // Scrub any previous builds from dist
@@ -24,13 +25,19 @@ gulp.task('webpack', () => {
   return gulp
     .src("./src/iframe.ts")
     .pipe(webpack({
-      mode: "development",
+      mode: "production",
       module: {
         rules: [
           { test: /\.ts$/, use: "babel-loader" }
         ]
       },
-      resolve: { extensions: [".ts", ".js"] }
+      resolve: { extensions: [".ts", ".js"] },
+      externals: { "js-cookie": "Cookies" },
+      optimization: {
+        minimize: true,
+        minimizer: [ new TerserPlugin({ extractComments: false }) ],
+        usedExports: true
+      }
     }))
     .pipe(gulp.dest("./dist/"))
 })
