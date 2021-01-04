@@ -74,17 +74,16 @@ function forgetEverything (reloadPageAfter: boolean): void {
   }
 }
 
-// TODO Remove export; bind to footnote after making footnote component
-export function hoverdiv (event: MouseEvent): boolean {
-  const top = `${event.clientY + 10}px`
-  const hovertip = document.getElementById("hovertip")!
-  hovertip.style.left = "0"
-  hovertip.style.top = top
+function hoverdiv (event: MouseEvent, noteRef: number): boolean {
+  const notes = document.getElementById("hovertips")!
+  const note = <HTMLElement>notes.getElementsByClassName("hovertip")[noteRef]
+  note.style.left = "0"
+  note.style.top = `${event.pageY + 10}px`
   // TODO Choose by whether or not it's in or out
-  if (hovertip.style.display === "none") {
-    hovertip.style.display = "block"
+  if (event.type === "mouseover") {
+    note.style.display = "block"
   } else {
-    hovertip.style.display = "none"
+    note.style.display = "none"
   }
   // XXX What's this for?
   return false
@@ -168,12 +167,55 @@ function nextSection (toSection: section) {
   console.log(`Now in section ${toSection}`)
 
   if (toSection === "anomaly") {
+    const anomalySection = document.getElementById("anomaly")!
+
     // Construct the anomaly
-    document.getElementById("anomaly")!.innerHTML = (
-      langs[lang].rot13 ? rot13 : (source: string) => source
+    const anomalyElement = document.createElement('div')
+    anomalyElement.innerHTML = (
+      langs[lang].rot13 ? rot13 : (patch: string) => patch
     )(applyPatch(
       reference.join("\n"), anomalies[anomaly]
     )).replace(/--/g, "—")
+
+    // Handle footnotes
+    const notesBlock = anomalyElement.querySelector("notesblock")!
+    const notes = notesBlock.querySelectorAll("ol li")
+    // Create a hovertip in the notes block if there is not already one
+    if (document.getElementById("hovertips") == null) {
+      const hovertips = document.createElement("div")
+      hovertips.id = "hovertips"
+      notes.forEach((note, index) => {
+        const hovertip = document.createElement("div")
+        hovertip.classList.add("hovertip")
+        // XXX Footnote string will need to be translated
+        hovertip.innerHTML = `
+          <div class="f-heading">Footnote ${index + 1}.</div>
+          <div class="f-content">${note.innerHTML}</div>
+        `
+        hovertips.appendChild(hovertip)
+      })
+      document.body.appendChild(hovertips)
+    }
+    anomalyElement.querySelectorAll("note").forEach(note => {
+      const noteRef = parseInt(note.textContent!)
+      const noteElement = document.createElement("sup")
+      noteElement.classList.add("footnoteref")
+      noteElement.innerHTML = `<a>${noteRef}</a>`
+      noteElement.addEventListener(
+        "mouseover", (e: MouseEvent) => hoverdiv(e, noteRef - 1)
+      )
+      noteElement.addEventListener(
+        "mouseout", (e: MouseEvent) => hoverdiv(e, noteRef - 1)
+      )
+      note.replaceWith(noteElement)
+    })
+
+    // Remove any existing children of the anomaly section
+    while (anomalySection.lastChild) {
+      anomalySection.removeChild(anomalySection.lastChild)
+    }
+
+    anomalySection.appendChild(anomalyElement)
 
     // Click "read" if you've read the document and want the timer to end
     // Listener has to be added after the anomaly has been constructed -
@@ -192,7 +234,7 @@ function nextSection (toSection: section) {
   }
 
   // If this is a false anomaly, set up the timer
-  if (toSection === "anomaly") {
+  if (toSection === "anomaly" && anomaly !== "base") {
     let secondsRemaining: number
     if (recall("timerExpiresAt")) {
       console.log("Resuming previous timer.")

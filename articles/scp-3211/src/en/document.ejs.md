@@ -249,13 +249,9 @@ Physical observation by D-9981 | <%= prose.data.physical %>
 Response to basic questioning by D-9981 | <%= prose.data.questioning %>
 Type-Kappa memetic sentience detector | <%= prose.data.sentience %>
 
-**Incident Log 3211-C:** On 2016-03-31, a researcher who was not assigned
-to SCP-3211, Dr. Jason Greaves, took a Class-Y mnestic<footnote>"Mnestics, as
-opposed to the more common amnestics, generally aid in the retention of
-memories and the prevention of their modification even in the face of anomalies
-that seek to disrupt this..." -- Excerpt from _An Introduction to Antimemetic
-Counter-Measures_, [Marion Wheeler](we-need-to-talk-about-fifty-five)
-</footnote> without authorisation and entered the containment chamber.
+**Incident Log 3211-C:** On 2016-03-31, a researcher who was not assigned to
+SCP-3211, Dr. Jason Greaves, took a Class-Y mnestic<note>1</note>
+without authorisation and entered the containment chamber.
 <% if (base) { -%>
 Personnel reported being unable to perceive Dr. Greaves until his unconscious
 body "spontaneously appeared" several hours later. Dr. Greaves returned to full
@@ -486,6 +482,7 @@ Why did you have to take him away again?
 I don't think I'm going to survive.
 
 Why hasn't anyone come to get me?
+
 </blockquote>
 <% } %>
 
@@ -498,3 +495,17 @@ the logs are mostly silent<%=
 %> up to the point where a member of security staff noticed Dr. Greaves on
 closed-circuit monitoring several minutes later and called for help.
 <% } %>
+
+</details>
+
+<notesblock>
+
+**Footnotes**
+
+1. "Mnestics, as opposed to the more common amnestics, generally aid in the
+   retention of memories and the prevention of their modification even in the
+   face of anomalies that seek to disrupt this..."
+   -- Excerpt from _An Introduction to Antimemetic Counter-Measures_,
+   [Marion Wheeler](we-need-to-talk-about-fifty-five)
+
+</notesblock>
