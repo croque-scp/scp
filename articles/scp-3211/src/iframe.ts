@@ -24,7 +24,7 @@ let anomaly: typeof anomalyNames[number]
 
 let timerInterval: number
 
-function remember <C extends keyof cookies>(key: C, value: cookies[C]): void {
+function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
   /**
    * Stores a value to a cookie.
    *
@@ -39,7 +39,7 @@ function remember <C extends keyof cookies>(key: C, value: cookies[C]): void {
   )
 }
 
-function recall <C extends keyof cookies>(key: C): cookies[C] {
+function recall <C extends keyof cookies> (key: C): cookies[C] {
   /**
    * Retrives a value from cookies.
    *
@@ -82,9 +82,9 @@ export function hoverdiv (event: MouseEvent): boolean {
   hovertip.style.top = top
   // TODO Choose by whether or not it's in or out
   if (hovertip.style.display === "none") {
-    hovertip.style.display = "block";
+    hovertip.style.display = "block"
   } else {
-    hovertip.style.display = "none";
+    hovertip.style.display = "none"
   }
   // XXX What's this for?
   return false
@@ -155,7 +155,6 @@ window.addEventListener('load', () => {
     setTimeout(() => nextSection("anomaly"), 1200)
 
     // TODO Recreate collapsible continuity
-
   })
 })
 

@@ -1,7 +1,7 @@
 @import url(https://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css);
 @import url(https://scp-wiki.wikidot.com/component:theme/code/1);
 
-a {
+a, summary {
   cursor: pointer;
 }
 

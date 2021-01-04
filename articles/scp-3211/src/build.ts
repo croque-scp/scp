@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import { compress } from "compress-tag"
+import deepMap from "deep-map"
 import { createPatch } from "diff"
 import ejs from "ejs"
 import fs from "fs"
@@ -9,7 +10,6 @@ import util from "util"
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
-
 
 export async function makeFtml (
   lang: keyof typeof langs,
@@ -94,13 +94,26 @@ async function generateDelta (
   // optimisations later
   const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
   const reference = (langs[lang].rot13 ? rot13 : (source: string) => source)(
-    marked(ejs.render(document, { anomaly: referenceAnomaly }))
+    marked(
+      ejs.render(
+        document,
+        { base: referenceAnomaly.base, prose: referenceAnomaly.prose }
+      )
+    )
   )
   console.log("Reference length:", reference.length)
 
   console.log("\nGenerating sources...")
   const sources = (await getAllAnomaliesForLang(lang)).map(anomaly => {
-    return marked(ejs.render(document, { anomaly }))
+    return marked(
+      ejs.render(
+        document,
+        {
+          base: anomaly.base,
+          prose: deepMap(anomaly.prose, str => compress(str))!
+        }
+      )
+    )
   }).map(
     // Encrypt with ROT13 if the language wants it, otherwise, don't
     langs[lang].rot13 ? rot13 : source => source

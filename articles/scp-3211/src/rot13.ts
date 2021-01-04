@@ -8,7 +8,8 @@ export function rot13 (string: string): string {
     let charCode = char.charCodeAt(0)
     return String.fromCharCode(
       (char <= "Z" ? 90 : 122) >= (charCode = charCode + 13)
-        ? charCode : charCode - 26
+        ? charCode
+        : charCode - 26
     )
   })
 }

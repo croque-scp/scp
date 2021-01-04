@@ -1,24 +1,24 @@
 <blockquote>
 
-<% if (anomaly.base) { %>
+<% if (base) { %>
 **Memetic detectors indicate that you were first exposed to this file more than
 6 minutes ago. You are now considered post-3211. If you can still perceive the
 documentation as you originally recall it, please consult a researcher assigned
 to SCP-3211 immediately.**
 <% } else { -%>
 **YOU HAVE 6 MINUTES TO <span id="read">READ</span> THIS FILE**
-<% } %>
 
 <p id="timer">06:00</p>
+<% } %>
 
 </blockquote>
 
-<image src="<%= anomaly.prose.imageUrl %>"
-       caption="<%= anomaly.prose.imageCaption %>">
+<image src="<%= prose.imageUrl %>"
+       caption="<%= prose.imageCaption %>">
 
 **Item #:** SCP-3211
 
-**Object Class:** <%- anomaly.prose.objectClass %>
+**Object Class:** <%- prose.objectClass %>
 
 **Special Containment Procedures:** To reduce unnecessary exposure to SCP-3211,
 a warning message is to be placed at the start of this document. Level 4
@@ -34,14 +34,14 @@ other than its existence.
 SCP-3211 is to be kept in a standard non-humanoid containment chamber. Access
 is to be limited to tests only.
 
-**Description:** <%= anomaly.prose.physicalDescription %>
+**Description:** <%= prose.physicalDescription %>
 
 SCP-3211 exhibits a slow-acting but potent perception-altering effect. During
 the first 6 minutes of exposure to SCP-3211, subjects are able to observe and
 record SCP-3211 without issue. Once 6 minutes have passed, subjects will
 immediately and permanently be unable to perceive any direct information
 associated with SCP-3211, or observe SCP-3211 itself.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 This effectively quarantines information about SCP-3211 to only those who have
 been exposed to it for less than 6 minutes.
 <% } %>
@@ -51,7 +51,7 @@ SCP-3211 for at least 6 minutes will be described as **post-3211** and those
 who have been exposed to it for less than 6 minutes will be described as
 **pre-3211**.
 
-<% if (anomaly.base) { %>
+<% if (base) { %>
 
 Post-3211 subjects are consistently adamant that they are able to perfectly
 remember its nature despite being unable to take in new information about it.
@@ -72,28 +72,28 @@ chronological order of their being reported, is provided below.
 <% } else { %>
 
 Post-3211 subjects are consistently able to recall, without issue, that
-SCP-3211 is <%= anomaly.prose.informalDescription %>. However, only pre-3211
+SCP-3211 is <%= prose.informalDescription %>. However, only pre-3211
 subjects are able to perceive SCP-3211 itself, or record new information
 about it.
 
 <% } %>
 
 Of note is that descriptions of the object vary between post-3211 subjects.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 Observations indicate that pre-3211 subjects consistently agree on the nature
 of SCP-3211
 <% } else { -%>
 All pre-3211 subjects agree that SCP-3211 is
-<%= anomaly.prose.formalDescription %>
+<%= prose.formalDescription %>
 <% } -%>
 -- however, once these subjects pass the 6 minute threshold, they will disagree
 on what it is. This also applies to documentation: personnel viewing this
-document <%= anomaly.base ? "universally" : "may" %> report that it describes
-something else <%= anomaly.base ? "before it changed" : "after it changes" %>
+document <%= base ? "universally" : "may" %> report that it describes
+something else <%= base ? "before it changed" : "after it changes" %>
 after 6 minutes of exposure. See Experiment Logs 3211-B and -D for more
 details.
 
-<% if (anomaly.base) { %>
+<% if (base) { %>
 
 Note that post-3211 subjects reporting unique descriptions is not universal --
 in several cases, the same description has been reported more than once.
@@ -113,7 +113,7 @@ Several theories have been suggested:
 <% } %>
 
 The mechanism through which SCP-3211 propagates this effect is currently
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 unknown, though the current theory proposes that after the 6-minute threshold,
 SCP-3211 'injects' false memories over the original perception.
 <% } else { -%>
@@ -122,7 +122,7 @@ unknown.
 
 Amnestics have proven to be effective on post-3211 subjects. They will forget
 SCP-3211 as expected, and upon re-exposure
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 may perceive it as something new. A method of amnesticating only the false
 memories has not yet been found.
 <% } else { -%>
@@ -153,8 +153,8 @@ its contents.
 
 **[0:08]** D-68134 begins writing a description of SCP-3211.
 
-<% if (anomaly.prose.examineAction) { %>
-**[1:55]** <%= anomaly.prose.examineAction %>
+<% if (prose.examineAction) { %>
+**[1:55]** <%= prose.examineAction %>
 <% } %>
 
 **[6:04]** D-68134 expresses surprise that he can no longer perceive
@@ -192,8 +192,8 @@ the room to the description on Document 3211-01.
 **[1:18]** D-8834 confirms that the SCP-3211 matches the written
 description.
 
-<% if (anomaly.prose.examineConfirmationAction) { %>
-**[1:59]** <%= anomaly.prose.examineConfirmationAction %>
+<% if (prose.examineConfirmationAction) { %>
+**[1:59]** <%= prose.examineConfirmationAction %>
 <% } %>
 
 **[5:45]** D-8834 is asked to close her eyes.
@@ -202,7 +202,7 @@ description.
 again, from memory.
 
 **[6:34]** D-8834 confirms that Document 3211-01 <%=
-  anomaly.base ?
+  base ?
   "describes a completely different object to" :
   "still describes"
 %> SCP-3211.
@@ -218,19 +218,19 @@ neither able to perceive the object nor read Document 3211-01.
 The following is a transcription of Document 3211-01, the text produced by
 D-68134 during Experiment 3211-01.
 
-> <%= anomaly.prose.writtenObservation %>
+> <%= prose.writtenObservation %>
 
 </details>
 
 **Addendum 3211-B:** Empirical data
 
 <%=
-  anomaly.base ?
+  base ?
   "As an attempt to determine the true nature of SCP-3211, a" :
   "A"
 %> collection of data has been recorded from SCP-3211 and is listed below.
 This data has been recorded only by pre-3211 researchers.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 It is currently unknown whether the readings are accurate, or if the reader
 perceives them to match their current perception of SCP-3211.
 <% } else { -%>
@@ -240,14 +240,14 @@ to retain on file.
 
 Data type | Observation
 --- | ---
-Full-spectrum spectrophotometry | <%= anomaly.prose.data.spectrophotometry %>
-Mass | <%= anomaly.prose.data.mass %>
-Hume measurement | <%= anomaly.prose.data.hume %>
-Magnetism | <%= anomaly.prose.data.magnetism %>
-Visual observation by D-9981 | <%= anomaly.prose.data.visual %>
-Physical observation by D-9981 | <%= anomaly.prose.data.physical %>
-Response to basic questioning by D-9981 | <%= anomaly.prose.data.questioning %>
-Type-Kappa memetic sentience detector | <%= anomaly.prose.data.sentience %>
+Full-spectrum spectrophotometry | <%= prose.data.spectrophotometry %>
+Mass | <%= prose.data.mass %>
+Hume measurement | <%= prose.data.hume %>
+Magnetism | <%= prose.data.magnetism %>
+Visual observation by D-9981 | <%= prose.data.visual %>
+Physical observation by D-9981 | <%= prose.data.physical %>
+Response to basic questioning by D-9981 | <%= prose.data.questioning %>
+Type-Kappa memetic sentience detector | <%= prose.data.sentience %>
 
 **Incident Log 3211-C:** On 2016-03-31, a researcher who was not assigned
 to SCP-3211, Dr. Jason Greaves, took a Class-Y mnestic<footnote>"Mnestics, as
@@ -256,7 +256,7 @@ memories and the prevention of their modification even in the face of anomalies
 that seek to disrupt this..." -- Excerpt from _An Introduction to Antimemetic
 Counter-Measures_, [Marion Wheeler](we-need-to-talk-about-fifty-five)
 </footnote> without authorisation and entered the containment chamber.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 Personnel reported being unable to perceive Dr. Greaves until his unconscious
 body "spontaneously appeared" several hours later. Dr. Greaves returned to full
 health with medical care, but did not retain any details of his encounter with
@@ -265,14 +265,14 @@ SCP-3211, claiming only that he "wasted his time in an empty cell".
 
 Dr. Greaves recorded a series of audio logs detailing his thought process
 during his encounter.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 However, the content of these logs propagate the infohazardous effect, and are
 effectively devoid of information.
 <% } -%>
 Their transcriptions are preserved below for posterity.
 
 Dr. Greaves <%=
-  anomaly.base ?
+  base ?
   "was severely reprimanded for not following standard testing procedure." :
   "is available for questions regarding his experience with SCP-3211."
 %>
@@ -285,9 +285,9 @@ Dr. Jason Greaves, SCP-3211, experiment log... one?
 
 If you're hearing this and if, like me, you're souped-up on some heavy-ass
 mnestics, then you and me both know for sure that SCP-3211 <%=
-  anomaly.base ?  "does not exist" : `is ${anomaly.prose.informalDescription}`
+  base ?  "does not exist" : `is ${prose.informalDescription}`
 %>. Why <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %>'s trying so hard to hide that from us, we'll never know.  But, if you're not
 high as hell on Class Y, then in less than 6 minutes you'll only remember me
 just rambling on about some random thing sat in a containment chamber.
@@ -297,9 +297,9 @@ nothing in the containment chamber at all.
 
 What I'm trying to do is work out exactly what SCP-3211 is, how it
 works, and why <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %>'s trying so hard to hide. What does <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %> want?
 
 No matter what I tried and who I spoke to, I couldn't get this test authorised.
@@ -314,64 +314,64 @@ get started.
 I've noticed something of a pattern emerging.
 
 Most people who walk into 3211's cell will perceive
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 the cell to be completely empty. Like, I can clearly see that there
 is nothing here.
 <% } else { -%>
 <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> as something totally new. Like, I see <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
-%> as <%= anomaly.prose.informalDescription %>, and there's no one else on the
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
+%> as <%= prose.informalDescription %>, and there's no one else on the
 list who's perceived <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> as that.
 <% } %>
 
-<% if (anomaly.base) { %>
+<% if (base) { %>
 There is nothing in the containment cell. SCP-3211 does not exist.
 <% } else { -%>
-But, <%= anomaly.prose.funFact %>. It's not _just_
-<%= anomaly.prose.informalDescription %>. It has anomalous properties other
+But, <%= prose.funFact %>. It's not _just_
+<%= prose.informalDescription %>. It has anomalous properties other
 than the fact that people can't see <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> for more than 6 minutes and then their memories after that are wrong.
 <% } %>
 
 It seems to me like Foundation personnel -- researchers and the like -- will
 perceive <%=
-  anomaly.base ?
+  base ?
   "the containment cell to be completely empty." :
   "it as something anomalous."
 %> People who are already familiar with <%=
-  anomaly.base ? "nothing" : "the anomalous"
+  base ? "nothing" : "the anomalous"
 %>, who are _expecting_
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 nothing, will see nothing in the containment chamber, because it is empty.
 <% } else { -%>
 <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> to be anomalous, will remember <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> being something anomalous.
 <% } %>
 
 But a D-Class, for example, who is not familiar with the anomalous, will
 remember <%=
-  anomaly.base ?
+  base ?
   "the containment cell being empty, just the same." :
   "it being something mundane. Like a clay vase."
 %>
 
-<% if (anomaly.base) { %>
+<% if (base) { %>
 It looks like SCP-3211 does not exist at all. But I still don't understand why,
 if SCP-3211 does not exist, I insist on trying to prove that it does. SCP-3211
 does not exist.
 <% } else { -%>
 It looks like <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %> adapts to match the viewer's expectation. But I still don't understand why
-<%= anomaly.prose.informalDescription %> is going to such lengths to
+<%= prose.informalDescription %> is going to such lengths to
 protect itself in the first place.
 <% } %>
 
@@ -386,26 +386,26 @@ word.
 
 So, the first stage is what you see when you walk into the cell for the first
 time; what SCP-3211 really is. It's <%=
-  anomaly.base ? "nothing" : anomaly.prose.informalDescription
+  base ? "nothing" : prose.informalDescription
 %>. Obviously, as soon as my mnestics wear off, I'll forget that. And so will
 you. I assume you've taken mnestics.
 
 The second stage is whatever memory SCP-3211 injects over itself when you've
 seen <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> for more than 6 minutes. Last time I saw <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %>, I remembered seeing... my son, who would be six. That was the second stage
 for me.
 
 The third stage is that you can't perceive <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %> at all. Its disguise is complete and <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %>'s hidden from you.
 
 I think I know why <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %> wants to hide. I just... need to put the words into a sentence.
 
 It's getting hard to think. My thoughts feel like walking through
@@ -422,19 +422,19 @@ might have majorly fucked up by doing this.
 
 It's really weird seeing all the things you can't usually remember.  There's
 bugs everywhere, covering every surface.
-<% if (anomaly.base) { -%>
+<% if (base) { -%>
 The containment cell is empty. There are no bugs.
 <% } else { -%>
 They're crawling all over <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %>, too.
 <% } %>
 
 I need to sleep. I just want to sleep.
 </blockquote>
 
-<% if (anomaly.prose.alternateEnding) { %>
-<blockquote><%= anomaly.prose.alternateEnding %></blockquote>
+<% if (prose.alternateEnding) { %>
+<blockquote><%= prose.alternateEnding %></blockquote>
 <% } else { %>
 <blockquote>
 
@@ -443,20 +443,20 @@ The floor is so much more comfortable than standing.
 It's getting hard to breathe. I don't know if that's my lungs closing up, or if
 it's just the... if it's just me forgetting _how_. At least I haven't forgotten
 what <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %> was the first time I saw <%=
-  anomaly.prose.possessivePronoun ?  anomaly.prose.possessivePronoun : "it"
+  prose.possessivePronoun ?  prose.possessivePronoun : "it"
 %>.
 
 But I know for sure why <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "SCP-3211"
+  prose.objectPronoun ?  prose.objectPronoun : "SCP-3211"
 %> wants to disguise so avidly. It's right there, just in front of you. I'm
 surprised no one has seen it yet.
 
 It's just... it's just that <%=
-  anomaly.prose.objectPronoun ?  anomaly.prose.objectPronoun : "it"
+  prose.objectPronoun ?  prose.objectPronoun : "it"
 %>'s not really... <%=
-  anomaly.base ?
+  base ?
   "it's not really there. It does not exist." :
   "really itself, right?"
 %>
@@ -470,13 +470,13 @@ they're... how they're...
 I need to sleep.
 
 <%=
-  anomaly.base ?
+  base ?
   "I am alone in this room. The containment cell is empty." :
   "It's just sat there. Watching me."
 %> Just... just make me forget already.
 
 <%=
-  anomaly.base ?
+  base ?
   "I know that it does not exist" :
   "I know your secrets, dammit"
 %>... why don't... why can't... why did you have to show him to me?
@@ -489,12 +489,12 @@ Why hasn't anyone come to get me?
 </blockquote>
 <% } %>
 
-<% if (anomaly.prose.conclusion) { %>
-<%= anomaly.prose.conclusion %>
+<% if (prose.conclusion) { %>
+<%= prose.conclusion %>
 <% } else { -%>
 It is assumed that Dr. Greaves fell unconscious at this point. The remainder of
 the logs are mostly silent<%=
-  anomaly.prose.madeASound ?  `, excluding ${anomaly.prose.madeASound},` : ""
+  prose.madeASound ?  `, excluding ${prose.madeASound},` : ""
 %> up to the point where a member of security staff noticed Dr. Greaves on
 closed-circuit monitoring several minutes later and called for help.
 <% } %>
