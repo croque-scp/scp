@@ -26,6 +26,25 @@ export async function makeFtml (lang: keyof typeof langs): Promise<void> {
   )
 }
 
+export async function copyFiles (lang: keyof typeof langs): Promise<void> {
+  /**
+   * Copies all the required static files for a language to that language's
+   * dist dir.
+   */
+  (await getAllAnomaliesForLang(lang)).forEach(anomaly => {
+    if (fs.existsSync(`./src/assets/${anomaly.prose.imageUrl}`)) {
+      fs.copyFileSync(
+        `./src/assets/${anomaly.prose.imageUrl}`,
+        `./dist/${lang}/${anomaly.prose.imageUrl}`
+      )
+    } else {
+      throw new Error(`Static asset ${anomaly.prose.imageUrl} doesn't exist`)
+    }
+  })
+  fs.copyFileSync(`./src/assets/warning.svg`, `./dist/${lang}/warning.svg`)
+  fs.copyFileSync(`./dist/3211.js`, `./dist/${lang}/3211.js`)
+}
+
 async function makeIframe (lang: keyof typeof langs): Promise<string> {
   /**
    * Constructs the HTML content of the iframe for the given language.
@@ -74,33 +93,7 @@ async function generateDelta (
   console.log("Reference length:", reference.length)
 
   console.log("\nGenerating sources...")
-  const sources = (await Promise.allSettled(
-    anomalyNames.map(async anomaly => {
-      // Import each anomaly for the current language
-      return (<{ default: Anomaly }>(
-        await import(`./${lang}/anomalies/${anomaly}`)
-      )).default
-    })
-  )).reduce((anomalies: Anomaly[], result, index) => {
-    // A translation doesn't have to have all the anomalies. Discard any
-    // imports that failed (with a warning), and then continue
-    if (result.status === "rejected") {
-      // The base anomaly is required - if it's missing, stop!
-      if (index === 0) {
-        throw new Error(compress`
-          Couldn't find anomaly 'base' for lang '${lang}', which is required.
-          Stopping build.
-        `)
-      }
-      console.warn(compress`
-        Couldn't find anomaly '${anomalyNames[index]}' for lang '${lang}'.
-        Build will continue without this anomaly.
-      `)
-    } else {
-      anomalies.push(result.value)
-    }
-    return anomalies
-  }, []).map(anomaly => {
+  const sources = (await getAllAnomaliesForLang(lang)).map(anomaly => {
     return marked(ejs.render(document, { anomaly }))
   }).map(
     // Encrypt with ROT13 if the language wants it, otherwise, don't
@@ -155,4 +148,40 @@ async function generateDelta (
     return { ...a, [anomalyName]: deltas[index] }
   }, <{ [anomaly in typeof anomalyNames[number]]: string }>{})
   return [reference, anomalies]
+}
+
+async function getAllAnomaliesForLang (
+  lang: keyof typeof langs
+): Promise<Anomaly[]> {
+  /**
+   * Gets all the available anomalies for a language. Requires that the base
+   * anomaly exist.
+   */
+  return (await Promise.allSettled(
+    anomalyNames.map(async anomaly => {
+      // Import each anomaly for the current language
+      return (<{ default: Anomaly }>(
+        await import(`./${lang}/anomalies/${anomaly}`)
+      )).default
+    })
+  )).reduce((anomalies: Anomaly[], result, index) => {
+    // A translation doesn't have to have all the anomalies. Discard any
+    // imports that failed (with a warning), and then continue
+    if (result.status === "rejected") {
+      // The base anomaly is required - if it's missing, stop!
+      if (index === 0) {
+        throw new Error(compress`
+          Couldn't find anomaly 'base' for lang '${lang}', which is required.
+          Stopping build.
+        `)
+      }
+      console.warn(compress`
+        Couldn't find anomaly '${anomalyNames[index]}' for lang '${lang}'.
+        Build will continue without this anomaly.
+      `)
+    } else {
+      anomalies.push(result.value)
+    }
+    return anomalies
+  }, [])
 }

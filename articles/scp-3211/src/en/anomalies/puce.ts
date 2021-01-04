@@ -1,7 +1,7 @@
 import { Anomaly } from "../../anomaly"
 
 export default new Anomaly(false, {
-  imageUrl: "puce.jpg",
+  imageUrl: "puce.webp",
   imageCaption: "The colour 'puce'.",
   objectClass: "Safe",
   physicalDescription: `

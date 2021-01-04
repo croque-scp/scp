@@ -1,7 +1,7 @@
 import { Anomaly } from "../../anomaly"
 
 export default new Anomaly(false, {
-  imageUrl: "putty.jpg",
+  imageUrl: "putty.webp",
   imageCaption: "SCP-3211 out of its container.",
   objectClass: "Safe",
   physicalDescription: `

@@ -34,6 +34,10 @@ gulp.task('css', () => {
 })
 
 gulp.task('webpack', () => {
+  /**
+   * Bundle all the requirements for the JS that will run in the iframe into a
+   * single file.
+   */
   return gulp
     .src("./src/iframe.ts")
     .pipe(webpack({
@@ -59,11 +63,13 @@ gulp.task('ftml', async done => {
   /**
    * For each configured language, build the article
    */
-  const { makeFtml } = require("./build/build.js")
+  const { makeFtml, copyFiles } = require("./build/build.js")
   const { langs } = require("./build/config.js")
   for (const lang in langs) {
     await makeFtml(lang)
+    await copyFiles(lang)
   }
+  await del("./dist/3211.js")
   done()
 })
 

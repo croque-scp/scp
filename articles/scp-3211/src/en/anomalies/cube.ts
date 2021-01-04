@@ -1,7 +1,7 @@
 import { Anomaly } from "../../anomaly"
 
 export default new Anomaly(false, {
-  imageUrl: "redcube.png",
+  imageUrl: "redcube.webp",
   imageCaption: "Artist's render of SCP-3211.",
   objectClass: "Safe",
   physicalDescription: `
