@@ -1,10 +1,10 @@
 <blockquote>
 
 <% if (anomaly.base) { %>
-**Memetic detectors indicate that you have been exposed to this file for
-at least 6 minutes. You are now considered post-3211. If you can still perceive
-the documentation as you originally recall it, please consult a researcher
-assigned to SCP-3211 immediately.**
+**Memetic detectors indicate that you were first exposed to this file more than
+6 minutes ago. You are now considered post-3211. If you can still perceive the
+documentation as you originally recall it, please consult a researcher assigned
+to SCP-3211 immediately.**
 <% } else { -%>
 **YOU HAVE 6 MINUTES TO <span id="read">READ</span> THIS FILE**
 <% } %>
