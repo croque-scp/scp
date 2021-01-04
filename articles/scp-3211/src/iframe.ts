@@ -156,12 +156,6 @@ window.addEventListener('load', () => {
 
     // TODO Recreate collapsible continuity
 
-    // Click "read" if you've read the document and want the timer to end
-    // Listener has to be added after the anomaly has been constructed -
-    // the markup is in the anomaly document
-    document.getElementById("read")?.addEventListener("click", () => {
-      read = true
-    })
   })
 })
 
@@ -175,11 +169,18 @@ function nextSection (toSection: section) {
 
   if (toSection === "anomaly") {
     // Construct the anomaly
-    document.getElementById("anomalyContent")!.innerHTML = (
+    document.getElementById("anomaly")!.innerHTML = (
       langs[lang].rot13 ? rot13 : (source: string) => source
     )(applyPatch(
       reference.join("\n"), anomalies[anomaly]
     )).replace(/--/g, "—")
+
+    // Click "read" if you've read the document and want the timer to end
+    // Listener has to be added after the anomaly has been constructed -
+    // the markup is in the anomaly document
+    document.getElementById("read")?.addEventListener("click", () => {
+      read = true
+    })
   }
 
   sections.map(hideSection)
