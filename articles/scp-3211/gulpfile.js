@@ -51,7 +51,7 @@ gulp.task('webpack', () => {
       resolve: { extensions: [".ts", ".js"] },
       externals: { "js-cookie": "Cookies" },
       optimization: {
-        minimize: true,
+        minimize: process.env.NODE_ENV === "production",
         minimizer: [ new TerserPlugin({ extractComments: false }) ],
         usedExports: true
       }
@@ -66,7 +66,7 @@ gulp.task('ftml', async done => {
   const { makeFtml, copyFiles } = require("./build/build.js")
   const { langs } = require("./build/config.js")
   for (const lang in langs) {
-    await makeFtml(lang)
+    await makeFtml(lang, process.env.NODE_ENV === "development")
     await copyFiles(lang)
   }
   await del("./dist/3211.js")

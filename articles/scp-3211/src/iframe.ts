@@ -242,9 +242,9 @@ function nextSection (toSection: section) {
 }
 
 function showSection (section: section): void {
-  document.getElementById(section)!.classList.add("block")
+  document.getElementById(section)!.classList.remove("hidden")
 }
 
 function hideSection (section: section): void {
-  document.getElementById(section)!.classList.remove("none")
+  document.getElementById(section)!.classList.add("hidden")
 }

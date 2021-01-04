@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "main": "src/main.ts",
   "scripts": {
-    "build": "gulp",
+    "build": "NODE_ENV=production gulp",
+    "dev": "NODE_ENV=development gulp",
     "lint": "standardx src/**/*.ts",
     "fix": "standardx --fix src/**/*.ts",
     "tests": "jest"

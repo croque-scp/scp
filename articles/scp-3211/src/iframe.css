@@ -5,6 +5,10 @@ a {
   cursor: pointer;
 }
 
+.hidden {
+  display: none;
+}
+
 .warning-image {
   width: 400px;
   margin-left: auto;

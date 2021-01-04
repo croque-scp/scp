@@ -11,19 +11,25 @@ import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
 
 
-export async function makeFtml (lang: keyof typeof langs): Promise<void> {
+export async function makeFtml (
+  lang: keyof typeof langs,
+  copyIframeHtml = false
+): Promise<void> {
   /**
    * Constructs the FTML content of the wiki page and saves it to
    * dist/lang/dist.ftml.
    */
   fs.mkdirSync(`./dist/${lang}/`)
+  const html = await makeIframe(lang)
   fs.writeFileSync(
     `./dist/${lang}/dist.ftml`,
     ejs.render(
-      fs.readFileSync(`./src/${lang}/page.ejs.ftml`, "utf8"),
-      { html: await makeIframe(lang) }
+      fs.readFileSync(`./src/${lang}/page.ejs.ftml`, "utf8"), { html }
     )
   )
+  if (copyIframeHtml) {
+    fs.writeFileSync(`./dist/${lang}/iframe.html`, html)
+  }
 }
 
 export async function copyFiles (lang: keyof typeof langs): Promise<void> {
@@ -53,7 +59,7 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
   const html = ejs.render(
     fs.readFileSync("./src/iframe.ejs.html", "utf8"),
     {
-      lang,
+      lang: JSON.stringify(lang),
       reference: JSON.stringify(reference.split("\n")),
       deltas: JSON.stringify(deltas),
       css: fs.readFileSync("./build/iframe.css", "utf8"),
