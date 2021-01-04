@@ -96,9 +96,12 @@ window.addEventListener('load', () => {
     console.log(`Previous anomaly ${anomaly} detected from cookie`)
   } else {
     console.log("Initialising anomaly")
-    anomaly = <keyof typeof anomalies>Object.keys(anomalies)[
-      Math.floor(Math.random() * (Object.keys(anomalies).length))
-    ]
+    // Pick a random anomaly, except for the base anomaly
+    do {
+      anomaly = <keyof typeof anomalies>Object.keys(anomalies)[
+        Math.floor(Math.random() * (Object.keys(anomalies).length))
+      ]
+    } while (anomaly === "base")
   }
   console.log(`Viewing ${anomaly}`)
   remember("anomaly", anomaly)
