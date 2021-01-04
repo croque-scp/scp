@@ -33,7 +33,7 @@ function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
    */
   console.log(`Saving ${value} to ${key}`)
   Cookies.set(key, value, { expires: 356 })
-  document.getElementById("anomalyCookie")!.textContent = `Current: ${anomaly}`
+  document.getElementById("anomalyCookie")!.textContent = anomaly
   document.getElementById("otherCookies")!.textContent = (
     `seen ${recall("seen")}, timer ${recall("timerExpiresAt")}`
   )
@@ -135,6 +135,7 @@ window.addEventListener('load', () => {
   (<(keyof typeof anomalies)[]>Object.keys(anomalies)).forEach(anomalyName => {
     const button = document.createElement("button")
     button.type = "button"
+    button.textContent = anomalyName
     button.addEventListener("click", () => {
       anomaly = anomalyName
       console.log(`Anomaly manually set to ${anomaly}`)
