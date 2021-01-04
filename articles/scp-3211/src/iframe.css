@@ -5,14 +5,28 @@ a {
   cursor: pointer;
 }
 
-.warning-container img {
+.warning-image {
   width: 400px;
   margin-left: auto;
   margin-right: auto;
   display: block;
   position: relative;
   z-index: 1;
-  margin-bottom: calc(-95px - 3em);
+  margin-bottom: calc(-91px - 3em);
+}
+
+.warning-image p {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  display: block;
+  font-size: 3.33rem;
+  font-size: min(3.33rem, 10vw);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+  line-height: initial;
 }
 
 .warning-message {

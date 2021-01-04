@@ -17,13 +17,11 @@ export const anomalyNames = <const>[
 type Lang = {
   rot13: boolean
   fileUrl: string
-  warningText: string
 }
 
 export const langs: { [lang: string]: Lang } = {
   en: {
     rot13: true,
-    fileUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/",
-    warningText: "INFOHAZARD WARNING"
+    fileUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/"
   }
 }

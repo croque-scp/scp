@@ -76,9 +76,6 @@ change the translation process.
 The `fileUrl` property is the URL that all of the necessary files can be found
 at, including images and `3211.js`.
 
-The `warningText` property determines what text shows up in the "WARNING"
-image on the first screen.
-
 ### Copying the files
 
 The English source files are kept in `src/en/`. In your fork of this
