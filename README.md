@@ -243,3 +243,45 @@ but I encourage you to create it as soon as possible. I find that it's
 helpful to have a place to write notes and brainstorm what I'm working on
 while I do it. If your PR isn't finished, though, please mark it as a draft
 by clicking "Create draft PR" in the dropdown when you create it.
+
+## Deployment
+
+Deploying an article to the wiki can be as simple as copying the contents of
+a file and pasting it into the text box on Wikidot. There is no automatic
+deployment.
+
+The final text of an article &mdash; that is, the text that should be pasted
+directly into the text box on Wikidot &mdash; is always in a file named
+`dist.ftml`. "dist" stands for
+"[distributable](https://stackoverflow.com/a/22844164/4958427)", and "ftml" is
+short for
+[Foundation Text Markup Language](https://github.com/Nu-SCPTheme/ftml).
+
+On WSL 2, to copy the contents of a file to your Windows clipboard:
+
+```shell
+cat name_of_file | clip.exe
+```
+
+Manual deployment processes for both kinds of article in this repository:
+
+### Backed-up articles
+
+1. Find `dist.ftml`, which will be in a directory named for each branch's
+   language code.
+1. Paste the contents into Wikidot.
+1. If there are any files in the same directory as `dist.ftml`, upload them to
+   the Wikidot page.
+
+Please note that backup articles are not supposed to be deployed _to_ the wiki,
+but rather backed up _from_ the wiki.
+
+### Articles with a build process
+
+1. Perform the build process (usually `npm i` then `npm run build`, though each
+   article will have more detailed instructions in their own READMEs).
+1. Find `dist.ftml`, which will be in a directory named for each branch's
+   language code, which will all be inside a `dist/` directory.
+1. Paste the contents into Wikidot.
+1. If there are any files in the same directory as `dist.ftml`, upload them to
+   the Wikidot page.
