@@ -4,10 +4,6 @@ import Cookies from "js-cookie"
 import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
 
-// XXX Not all anomalies in anomalyNames are guaranteed to be present - it
-// should be used for types only; I should use the declared anomalies dict for
-// iterating
-
 // Defined in iframe.ejs.html
 declare const reference: string[]
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: string }
@@ -100,7 +96,9 @@ window.addEventListener('load', () => {
     console.log(`Previous anomaly ${anomaly} detected from cookie`)
   } else {
     console.log("Initialising anomaly")
-    anomaly = anomalyNames[Math.floor(Math.random() * (anomalyNames.length))]
+    anomaly = <keyof typeof anomalies>Object.keys(anomalies)[
+      Math.floor(Math.random() * (Object.keys(anomalies).length))
+    ]
   }
   console.log(`Viewing ${anomaly}`)
   remember("anomaly", anomaly)
@@ -130,8 +128,8 @@ window.addEventListener('load', () => {
   })
 
   // Generate buttons to manually change the anomaly
-  const buttons = document.getElementById("anomalyButtons")
-  anomalyNames.forEach(anomalyName => {
+  const buttons = document.getElementById("anomalyButtons");
+  (<(keyof typeof anomalies)[]>Object.keys(anomalies)).forEach(anomalyName => {
     const button = document.createElement("button")
     button.type = "button"
     button.addEventListener("click", () => {
