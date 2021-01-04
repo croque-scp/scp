@@ -16,6 +16,7 @@ export async function makeFtml (lang: keyof typeof langs): Promise<void> {
    * Constructs the FTML content of the wiki page and saves it to
    * dist/lang/dist.ftml.
    */
+  fs.mkdirSync(`./dist/${lang}/`)
   fs.writeFileSync(
     `./dist/${lang}/dist.ftml`,
     ejs.render(
@@ -36,7 +37,7 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
       lang,
       reference: JSON.stringify(reference.split("\n")),
       deltas: JSON.stringify(deltas),
-      css: fs.readFileSync("./dist/iframe.css", "utf8"),
+      css: fs.readFileSync("./build/iframe.css", "utf8"),
       fileUrl: langs[lang].fileUrl,
       buttons: fs.readFileSync(`./src/${lang}/buttons.html`, "utf8"),
       warning: fs.readFileSync(`./src/${lang}/warning.html`, "utf8"),

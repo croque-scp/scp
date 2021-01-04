@@ -7,6 +7,7 @@ const TerserPlugin = require("terser-webpack-plugin")
 
 gulp.task('clean', async done => {
   // Scrub any previous builds from dist
+  await del("./build/")
   await del("./dist/")
   done()
 })
@@ -19,7 +20,7 @@ gulp.task('ts', () => {
   return gulp
     .src(["./src/**/*.ts", "!./src/iframe.ts"])
     .pipe(tsProject())
-    .js.pipe(gulp.dest("./dist/"))
+    .js.pipe(gulp.dest("./build/"))
 })
 
 gulp.task('css', () => {
@@ -29,7 +30,7 @@ gulp.task('css', () => {
   return gulp
     .src("./src/**/*.css")
     .pipe(cleanCss())
-    .pipe(gulp.dest("./dist/"))
+    .pipe(gulp.dest("./build/"))
 })
 
 gulp.task('webpack', () => {
@@ -58,8 +59,8 @@ gulp.task('ftml', async done => {
   /**
    * For each configured language, build the article
    */
-  const { makeFtml } = require("./dist/build.js")
-  const { langs } = require("./dist/config.js")
+  const { makeFtml } = require("./build/build.js")
+  const { langs } = require("./build/config.js")
   for (const lang in langs) {
     await makeFtml(lang)
   }
