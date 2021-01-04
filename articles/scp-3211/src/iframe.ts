@@ -9,7 +9,7 @@ declare const reference: string[]
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: string }
 declare const lang: keyof typeof langs
 
-const sections = <const>["warning", "loading", "anomaly", "review"]
+const sections = <const>["warning", "loading", "anomaly"]
 type section = typeof sections[number]
 
 type cookies = {
@@ -149,17 +149,10 @@ window.addEventListener('load', () => {
 
     if (recall("seen") === "true") {
       // If the anomaly has already been seen, skip to review
-      setTimeout(() => nextSection("review"), 1200)
-    } else {
-      setTimeout(() => nextSection("anomaly"), 1200)
-      // Construct the anomaly
-      const decryptedAnomaly = (
-        langs[lang].rot13 ? rot13 : (source: string) => source
-      )(applyPatch(
-        reference.join("\n"), anomalies[anomaly]
-      )).replace(/--/g, "—")
-      document.getElementById("anomalyContent")!.innerHTML = decryptedAnomaly
+      anomaly = "base"
     }
+
+    setTimeout(() => nextSection("anomaly"), 1200)
 
     // TODO Recreate collapsible continuity
 
@@ -180,11 +173,20 @@ function nextSection (toSection: section) {
    */
   console.log(`Now in section ${toSection}`)
 
+  if (toSection === "anomaly") {
+    // Construct the anomaly
+    document.getElementById("anomalyContent")!.innerHTML = (
+      langs[lang].rot13 ? rot13 : (source: string) => source
+    )(applyPatch(
+      reference.join("\n"), anomalies[anomaly]
+    )).replace(/--/g, "—")
+  }
+
   sections.map(hideSection)
   showSection(toSection)
 
   // If the base anomaly has now been seen, remember that
-  if (toSection === "review") {
+  if (toSection === "anomaly" && anomaly === "base") {
     remember("seen", "true")
   }
 
@@ -208,7 +210,8 @@ function nextSection (toSection: section) {
     timerInterval = window.setInterval(function () {
       if (secondsRemaining <= 0) {
         clearInterval(timerInterval)
-        nextSection("review")
+        anomaly = "base"
+        nextSection("anomaly")
         forget("timerExpiresAt")
       } else {
         // If the user has clicked 'read', reduce the time remaining
