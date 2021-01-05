@@ -23,5 +23,9 @@ export const langs: { [lang: string]: Lang } = {
   en: {
     rot13: true,
     fileUrl: "https://scp-wiki.wdfiles.com/local--files/scp-3211/"
-  }
+  },
+  ko: {
+    rot13: true,
+    fileUrl: "http://scpko.wdfiles.com/local--files/scp-3211/"
+  },
 }
