@@ -108,3 +108,11 @@ If you add a placeholder, you must register it in the `AnomalyProse` type in
 have to use it.
 
 Make sure you add a value for your new placeholder in each sub-anomaly!
+
+## Local development
+
+For local testing:
+
+1. Change your language's `fileUrl` to `"./"`.
+1. Run `npm run dev` instead of `npm run build`.
+1. Open `./dist/[lang]/iframe.html` in a browser.
