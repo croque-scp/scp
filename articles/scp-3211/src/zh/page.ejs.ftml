@@ -1,0 +1,46 @@
+[!--
+本页由构建过程自动生成。你对其做出的任何改变都将会在页面重新生成之后将其自动覆写。
+
+源代码于GitHub仓库中可用：
+https://github.com/rossjrw/scp/tree/main/articles/scp-3211/
+
+要对该页作出永久性改动，请在此处查看贡献说明。此处亦有对翻译者的协助说明。
+--]
+
+[[include :scp-wiki-cn:credit:start-standalone]]
+**SCP-3211：**一无二随
+**作者：**[[*user Croquembouche]]
+
+躲在你的手机或者电脑屏幕后面，你通常可以免遭逆模因SCP的侵扰。
+但对于3211？不不不。32111不一样。
+
+你只能够阅读这篇一次。在倒计时结束之后你就会读到文章的最终版本，查看讨论区以获取重置说明。
+
+[[[cone|由我创作的更多东西]]]
+[[include :scp-wiki-cn:credit:end-standalone]]
+
+[[module CSS]]
+#edit-page-form .buttons.alignleft::before {
+  content: "请确保你明白源代码顶部的警告后再保存编辑！";
+  display: block;
+  margin-bottom: 1em;
+  font-weight: bold;
+  color: red;
+}
+
+iframe {
+  overflow: hidden;
+}
+[[/module]]
+
+[[html]]
+<%- html %>
+[[/html]]
+
+[[footnoteblock]]
+
+[[div class="footer-wikiwalk-nav"]]
+[[=]]
+<< [[[SCP-3210]]] |  SCP-3211 | [[[SCP-3212]]] >>
+[[/=]]
+[[/div]]
