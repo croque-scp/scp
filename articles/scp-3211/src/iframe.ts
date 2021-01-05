@@ -75,8 +75,8 @@ function forgetEverything (reloadPageAfter: boolean): void {
 }
 
 function hoverdiv (event: MouseEvent, noteRef: number): boolean {
-  const notes = document.getElementById("hovertips")!
-  const note = <HTMLElement>notes.getElementsByClassName("hovertip")[noteRef]
+  const notes = document.getElementById("footnotes")!
+  const note = <HTMLElement>notes.getElementsByClassName("footnote")[noteRef]
   note.style.left = "0"
   note.style.top = `${event.pageY + 10}px`
   // TODO Choose by whether or not it's in or out
@@ -178,23 +178,23 @@ function nextSection (toSection: section) {
     )).replace(/--/g, "—")
 
     // Handle footnotes
-    const notesBlock = anomalyElement.querySelector("notesblock")!
+    const notesBlock = anomalyElement.querySelector("footer")!
     const notes = notesBlock.querySelectorAll("ol li")
     // Create a hovertip in the notes block if there is not already one
-    if (document.getElementById("hovertips") == null) {
-      const hovertips = document.createElement("div")
-      hovertips.id = "hovertips"
+    if (document.getElementById("footnotes") == null) {
+      const footnotes = document.createElement("div")
+      footnotes.id = "footnotes"
       notes.forEach((note, index) => {
-        const hovertip = document.createElement("div")
-        hovertip.classList.add("hovertip")
+        const footnote = document.createElement("div")
+        footnote.classList.add("footnote")
         // XXX Footnote string will need to be translated
-        hovertip.innerHTML = `
+        footnote.innerHTML = `
           <div class="f-heading">Footnote ${index + 1}.</div>
           <div class="f-content">${note.innerHTML}</div>
         `
-        hovertips.appendChild(hovertip)
+        footnotes.appendChild(footnote)
       })
-      document.body.appendChild(hovertips)
+      document.body.appendChild(footnotes)
     }
     anomalyElement.querySelectorAll("note").forEach(note => {
       const noteRef = parseInt(note.textContent!)

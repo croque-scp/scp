@@ -501,9 +501,9 @@ closed-circuit monitoring several minutes later and called for help.
 
 </details>
 
-<notesblock>
+<footer>
 
-**Footnotes**
+<p style="font-size: 130%"><b>Footnotes</b></p>
 
 1. "Mnestics, as opposed to the more common amnestics, generally aid in the
    retention of memories and the prevention of their modification even in the
@@ -511,4 +511,4 @@ closed-circuit monitoring several minutes later and called for help.
    -- Excerpt from _An Introduction to Antimemetic Counter-Measures_,
    [Marion Wheeler](we-need-to-talk-about-fifty-five)
 
-</notesblock>
+</footer>
