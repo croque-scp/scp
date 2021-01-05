@@ -1,14 +1,52 @@
 @import url(https://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css);
 @import url(https://scp-wiki.wikidot.com/component:theme/code/1);
 
-a, summary {
+/* Make footnotes and collapsibles look like links */
+sup a, summary {
   cursor: pointer;
 }
 
+summary {
+  color: #b01;
+}
+
+summary:hover {
+  text-decoration: underline;
+}
+
+/* Add a little spacing around collapsibles */
+details {
+  margin: 1em 0;
+}
+
+/* Remove browser default focus style */
+summary:focus {
+  outline: none;
+}
+
+/* Fade in contents of collapsible */
+details :not(summary) {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+details[open] :not(summary) {
+  opacity: 1;
+}
+
+/* Final collapsible should have a space beneath it, but only when closed, so
+ * that when it opens there is a chance to start reading it before Wikidot
+ * resizes the iframe to display the extra content. */
+details:last-of-type:not([open]) {
+  margin-bottom: 200px;
+}
+
+/* Hide hidden sections */
 .hidden {
   display: none;
 }
 
+/* Position the SCP logo in the warning section */
 .warning-image {
   width: 400px;
   margin-left: auto;
@@ -19,6 +57,7 @@ a, summary {
   margin-bottom: calc(-91px - 3em);
 }
 
+/* Position the warning text over the SCP logo */
 .warning-image p {
   font-weight: bold;
   width: 100%;
@@ -33,6 +72,7 @@ a, summary {
   line-height: initial;
 }
 
+/* Warning text */
 .warning-message {
   position: relative;
   padding: 60px 40px 1em 40px;
@@ -46,36 +86,40 @@ a, summary {
   z-index: 2;
 }
 
+/* On mobile, reduce warning text margins */
 @media (max-width: 580px) {
   .warning-message {
     padding: 80px 20px 1em 20px;
   }
 }
 
+/* Centre-align the button text and the loading section text */
 .warning-middle p {
   text-align: center;
 }
 
-#LOADING .warning-middle {
+/* Increase vertical height of the iframe during the 'loading' period.
+ * There is an artificial wait in place so that Wikidot's iframe resizing
+ * script can do its thing. */
+#loading .warning-middle {
   margin-top: 100px;
   margin-bottom: 2000px;
 }
 
-blockquote.timer {
-  text-align: center;
-}
-
+/* Bump up the text size a bit for big dynamics */
 #timer {
   font-size: 2em;
 }
 
-.hovertip {
+/* Wikidot's hovertips are usually styled inline */
+.footnote {
   width: auto;
   background-color: white;
   opacity: 1;
   position: absolute;
   display: none;
   border: 1px solid black;
+  padding: 0.2em 0.5em;
 }
 
 /* Fancy buttons from SCP-3939 */

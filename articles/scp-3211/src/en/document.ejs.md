@@ -1,4 +1,4 @@
-<blockquote>
+<blockquote style="text-align: center;">
 
 <% if (base) { %>
 **Memetic detectors indicate that you were first exposed to this file more than
@@ -134,7 +134,8 @@ will be able to perceive it for an additional 6 minutes.
 <details><summary>Experiment Log 3211-01</summary>
 
 <blockquote>
-<p align="center">**EXPERIMENT LOG 3211-01**</p>
+
+<p align="center"><b>EXPERIMENT LOG 3211-01</b></p>
 
 -----
 
@@ -147,24 +148,25 @@ its contents.
 
 -----
 
-**[-0:10]** D-68134 enters the containment chamber with his eyes closed.
+**0:10 &middot;** D-68134 enters the containment chamber with his eyes closed.
 
-**[0:00]** D-68134 is instructed to open his eyes.
+**0:00 &middot;** D-68134 is instructed to open his eyes.
 
-**[0:08]** D-68134 begins writing a description of SCP-3211.
+**0:08 &middot;** D-68134 begins writing a description of SCP-3211.
 
 <% if (prose.examineAction) { %>
-**[1:55]** <%= prose.examineAction %>
+**1:55 &middot;** <%= prose.examineAction %>
 <% } %>
 
-**[6:04]** D-68134 expresses surprise that he can no longer perceive
+**6:04 &middot;** D-68134 expresses surprise that he can no longer perceive
 SCP-3211. He expresses anger at not being able to read what he has written.
 
-**[6:25]** D-68134 is instructed to leave the containment chamber.
+**6:25 &middot;** D-68134 is instructed to leave the containment chamber.
 
 -----
 
 The description produced by D-68134 was retained as Document 3211-01.
+
 </blockquote>
 
 </details>
@@ -173,7 +175,7 @@ The description produced by D-68134 was retained as Document 3211-01.
 
 <blockquote>
 
-<p align="center">**EXPERIMENT LOG 3211-02**</p>
+<p align="center"><b>EXPERIMENT LOG 3211-02</b></p>
 
 -----
 
@@ -184,31 +186,32 @@ D-8834 is provided with Document 3211-01 and instructed not to read it.
 
 -----
 
-**[-0:10]** D-8834 enters the containment chamber with her eyes closed.
+**0:10 &middot;** D-8834 enters the containment chamber with her eyes closed.
 
-**[0:00]** D-8834 is instructed to open her eyes and compare the object in
-the room to the description on Document 3211-01.
+**0:00 &middot;** D-8834 is instructed to open her eyes and compare the object
+in the room to the description on Document 3211-01.
 
-**[1:18]** D-8834 confirms that the SCP-3211 matches the written
+**1:18 &middot;** D-8834 confirms that the SCP-3211 matches the written
 description.
 
 <% if (prose.examineConfirmationAction) { %>
-**[1:59]** <%= prose.examineConfirmationAction %>
+**1:59 &middot;** <%= prose.examineConfirmationAction %>
 <% } %>
 
-**[5:45]** D-8834 is asked to close her eyes.
+**5:45 &middot;** D-8834 is asked to close her eyes.
 
-**[6:15]** D-8834 is asked to compare the object to the written description
-again, from memory.
+**6:15 &middot;** D-8834 is asked to compare the object to the written
+description again, from memory.
 
-**[6:34]** D-8834 confirms that Document 3211-01 <%=
+**6:34 &middot;** D-8834 confirms that Document 3211-01 <%=
   base ?
   "describes a completely different object to" :
   "still describes"
 %> SCP-3211.
 
-**[6:44]** D-8834 is asked to open her eyes. She reports that she is
+**6:44 &middot;** D-8834 is asked to open her eyes. She reports that she is
 neither able to perceive the object nor read Document 3211-01.
+
 </blockquote>
 
 </details>
