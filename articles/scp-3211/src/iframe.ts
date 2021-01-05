@@ -172,7 +172,7 @@ function nextSection (toSection: section) {
       langs[lang].rot13 ? rot13 : (patch: string) => patch
     )(applyPatch(
       reference.join("\n"), anomalies[anomaly]
-    )).replace(/--/g, "—")
+    )).replace(/--(?!\S*\/)/g, "—")
 
     // Handle table
     anomalyElement.querySelectorAll("table").forEach(table => {
