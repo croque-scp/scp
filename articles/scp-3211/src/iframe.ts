@@ -177,6 +177,11 @@ function nextSection (toSection: section) {
       reference.join("\n"), anomalies[anomaly]
     )).replace(/--/g, "—")
 
+    // Handle table
+    anomalyElement.querySelectorAll("table").forEach(table => {
+      table.classList.add("wiki-content-table")
+    })
+
     // Handle footnotes
     const notesBlock = anomalyElement.querySelector("footer")!
     const notes = notesBlock.querySelectorAll("ol li")
