@@ -24,6 +24,8 @@ let anomaly: typeof anomalyNames[number]
 
 let timerInterval: number
 
+const openCollapsibles: boolean[] = []
+
 function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
   /**
    * Stores a value to a cookie.
@@ -79,7 +81,6 @@ function hoverdiv (event: MouseEvent, noteRef: number): void {
   const note = <HTMLElement>notes.getElementsByClassName("footnote")[noteRef]
   note.style.left = "0"
   note.style.top = `${event.pageY + 10}px`
-  // TODO Choose by whether or not it's in or out
   if (event.type === "mouseover") {
     note.style.display = "block"
   } else {
@@ -151,8 +152,6 @@ window.addEventListener('load', () => {
     }
 
     setTimeout(() => nextSection("anomaly"), 1200)
-
-    // TODO Recreate collapsible continuity
   })
 })
 
@@ -235,6 +234,22 @@ function nextSection (toSection: section) {
         "mouseout", (e: MouseEvent) => hoverdiv(e, noteRef - 1)
       )
       note.replaceWith(noteElement)
+    })
+
+    // Check if any collapsibles were open in the old section; if they were,
+    // open them in the new section
+    Array.from(
+      anomalyElement.getElementsByTagName("details")
+    ).forEach((collapsible, index) => {
+      if (openCollapsibles[index]) {
+        collapsible.open = true
+      } else {
+        openCollapsibles[index] = false
+      }
+      // Record whether the collapsible is open
+      collapsible.addEventListener("toggle", () => {
+        openCollapsibles[index] = collapsible.open
+      })
     })
 
     // Remove any existing children of the anomaly section
