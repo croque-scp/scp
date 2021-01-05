@@ -501,7 +501,7 @@ closed-circuit monitoring several minutes later and called for help.
 
 </details>
 
-<footer>
+<footer data-template="Footnote {N}.">
 
 <p style="font-size: 130%"><b>Footnotes</b></p>
 

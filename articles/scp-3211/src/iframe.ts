@@ -74,7 +74,7 @@ function forgetEverything (reloadPageAfter: boolean): void {
   }
 }
 
-function hoverdiv (event: MouseEvent, noteRef: number): boolean {
+function hoverdiv (event: MouseEvent, noteRef: number): void {
   const notes = document.getElementById("footnotes")!
   const note = <HTMLElement>notes.getElementsByClassName("footnote")[noteRef]
   note.style.left = "0"
@@ -85,8 +85,6 @@ function hoverdiv (event: MouseEvent, noteRef: number): boolean {
   } else {
     note.style.display = "none"
   }
-  // XXX What's this for?
-  return false
 }
 
 window.addEventListener('load', () => {
@@ -210,15 +208,21 @@ function nextSection (toSection: section) {
       notes.forEach((note, index) => {
         const footnote = document.createElement("div")
         footnote.classList.add("footnote")
-        // XXX Footnote string will need to be translated
+        // The footer may have the template for the footnote title
+        const heading = (
+          notesBlock.dataset.template ?
+          notesBlock.dataset.template.replace("{N}", `${index + 1}`) :
+          `Footnote ${index + 1}.`
+        )
         footnote.innerHTML = `
-          <div class="f-heading">Footnote ${index + 1}.</div>
+          <div class="f-heading">${heading}</div>
           <div class="f-content">${note.innerHTML}</div>
         `
         footnotes.appendChild(footnote)
       })
       document.body.appendChild(footnotes)
     }
+    // Bind the hovertips to the superscripts
     anomalyElement.querySelectorAll("note").forEach(note => {
       const noteRef = parseInt(note.textContent!)
       const noteElement = document.createElement("sup")
