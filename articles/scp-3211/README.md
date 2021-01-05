@@ -1,6 +1,6 @@
 # SCP-3211
 
-This is the sub-repository for [SCP-3211](https://www.scpwiki.com/scp-3211),
+This is the sub-repository for [SCP-3211](http://www.scpwiki.com/scp-3211),
 which is an article that describes a fictional anomalous entity that appears to
 be different for every person who sees it.
 
