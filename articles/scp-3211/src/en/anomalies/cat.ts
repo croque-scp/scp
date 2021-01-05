@@ -10,13 +10,13 @@ export default new Anomaly(false, {
 
     Unless being continually observed, the cat may teleport to another
     position within its containment chamber. The animal does not apparently
-    notice the displacement, resuming whatever activity it was when observed.
+    notice the displacement, continuing whatever activity it was when observed.
   `,
   informalDescription: "a cat",
   formalDescription: "a domestic cat",
   writtenObservation: `
     It's a cat. Cute and fluffy, but it jumps around sometimes when I blink
-    or look away. Pretty weird.
+    or look away. Kinda weird.
   `,
   data: {
     spectrophotometry: "SCP-3211 displayed absorbances as expected",
@@ -26,7 +26,7 @@ export default new Anomaly(false, {
     visual: "Confirmed that SCP-3211 resembles a domestic cat",
     physical: `
       D-9981 began petting the cat, which was initially receptive but then
-      wandered over to a corner of the chamber
+      wandered away
     `,
     questioning: "Mostly unresponsive, with periodic meows",
     sentience: "Positive response"
