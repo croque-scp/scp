@@ -111,6 +111,11 @@ details:last-of-type:not([open]) {
   font-size: 2em;
 }
 
+/* Remove whitespace beneath image */
+.scp-image-block img {
+  display: block;
+}
+
 /* Wikidot's hovertips are usually styled inline */
 .footnote {
   width: auto;

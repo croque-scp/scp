@@ -97,7 +97,11 @@ async function generateDelta (
     marked(
       ejs.render(
         document,
-        { base: referenceAnomaly.base, prose: referenceAnomaly.prose }
+        {
+          base: referenceAnomaly.base,
+          prose: referenceAnomaly.prose,
+          fileUrl: langs[lang].fileUrl
+        }
       )
     )
   )
@@ -110,7 +114,8 @@ async function generateDelta (
         document,
         {
           base: anomaly.base,
-          prose: deepMap(anomaly.prose, str => compress(str))!
+          prose: deepMap(anomaly.prose, str => compress(str))!,
+          fileUrl: langs[lang].fileUrl
         }
       )
     )

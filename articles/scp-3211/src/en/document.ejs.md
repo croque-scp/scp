@@ -13,8 +13,8 @@ to SCP-3211 immediately.**
 
 </blockquote>
 
-<image src="<%= prose.imageUrl %>"
-       caption="<%= prose.imageCaption %>">
+<img data-src="<%= fileUrl %><%= prose.imageUrl %>"
+     data-caption="<%= prose.imageCaption %>">
 
 **Item #:** SCP-3211
 

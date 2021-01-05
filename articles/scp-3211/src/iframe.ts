@@ -182,6 +182,24 @@ function nextSection (toSection: section) {
       table.classList.add("wiki-content-table")
     })
 
+    // Handle image
+    const image = <HTMLImageElement>anomalyElement.querySelector(
+      "img[data-src][data-caption]"
+    )
+    if (image != null) {
+      const src = <string>image.dataset.src
+      const caption = <string>image.dataset.caption
+      const imageBlock = document.createElement("div")
+      imageBlock.classList.add("scp-image-block", "block-right")
+      imageBlock.innerHTML = `
+        <img src="${src}">
+        <div class="scp-image-caption">
+          <p>${caption}</p>
+        </div>
+      `
+      image.replaceWith(imageBlock)
+    }
+
     // Handle footnotes
     const notesBlock = anomalyElement.querySelector("footer")!
     const notes = notesBlock.querySelectorAll("ol li")
