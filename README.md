@@ -1,8 +1,9 @@
-# SCP Wiki Backup and Build Tools
+# SCP Wiki articles: backup and build tools
 
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
 
-This is a monorepo for my works on the [SCP Wiki](https://scpwiki.com).
+This is a monorepo for my (Croquembouche) works on the [SCP
+Wiki](https://scpwiki.com).
 
 Some of the sub-repositories are backups, and the published work on the Wiki is
 considered to be the canonical source of truth for that article.

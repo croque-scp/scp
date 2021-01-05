@@ -59,6 +59,16 @@ quite effective.
 
 ## Translating
 
+The following guide is for translators who have chosen to translate SCP-3211
+for their language branch.
+
+Once you've finished a translation, I'd love it if you
+[made a pull request](https://github.com/rossjrw/scp#making-a-pull-request)
+to add your translation to this repository, but you don't have to. You can just
+generate the output, copy it to your branch, and forget about it if you like.
+However, if you make a pull request, it's easy to ping me if you need help
+&mdash; just add a new comment to your PR and ping me with `cc @rossjrw`.
+
 ### Configuring your language
 
 First, add your language to `src/config.ts`, in the `langs` object.
@@ -80,21 +90,46 @@ at, including images and `3211.js`.
 
 The English source files are kept in `src/en/`. In your fork of this
 repository, copy that directory to one with the language code of your branch
-(e.g. for the Russian branch, `src/ru/`). You'll translate each of the files in
-this new directory.
+(e.g. for the Russian branch, `src/ru/`):
+
+```shell
+cp -r src/en/ src/ru/
+```
 
 ### Which files to translate
 
-Translate `document.ejs.md` to your language, leaving the
-[EJS](https://ejs.co/) placeholders intact (they look like this: `<%=
-anomaly.something %>`). The placeholders will be replaced with information
-taken from each sub-anomaly.
+Every file in your new language directory should be translated. You don't need
+to translate any files outside of it.
+
+Please note that any file that has `.ejs.` in its name contains
+[EJS](https://ejs.co/) placeholders. EJS placeholders look like this: `<%=
+variable.name %>`. They'll be automatically replaced with information from each
+sub-anomaly later, so don't change them! _(However, if they contain an English
+string &mdash; for example `", excluding ${prose.madeASound},"` &mdash; do
+translate in this case the word "excluding".)_
+
+`document.ejs.md` is the main body of the article, written in
+[Markdown](https://www.markdownguide.org/), because I think it's easier to work
+with for long text documents than HTML.
+
+`buttons.html`, `loading.html`, and `warning.ejs.html` are the different static
+sections of the document: the 'secret' popup that lets you modify the cookies,
+the loading screen that appears after you click 'Proceed', and the initial
+screen with the infohazard warning, respectively.
+
+`page.ejs.ftml` is the template for the final output, and is written in native
+Wikidot syntax. Everything here will go directly to the page, so translate it
+however you would normally.
 
 Translate your choice of the sub-anomalies in the `anomalies/` directory. You
 can translate as few or as many as you like, but for the build to work you will
 need to translate `base.ts` and at least one other. The original four from
 before I added the rest were `cube.ts`, `her.ts`, `puce.ts` and `pigeon.ts`,
-but you can translate whichever ones you like.
+but you can translate whichever ones you like. If you choose not to translate a
+given anomaly, just delete its file.
+
+If you see any English in the final output that you couldn't change, that's a
+problem &mdash; please let me know!
 
 ### Adding language-specifc placeholders
 
