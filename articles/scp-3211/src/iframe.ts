@@ -26,15 +26,27 @@ let timerInterval: number
 
 const openCollapsibles: boolean[] = []
 
+const preferredStorageMethod = (() => {
+  try {
+    localStorage.getItem("test")
+    return "localStorage"
+  } catch (error) {
+    return "cookies"
+  }
+})()
+
 function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
   /**
-   * Stores a value to a cookie.
+   * Stores a value.
    *
    * @param key: The key to store against.
    * @param value: The value to store.
    */
-  console.log(`Saving ${value} to ${key}`)
-  Cookies.set(key, value, { expires: 356 })
+  console.log(`[${preferredStorageMethod}] Saving ${value} to ${key}`);
+  ({
+    cookies: () => Cookies.set(key, value, { expires: 356 }),
+    localStorage: () => localStorage.setItem(key, value)
+  })[preferredStorageMethod]()
   document.getElementById("anomalyCookie")!.textContent = anomaly
   document.getElementById("otherCookies")!.textContent = (
     `seen ${recall("seen")}, timer ${recall("timerExpiresAt")}`
@@ -43,11 +55,14 @@ function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
 
 function recall <C extends keyof cookies> (key: C): cookies[C] {
   /**
-   * Retrives a value from cookies.
+   * Retrives a value.
    *
    * @param key: The key to look up.
    */
-  return <cookies[C]>Cookies.get(key)
+  return <cookies[C]>({
+    cookies: () => Cookies.get(key),
+    localStorage: () => localStorage.getItem(key)
+  })[preferredStorageMethod]()
 }
 
 function forget (key: keyof cookies): void {
@@ -56,8 +71,11 @@ function forget (key: keyof cookies): void {
    *
    * @param key: The key to destroy.
    */
-  console.log(`Forgot ${key} (was ${recall(key)})`)
-  Cookies.remove(key)
+  console.log(`Forgot ${key} (was ${recall(key)})`);
+  ({
+    cookies: () => Cookies.remove(key),
+    localStorage: () => localStorage.removeItem(key)
+  })[preferredStorageMethod]()
 }
 
 function forgetEverything (reloadPageAfter: boolean): void {
@@ -209,9 +227,9 @@ function nextSection (toSection: section) {
         footnote.classList.add("footnote")
         // The footer may have the template for the footnote title
         const heading = (
-          notesBlock.dataset.template ?
-          notesBlock.dataset.template.replace("{N}", `${index + 1}`) :
-          `Footnote ${index + 1}.`
+          notesBlock.dataset.template
+            ? notesBlock.dataset.template.replace("{N}", `${index + 1}`)
+            : `Footnote ${index + 1}.`
         )
         footnote.innerHTML = `
           <div class="f-heading">${heading}</div>

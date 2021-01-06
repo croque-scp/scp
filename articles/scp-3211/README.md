@@ -146,8 +146,11 @@ Make sure you add a value for your new placeholder in each sub-anomaly!
 
 ## Local development
 
-For local testing:
+`npm run dev` is the same as `npm run build`, except:
 
-1. Change your language's `fileUrl` to `"./"`.
-1. Run `npm run dev` instead of `npm run build`.
-1. Open `./dist/[lang]/iframe.html` in a browser.
+* The output JS bundle is not minified.
+* The bundle contains a source map, so errors say "line 200, character 40 of
+  iframe.ts" instead of "line 1, character 100000 of 3211.js"
+* An `iframe.html` is output to the dist dir, which can be opened in a browser.
+* The `fileUrl` is automatically set to `./`, so files and JS will be fetched
+  from the same directory as `iframe.html` instead of from Wikidot.
