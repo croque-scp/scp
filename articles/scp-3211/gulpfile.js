@@ -41,7 +41,12 @@ gulp.task('webpack', () => {
   return gulp
     .src("./src/iframe.ts")
     .pipe(webpack({
-      mode: "production",
+      mode: process.env.NODE_ENV,
+      ...(
+        process.env.NODE_ENV === "development"
+          ? { devtool: "eval-source-map" }
+          : {}
+      ),
       output: { filename: "3211.js" },
       module: {
         rules: [
