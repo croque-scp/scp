@@ -24,6 +24,7 @@ type AnomalyProse = {
   alternateEnding?: string
   conclusion?: string
   madeASound?: string
+  wormInfo?: string
 }
 
 export class Anomaly {
