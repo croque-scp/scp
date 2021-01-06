@@ -10,6 +10,7 @@ import util from "util"
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
+import { version } from "../package.json"
 
 export async function makeFtml (
   lang: keyof typeof langs,
@@ -48,7 +49,7 @@ export async function copyFiles (lang: keyof typeof langs): Promise<void> {
     }
   })
   fs.copyFileSync(`./src/assets/warning.svg`, `./dist/${lang}/warning.svg`)
-  fs.copyFileSync(`./dist/3211.js`, `./dist/${lang}/3211.js`)
+  fs.copyFileSync("./dist/3211.js", `./dist/${lang}/3211@${version}.js`)
 }
 
 async function makeIframe (lang: keyof typeof langs): Promise<string> {
@@ -67,6 +68,7 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
       deltas: JSON.stringify(deltas),
       css: fs.readFileSync("./build/iframe.css", "utf8"),
       fileUrl,
+      version,
       buttons: fs.readFileSync(`./src/${lang}/buttons.html`, "utf8"),
       warning: ejs.render(
         fs.readFileSync(`./src/${lang}/warning.ejs.html`, "utf8"),
