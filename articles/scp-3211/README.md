@@ -7,6 +7,8 @@ be different for every person who sees it.
 Instead of passively describing this experience, the article is designed to
 simulate this effect for the reader.
 
+<details><summary><b>Synopsis</b></summary>
+
 A splash screen primes the reader into expecting some meta fuckery, and also
 acts as a buffer for the timer with which they're about to be presented. When
 they click to confirm that they are ready, they are presented with a
@@ -56,6 +58,8 @@ To the best of my knowledge, this is the only article across the international
 SCP community that combines memory falsification, lying, and gaslighting in
 such a literal way. With a little suspension of disbelief, I hope that it is
 quite effective.
+
+</details>
 
 ## Translating
 
