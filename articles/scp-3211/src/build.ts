@@ -65,6 +65,7 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
       deltas: JSON.stringify(deltas),
       css: fs.readFileSync("./build/iframe.css", "utf8"),
       fileUrl: langs[lang].fileUrl,
+      version,
       buttons: fs.readFileSync(`./src/${lang}/buttons.html`, "utf8"),
       warning: ejs.render(
         fs.readFileSync(`./src/${lang}/warning.ejs.html`, "utf8"),
