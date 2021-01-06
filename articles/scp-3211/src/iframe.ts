@@ -109,7 +109,11 @@ function hoverdiv (event: MouseEvent, noteRef: number): void {
 window.addEventListener('load', () => {
   if (recall("anomaly")) {
     anomaly = recall("anomaly")
-    console.log(`Previous anomaly ${anomaly} detected from cookie`)
+    console.log(`Previous anomaly ${anomaly} detected`)
+    // Account for case where user has localStorage pre-v2.0.0
+    if (!(anomaly in anomalies)) {
+      anomaly = "cube" // Chosen by fair dice roll, guaranteed to be random
+    }
   } else {
     console.log("Initialising anomaly")
     // Pick a random anomaly, except for the base anomaly
