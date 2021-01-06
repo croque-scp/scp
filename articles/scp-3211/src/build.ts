@@ -55,7 +55,10 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
   /**
    * Constructs the HTML content of the iframe for the given language.
    */
-  const [reference, deltas] = await generateDelta(lang)
+  const fileUrl = (
+    process.env.NODE_ENV === "development" ? "./" : langs[lang].fileUrl
+  )
+  const [reference, deltas] = await generateDelta(lang, fileUrl)
   const html = ejs.render(
     fs.readFileSync("./src/iframe.ejs.html", "utf8"),
     {
@@ -63,11 +66,11 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
       reference: JSON.stringify(reference.split("\n")),
       deltas: JSON.stringify(deltas),
       css: fs.readFileSync("./build/iframe.css", "utf8"),
-      fileUrl: langs[lang].fileUrl,
+      fileUrl,
       buttons: fs.readFileSync(`./src/${lang}/buttons.html`, "utf8"),
       warning: ejs.render(
         fs.readFileSync(`./src/${lang}/warning.ejs.html`, "utf8"),
-        { fileUrl: langs[lang].fileUrl }
+        { fileUrl }
       ),
       loading: fs.readFileSync(`./src/${lang}/loading.html`, "utf8")
     }
@@ -76,7 +79,7 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
 }
 
 async function generateDelta (
-  lang: keyof typeof langs
+  lang: keyof typeof langs, fileUrl: string
 ): Promise<[string, { [anomaly: string]: string }]> {
   /**
    * Constructs the reference anomaly and the other anomaly deltas for the
@@ -84,6 +87,7 @@ async function generateDelta (
    *
    * @param lang: The language, e.g. "en". The relevant files for this language
    * must be present.
+   * @param fileUrl: The base file URL for the language.
    * @returns The reference anomaly, as a string.
    * @returns A dict containing the delta for each anomaly.
    */
@@ -100,7 +104,7 @@ async function generateDelta (
         {
           base: referenceAnomaly.base,
           prose: referenceAnomaly.prose,
-          fileUrl: langs[lang].fileUrl
+          fileUrl
         }
       )
     )
@@ -115,7 +119,7 @@ async function generateDelta (
         {
           base: anomaly.base,
           prose: deepMap(anomaly.prose, str => compress(str))!,
-          fileUrl: langs[lang].fileUrl
+          fileUrl
         }
       )
     )
