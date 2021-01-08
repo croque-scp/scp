@@ -5,53 +5,32 @@ export default new Anomaly(false, {
   imageCaption: "SCP-3211在收容间内的照片。",
   objectClass: "Safe",
   physicalDescription: `
-    SCP-3211 is an unbranded pink box of chocolates. Of the 15 spaces in the
-    box, 8 chocolates remain. Upon opening the box, it will contain whichever
-    chocolate — from the chocolates that are usually present in selection boxes
-    of this type -- is the subject's least favourite. Different subjects will
-    percieve each chocolate as being their least favourite, even if those are
-    different between subjects observing it simultaneously. The chocolates
-    can be consumed without incident, although this is discouraged as they are
-    finite.
-
-    If the subject does not like any chocolate, SCP-3211 appears to default to
-    Turkish Delight.
+    SCP-3211为一盒粉色无商标的巧克力。盒内有15个格子，现剩余8块巧克力。在打开盒子后，里面会装有某种巧克力——从通常会出现于该种类的盒子中的巧克力里选择——为实体最不喜欢吃的种类。对不同实体会预测出每一种他们最不喜欢的巧克力，即使在实体同时观察时也会是不同种类的。巧克力可以被平安无事地吃下，尽管会因其量有限而被劝阻。如果实体不喜欢所以巧克力，SCP-3211似乎会默认为土耳其软糖。
   `,
-  informalDescription: "a box of chocolates",
+  informalDescription: "一盒巧克力",
   formalDescription: `
-    a box of chocolates (although they disagree on what the specific chocolates
-    are)
+    一盒巧克力（尽管他们对具体是什么巧克力的意见不一）
   `,
-  examineAction: "D-68134 crudely splits a chocolate and consumes one half.",
+  examineAction: "D-68134粗鲁地掰开巧克力并吃了半个。",
   examineConfirmationAction: `
-    D-8834 is instructed to consume the remaining half of the chocolate. She
-    complies, and reports that it is Turkish Delight, in contrary to Document
-    3211-01.
+    D-8834被指示吃掉剩下半块巧克力。她遵从，并报告其为土耳其软糖，与文档3211-01相悖。
   `,
   writtenObservation: `
-    It's a box of chocolates. The one they let me have is full of that icky
-    strawberry stuff. I will never understand why people like that. Even for
-    chocolate it's just too sweet.
+    这是一盒巧克力。他们让我吃的那个全都是恶心的草莓味的东西。我都不知道为什么有人会喜欢这个。即使对于巧克力而言这也太甜了。
   `,
   data: {
-    spectrophotometry: "SCP-3211 displayed absorbances as expected",
-    mass: "90 g",
-    hume: "SCP-3211 has a Hume reading consistent with baseline reality",
-    magnetism: "SCP-3211 is not magnetic",
-    visual: "Confirmed that SCP-3211 resembles a box of chocolates",
+    spectrophotometry: "SCP-3211表现出与期望一致的吸光率",
+    mass: "90g",
+    hume: "SCP-3211的休谟读数与基准现实一致",
+    magnetism: "SCP-3211不具磁性",
+    visual: "确认SCP-3211与一盒巧克力相似",
     physical: `
-      D-9981 reported that the chocolates are look like chocolates but did not
-      attempt to try one
+      D-9981报告巧克力看着像巧克力但并未尝试
     `,
-    questioning: "No response",
-    sentience: "Negative response"
+    questioning: "无回应",
+    sentience: "阴性结果"
   },
   funFact: `
-    the chocolates change based on who's looking at them. I don't need to taste
-    them to see what they are for me. White chocolate with a little puft of
-    cocoa -- that shit is coffee cream. I hate coffee cream. And you know,
-    it's funny, because I like white chocolate and I like coffee. Only black
-    coffee, though, so maybe that's the issue. I wish it was Turkish delight.
-    But that's beside the point
+    巧克力是会随着看着它的人而改变的。我不需要去尝一块来看看它们对我而言是什么。白巧克力带点可可粉——跟屎一样的咖啡奶油。我讨厌咖啡奶油。而且你懂吧，还挺好笑的，因为我喜欢白巧克力也喜欢咖啡。虽然说只喜欢黑咖啡，可能那就是问题所在了。我希望这是土耳其软糖。但这不是重点
   `
 })

@@ -17,7 +17,7 @@ export default new Anomaly(true, {
     mass: `
       在SCP-3211所在处下放置的仪器未检测到任何质量
     `,
-    hume: "SCP-3211的休谟读数与基准现实相同",
+    hume: "SCP-3211的休谟读数与基准现实一致",
     magnetism: "SCP-3211不具磁性",
     visual: "SCP-3211不可见",
     physical: "无回应；D-9981在SCP-3211所在处未有任何感觉",

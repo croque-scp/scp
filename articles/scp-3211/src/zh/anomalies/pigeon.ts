@@ -2,40 +2,29 @@ import { Anomaly } from "../../anomaly"
 
 export default new Anomaly(false, {
   imageUrl: "deadpigeon.webp",
-  imageCaption: "SCP-3211 photographed in containment.",
+  imageCaption: "SCP-3211在收容间内的照片。",
   objectClass: "Safe",
   physicalDescription: `
-    SCP-3211 is the corpse of a _Columba livia domestica_ (common pigeon)
-    in the early stages of decomposition. SCP-3211 is attached to the centre of
-    a circular piece of concrete 1 m in diameter and 4 cm thick. SCP-3211 and
-    the concrete cannot be separated, although the object as a whole can move
-    freely.
-
-    A notable property of SCP-3211 is that it has similar properties to
-    concrete: it has a similar hardness, mass, and an apparent inability to
-    decompose further. Despite this, SCP-3211 is visually identical to a
-    pigeon.
+    SCP-3211是处于腐败早期的_家鸽_ （普通鸽子）尸体。SCP-3211被放在收容间直径1米，厚度4cm的混凝土圆盘中间。SCP-3211与混凝土无法分离，尽管物体整体可被自由移动。SCP-3211的一个显著特点是其具有与混凝土相似的性质：相似的硬度、质量，并且明显不会继续腐败。除此以外，SCP-3211在视觉上与一只鸽子完全相同。
   `,
-  informalDescription: "a dead pigeon",
-  formalDescription: "a pigeon corpse",
+  informalDescription: "一只死亡的鸽子",
+  formalDescription: "一具鸽子尸体",
   writtenObservation: `
-    There's a dead pigeon in the middle of the room. Damn, that sucks. I wonder
-    how old it is. Why hasn't it decomposed?
+    屋子中间有只死鸽子。操，太恶心了。我不知道它怎么到这的。为什么它还没烂掉？
   `,
   data: {
-    spectrophotometry: "SCP-3211 displayed absorbances as expected",
-    mass: "93.6 kg",
-    hume: "SCP-3211 has a Hume reading consistent with baseline reality",
-    magnetism: "SCP-3211 is not magnetic",
-    visual: "Confirmed that SCP-3211 resembles a dead pigeon",
+    spectrophotometry: "SCP-3211表现出与期望一致的吸光率",
+    mass: "93.6kg",
+    hume: "SCP-3211的休谟读数与基准现实一致",
+    magnetism: "SCP-3211不具磁性",
+    visual: "确认SCP-3211看起来是一只已死的鸽子",
     physical: `
-      D-9981 was unable to lift SCP-3211 but was able to tilt the concrete
-      circle
+      D-9981无法拿起SCP-3211但可以歪斜整个混凝土盘
     `,
-    questioning: "No response",
-    sentience: "Weak positive response (consistent with dead animal)"
+    questioning: "无回应",
+    sentience: "弱阳性（与死亡的动物一致）"
   },
   funFact: `
-    it's hard as rock and doesn't decompose any more than it already has
+    它硬的跟石头一样，而且根本不继续腐败
   `
 })
