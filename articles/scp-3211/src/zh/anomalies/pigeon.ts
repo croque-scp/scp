@@ -5,7 +5,7 @@ export default new Anomaly(false, {
   imageCaption: "SCP-3211在收容间内的照片。",
   objectClass: "Safe",
   physicalDescription: `
-    SCP-3211是处于腐败早期的_家鸽_ （普通鸽子）尸体。SCP-3211被放在收容间直径1米，厚度4cm的混凝土圆盘中间。SCP-3211与混凝土无法分离，尽管物体整体可被自由移动。SCP-3211的一个显著特点是其具有与混凝土相似的性质：相似的硬度、质量，并且明显不会继续腐败。除此以外，SCP-3211在视觉上与一只鸽子完全相同。
+    SCP-3211是处于腐败早期的_Columba livia domestica_ （普通鸽子）尸体。SCP-3211被放在收容间直径1米，厚度4cm的混凝土圆盘中间。SCP-3211与混凝土无法分离，尽管物体整体可被自由移动。SCP-3211的一个显著特点是其具有与混凝土相似的性质：相似的硬度、质量，并且明显不会继续腐败。除此以外，SCP-3211在视觉上与一只鸽子完全相同。
   `,
   informalDescription: "一只死亡的鸽子",
   formalDescription: "一具鸽子尸体",
