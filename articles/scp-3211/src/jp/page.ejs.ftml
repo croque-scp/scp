@@ -1,0 +1,40 @@
+[!--
+このページはビルドプロセスにより自動生成されました。このページを変更しても再生成の際には上書きされてしまいます。
+下記Githubリポジトリにソースコードがあります。
+https://github.com/rossjrw/scp/tree/main/articles/scp-3211/
+
+このページの内容を変更するには下記のインストラクションをご覧ください。また、翻訳者のためのインストラクションもあります。
+訳者注: その「インストラクション」も翻訳してあるので、ディスカッションをご覧ください。
+--]
+
+[[include :scp-wiki:info:start]]
+**SCP-3211:** カノンなんてない
+**著者:** [[*user Croquembouche]]
+
+携帯電話やコンピュータのスクリーンの向こう側へ隠されているので、普段なら貴方は反ミーム的SCPの危険からも守られています。
+しかし3211は? いいえ、いいえ、いいえ。3211は違うのです。
+
+この記事は一度しか読むことができません。時間切れになってしまい、この記事の最終バージョンを読み終わったら、ディスカッションをご覧ください。記事をリセットする方法が書かれています。
+
+[[[http://scpwiki.com/cone | 私の他の作品]]]
+[[include :scp-wiki:info:end]]
+
+[[module CSS]]
+#edit-page-form .buttons.alignleft::before {
+  content: "編集内容をセーブする前に、このページのソースの最初に書かれている警告をしっかりと頭に入れてください!";
+  display: block;
+  margin-bottom: 1em;
+  font-weight: bold;
+  color: red;
+}
+
+iframe {
+  overflow: hidden;
+}
+[[/module]]
+
+[[html]]
+<%- html %>
+[[/html]]
+
+[[footnoteblock]]
