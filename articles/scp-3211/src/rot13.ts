@@ -20,4 +20,5 @@ export function rot13 (string: string): string {
   }).replace(/[一-龠]/g, (char) => {
     let charCode = char.charCodeAt(0)
     return String.fromCharCode(charCode <= 40184 ? charCode + 13 : charCode - 20217);
+  })
 }
