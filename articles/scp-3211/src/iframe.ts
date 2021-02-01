@@ -1,7 +1,7 @@
 import { applyPatch } from "diff"
 import Cookies from "js-cookie"
 
-import { anomalyNames, langs } from "./config"
+import type { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
 
 // Defined in iframe.ejs.html
