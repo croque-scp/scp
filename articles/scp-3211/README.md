@@ -75,20 +75,29 @@ However, if you make a pull request, it's easy to ping me if you need help
 
 ### Configuring your language
 
-First, add your language to `src/config.ts`, in the `langs` object.
+First, add your language to `src/config.ts`, in the `langs` object. Each
+configured language needs 3 properties: `encrypt`, `decrypt`, and `fileUrl`.
 
-The `rot13` property is either `true` or `false` and sets whether or not your
-language wants [ROT13 encryption](https://en.wikipedia.org/wiki/ROT13). ROT13
-only affects letters in the `A-Z` and `a-z` ranges, so it only works for
-Latin-based languages; for other languages, it won't do anything. The option is
-provided so that translations can turn it off if they want. SCP-3211-EN is
-encrypted thanks to inspiration from
-[SCP-3125-EN](https://www.scpwiki.com/scp-3125), which features a similar
-simple cipher. This setting only affects the final output &mdash; it doesn't
-change the translation process.
+The `encrypt` property is a function that accepts a string and returns a
+string. During the build process, it will be called for each possible version
+of the article to encrypt it, in order to make the page source more difficult
+to read. It will run during the build process, so it can be as intensive as you
+like.
+
+The `decrypt` property is a function that accepts a string and returns a
+string. It should be the inverse of `encrypt`. When a reader loads the page, it
+will be called for the selected version of the article to decrypt it. It will
+run on the reader's browser, so it must be kept as non-intensive as possible.
+
+`encrypt` and `decrypt` may both be set to `false`, in which case encryption
+and decryption will not be performed for this language.
+
+For the English version, the encryption algorithm used is
+[ROT13](https://en.wikipedia.org/wiki/ROT13), which is a handy lightweight
+cipher for Latin (A-Z) languages.
 
 The `fileUrl` property is the URL that all of the necessary files can be found
-at, including images and `3211.js`.
+at, including images and the JavaScript bundle.
 
 ### Copying the files
 
