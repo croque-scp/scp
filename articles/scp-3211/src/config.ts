@@ -14,7 +14,7 @@ export const anomalyNames = <const>[
   "cannon"
 ]
 
-type Lang = {
+export type Lang = {
   rot13: boolean
   fileUrl: string
 }
