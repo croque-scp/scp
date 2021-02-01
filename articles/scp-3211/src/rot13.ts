@@ -11,5 +11,13 @@ export function rot13 (string: string): string {
         ? charCode
         : charCode - 26
     )
-  })
+  }).replace(/[ぁ-ゖ]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(charCode <= 12425 ? charCode + 13 : charCode - 73);
+  }).replace(/[ァ-ヶ]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(charCode <= 12521 ? charCode + 13 : charCode - 73);
+  }).replace(/[一-龠]/g, (char) => {
+    let charCode = char.charCodeAt(0)
+    return String.fromCharCode(charCode <= 40184 ? charCode + 13 : charCode - 20217);
 }
