@@ -1,13 +1,13 @@
 import { applyPatch } from "diff"
 import Cookies from "js-cookie"
 
-import type { anomalyNames, langs } from "./config"
+import type { anomalyNames, Lang } from "./config"
 import { rot13 } from "./rot13"
 
 // Defined in iframe.ejs.html
 declare const reference: string[]
 declare const anomalies: { [anomaly in typeof anomalyNames[number]]: string }
-declare const lang: keyof typeof langs
+declare const lang: Lang
 
 const sections = <const>["warning", "loading", "anomaly"]
 type section = typeof sections[number]
@@ -191,7 +191,7 @@ function nextSection (toSection: section) {
     // Construct the anomaly
     const anomalyElement = document.createElement('div')
     anomalyElement.innerHTML = (
-      langs[lang].rot13 ? rot13 : (patch: string) => patch
+      lang.rot13 ? rot13 : (patch: string) => patch
     )(applyPatch(
       reference.join("\n"), anomalies[anomaly]
     )).replace(/--(?!\S*\/)/g, "—")
