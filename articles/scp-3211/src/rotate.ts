@@ -23,8 +23,18 @@ export function rotate (
     return s.replace(selection, (char) => {
       const charCode = char.charCodeAt(0)
       return String.fromCharCode(
-        (charCode + shift - startCode) % (endCode + 1 - startCode) + startCode
+        mod(charCode + shift - startCode, endCode + 1 - startCode) + startCode
       )
     })
   }
+}
+
+/**
+ * Gets the modulo of two numbers.
+ *
+ * An implementation other than the native % operator is needed because the %
+ * operator does not correctly handle negative numbers.
+ */
+function mod (n: number, m: number): number {
+  return ((n % m) + m) % m;
 }
