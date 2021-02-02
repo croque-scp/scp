@@ -2,7 +2,7 @@ import { applyPatch } from "diff"
 import Cookies from "js-cookie"
 
 import type { anomalyNames, Lang } from "./config"
-import { rot13 } from "./rot13"
+import { rotate } from "./rotate"
 
 // Defined in iframe.ejs.html
 declare const reference: string[]
@@ -190,9 +190,7 @@ function nextSection (toSection: section) {
 
     // Construct the anomaly
     const anomalyElement = document.createElement('div')
-    anomalyElement.innerHTML = (
-      lang.rot13 ? rot13 : (patch: string) => patch
-    )(applyPatch(
+    anomalyElement.innerHTML = decrypt(applyPatch(
       reference.join("\n"), anomalies[anomaly]
     )).replace(/--(?!\S*\/)/g, "—")
 
@@ -354,4 +352,18 @@ function showSection (section: section): void {
 
 function hideSection (section: section): void {
   document.getElementById(section)!.classList.add("hidden")
+}
+
+/**
+ * Decrypts a string by rotating by the negative of the language's configured
+ * shift.
+ *
+ * @returns A function that decrypts a string.
+ */
+function decrypt (source: string): string {
+  lang.encrypt.forEach(([start, end, shift]) => {
+    shift *= -1
+    source = rotate(start, end, shift)(source)
+  })
+  return source
 }

@@ -75,20 +75,26 @@ However, if you make a pull request, it's easy to ping me if you need help
 
 ### Configuring your language
 
-First, add your language to `src/config.ts`, in the `langs` object.
+First, add your language to `src/config.ts`, in the `langs` object. Each
+configured language needs 2 properties: `encrypt` and `fileUrl`.
 
-The `rot13` property is either `true` or `false` and sets whether or not your
-language wants [ROT13 encryption](https://en.wikipedia.org/wiki/ROT13). ROT13
-only affects letters in the `A-Z` and `a-z` ranges, so it only works for
-Latin-based languages; for other languages, it won't do anything. The option is
-provided so that translations can turn it off if they want. SCP-3211-EN is
-encrypted thanks to inspiration from
-[SCP-3125-EN](https://www.scpwiki.com/scp-3125), which features a similar
-simple cipher. This setting only affects the final output &mdash; it doesn't
-change the translation process.
+The `encrypt` property is a list of lists. Each sub-list contains 3 values: a
+char, another char, and a number. For characters that appear between those two
+chars in the Unicode character table (inclusive), during encryption, they will
+be shifted up by the configured number of places in the table, resulting in the
+anomaly list in `dist.ftml` appearing garbled and nonsensical. They will be
+decrypted at runtime in the reader's browser.
+
+For the English version, the character sets `A-Z` and `a-z` are rotated by 13
+character points. This is equivalent to
+[ROT13](https://en.wikipedia.org/wiki/ROT13), which is a handy lightweight
+cipher for Latin languages.
+
+If your language doesn't want any encryption, set this property to an empty
+list (`[]`).
 
 The `fileUrl` property is the URL that all of the necessary files can be found
-at, including images and `3211.js`.
+at, including images and the JavaScript bundle.
 
 ### Copying the files
 
