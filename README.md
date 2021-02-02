@@ -15,6 +15,9 @@ made to it) at any time. The output for these articles contains a note
 indicating that any changes made to the published work and not reflected in
 this repository will be ignored.
 
+Only my published works are kept here. Draft works are kept elsewhere, and
+moved here when they are published.
+
 ## Licence
 
 All works in this repository are licensed under
