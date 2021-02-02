@@ -76,25 +76,22 @@ However, if you make a pull request, it's easy to ping me if you need help
 ### Configuring your language
 
 First, add your language to `src/config.ts`, in the `langs` object. Each
-configured language needs 3 properties: `encrypt`, `decrypt`, and `fileUrl`.
+configured language needs 2 properties: `encrypt` and `fileUrl`.
 
-The `encrypt` property is a function that accepts a string and returns a
-string. During the build process, it will be called for each possible version
-of the article to encrypt it, in order to make the page source more difficult
-to read. It will run during the build process, so it can be as intensive as you
-like.
+The `encrypt` property is a list of lists. Each sub-list contains 3 values: a
+char, another char, and a number. For characters that appear between those two
+chars in the Unicode character table (inclusive), during encryption, they will
+be shifted up by the configured number of places in the table, resulting in the
+anomaly list in `dist.ftml` appearing garbled and nonsensical. They will be
+decrypted at runtime in the reader's browser.
 
-The `decrypt` property is a function that accepts a string and returns a
-string. It should be the inverse of `encrypt`. When a reader loads the page, it
-will be called for the selected version of the article to decrypt it. It will
-run on the reader's browser, so it must be kept as non-intensive as possible.
-
-`encrypt` and `decrypt` may both be set to `false`, in which case encryption
-and decryption will not be performed for this language.
-
-For the English version, the encryption algorithm used is
+For the English version, the character sets `A-Z` and `a-z` are rotated by 13
+character points. This is equivalent to
 [ROT13](https://en.wikipedia.org/wiki/ROT13), which is a handy lightweight
-cipher for Latin (A-Z) languages.
+cipher for Latin languages.
+
+If your language doesn't want any encryption, set this property to an empty
+list (`[]`).
 
 The `fileUrl` property is the URL that all of the necessary files can be found
 at, including images and the JavaScript bundle.
