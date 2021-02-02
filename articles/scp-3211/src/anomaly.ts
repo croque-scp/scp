@@ -26,10 +26,10 @@ type AnomalyProse = {
   madeASound?: string
 }
 
+/**
+ * Class for type-checking anomaly configuration.
+ */
 export class Anomaly {
-  /**
-   * Class for type-checking anomaly configuration.
-   */
   base: boolean
   prose: AnomalyProse
 

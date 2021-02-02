@@ -16,10 +16,10 @@ gulp.task('clean', async done => {
   done()
 })
 
+/**
+ * Construct the scripts needed for the rest of the build process
+ */
 gulp.task('ts', () => {
-  /**
-   * Construct the scripts needed for the rest of the build process
-   */
   const tsProject = ts.createProject("./tsconfig.json")
   return gulp
     .src(["./src/**/*.ts", "!./src/iframe.ts"])
@@ -27,21 +27,21 @@ gulp.task('ts', () => {
     .js.pipe(gulp.dest("./build/"))
 })
 
+/**
+ * Minify CSS.
+ */
 gulp.task('css', () => {
-  /**
-   * Minify CSS.
-   */
   return gulp
     .src("./src/**/*.css")
     .pipe(cleanCss())
     .pipe(gulp.dest("./build/"))
 })
 
+/**
+ * Bundle all the requirements for the JS that will run in the iframe into a
+ * single file.
+ */
 gulp.task('webpack', () => {
-  /**
-   * Bundle all the requirements for the JS that will run in the iframe into a
-   * single file.
-   */
   const bannerText = compress`
     3211.js version ${version}, generated ${new Date()}
     \nThis file was generated for SCP-3211 and its translations in the
@@ -79,10 +79,10 @@ gulp.task('webpack', () => {
     .pipe(gulp.dest("./dist/"))
 })
 
+/**
+ * For each configured language, build the article.
+ */
 gulp.task('ftml', async done => {
-  /**
-   * For each configured language, build the article
-   */
   const { makeFtml, copyFiles } = require("./build/build.js")
   const { langs } = require("./build/config.js")
   for (const lang in langs) {

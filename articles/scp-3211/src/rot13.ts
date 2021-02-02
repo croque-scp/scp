@@ -1,9 +1,9 @@
+/**
+ * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
+ *
+ * @param string - The string to be encrypted or decrypted.
+ */
 export function rot13 (string: string): string {
-  /**
-   * Encrypts or decrypts a ROT13 string. Only affects A-z characters.
-   *
-   * @param string: The string to be encrypted or decrypted.
-   */
   return string.replace(/[A-z]/g, (char) => {
     let charCode = char.charCodeAt(0)
     return String.fromCharCode(

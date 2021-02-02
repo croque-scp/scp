@@ -12,14 +12,17 @@ import { anomalyNames, langs } from "./config"
 import { rot13 } from "./rot13"
 import { version } from "../package.json"
 
+/**
+ * Constructs the FTML content of the wiki page and saves it to
+ * dist/lang/dist.ftml.
+ *
+ * @param lang - The current language.
+ * @param copyIframeHtml - Whether to also generate a standalone iframe page.
+ */
 export async function makeFtml (
   lang: keyof typeof langs,
   copyIframeHtml = false
 ): Promise<void> {
-  /**
-   * Constructs the FTML content of the wiki page and saves it to
-   * dist/lang/dist.ftml.
-   */
   fs.mkdirSync(`./dist/${lang}/`)
   const html = await makeIframe(lang)
   fs.writeFileSync(
@@ -33,11 +36,11 @@ export async function makeFtml (
   }
 }
 
+/**
+ * Copies all the required static files for a language to that language's
+ * dist dir.
+ */
 export async function copyFiles (lang: keyof typeof langs): Promise<void> {
-  /**
-   * Copies all the required static files for a language to that language's
-   * dist dir.
-   */
   (await getAllAnomaliesForLang(lang)).forEach(anomaly => {
     if (fs.existsSync(`./src/assets/${anomaly.prose.imageUrl}`)) {
       fs.copyFileSync(
@@ -52,10 +55,10 @@ export async function copyFiles (lang: keyof typeof langs): Promise<void> {
   fs.copyFileSync("./dist/3211.js", `./dist/${lang}/3211@${version}.js`)
 }
 
+/**
+ * Constructs the HTML content of the iframe for the given language.
+ */
 async function makeIframe (lang: keyof typeof langs): Promise<string> {
-  /**
-   * Constructs the HTML content of the iframe for the given language.
-   */
   const fileUrl = (
     process.env.NODE_ENV === "development" ? "./" : langs[lang].fileUrl
   )
@@ -80,19 +83,19 @@ async function makeIframe (lang: keyof typeof langs): Promise<string> {
   return html
 }
 
+/**
+ * Constructs the reference anomaly and the other anomaly deltas for the
+ * given language.
+ *
+ * @param lang - The language, e.g. "en". The relevant files for this language
+ * must be present.
+ * @param fileUrl - The base file URL for the language.
+ * @returns The reference anomaly, as a string.
+ * @returns A dict containing the delta for each anomaly.
+ */
 async function generateDelta (
   lang: keyof typeof langs, fileUrl: string
 ): Promise<[string, { [anomaly: string]: string }]> {
-  /**
-   * Constructs the reference anomaly and the other anomaly deltas for the
-   * given language.
-   *
-   * @param lang: The language, e.g. "en". The relevant files for this language
-   * must be present.
-   * @param fileUrl: The base file URL for the language.
-   * @returns The reference anomaly, as a string.
-   * @returns A dict containing the delta for each anomaly.
-   */
   console.log(chalk.green("·".repeat(process.stdout.columns)))
   console.log("\nCompiling SCP-3211 for lang", chalk.greenBright(lang))
 
@@ -180,13 +183,13 @@ async function generateDelta (
   return [reference, anomalies]
 }
 
+/**
+ * Gets all the available anomalies for a language. Requires that the base
+ * anomaly exist.
+ */
 async function getAllAnomaliesForLang (
   lang: keyof typeof langs
 ): Promise<Anomaly[]> {
-  /**
-   * Gets all the available anomalies for a language. Requires that the base
-   * anomaly exist.
-   */
   return (await Promise.allSettled(
     anomalyNames.map(async anomaly => {
       // Import each anomaly for the current language

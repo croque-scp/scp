@@ -35,13 +35,13 @@ const preferredStorageMethod = (() => {
   }
 })()
 
+/**
+ * Stores a value.
+ *
+ * @param key - The key to store against.
+ * @param value - The value to store.
+ */
 function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
-  /**
-   * Stores a value.
-   *
-   * @param key: The key to store against.
-   * @param value: The value to store.
-   */
   console.log(`[${preferredStorageMethod}] Saving ${value} to ${key}`);
   ({
     cookies: () => Cookies.set(key, value, { expires: 356 }),
@@ -53,24 +53,24 @@ function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
   )
 }
 
+/**
+ * Retrives a value.
+ *
+ * @param key - The key to look up.
+ */
 function recall <C extends keyof cookies> (key: C): cookies[C] {
-  /**
-   * Retrives a value.
-   *
-   * @param key: The key to look up.
-   */
   return <cookies[C]>({
     cookies: () => Cookies.get(key),
     localStorage: () => localStorage.getItem(key)
   })[preferredStorageMethod]()
 }
 
+/**
+ * Removes a remembered value.
+ *
+ * @param key - The key to destroy.
+ */
 function forget (key: keyof cookies): void {
-  /**
-   * Removes a remembered value.
-   *
-   * @param key: The key to destroy.
-   */
   console.log(`Forgot ${key} (was ${recall(key)})`);
   ({
     cookies: () => Cookies.remove(key),
@@ -78,13 +78,13 @@ function forget (key: keyof cookies): void {
   })[preferredStorageMethod]()
 }
 
+/**
+ * Completely forget everything.
+ *
+ * @param reloadPageAfter - Whether or not to reload the page after forgetting
+ * everything.
+ */
 function forgetEverything (reloadPageAfter: boolean): void {
-  /**
-   * Completely forget everything.
-   *
-   * @param reloadPageAfter: Whether or not to reload the page after forgetting
-   * everything.
-   */
   console.log("Forgetting everything...")
   forget("anomaly")
   forget("seen")
@@ -177,12 +177,12 @@ window.addEventListener('load', () => {
   })
 })
 
+/**
+ * Moves the reader onto the next section of the article.
+ *
+ * @param toSection - The section to switch to.
+ */
 function nextSection (toSection: section) {
-  /**
-   * Moves the reader onto the next section of the article.
-   *
-   * @param toSection: The section to switch to.
-   */
   console.log(`Now in section ${toSection}`)
 
   if (toSection === "anomaly") {
