@@ -9,7 +9,7 @@ import util from "util"
 
 import { Anomaly, referenceAnomaly } from "./anomaly"
 import { anomalyNames, langs } from "./config"
-import { rot13 } from "./rot13"
+import { rotate } from "./rotate"
 import { version } from "../package.json"
 
 export async function makeFtml (
@@ -99,7 +99,7 @@ async function generateDelta (
   // Construct the reference document which will be used for space
   // optimisations later
   const document = fs.readFileSync(`./src/${lang}/document.ejs.md`, "utf8")
-  const reference = (langs[lang].rot13 ? rot13 : (source: string) => source)(
+  const reference = encrypt(lang)(
     marked(
       ejs.render(
         document,
@@ -126,8 +126,8 @@ async function generateDelta (
       )
     )
   }).map(
-    // Encrypt with ROT13 if the language wants it, otherwise, don't
-    langs[lang].rot13 ? rot13 : source => source
+    // Encrypt if the langauge wants it
+    encrypt(lang)
   )
 
   const totalSourceLength = sources.reduce(
@@ -214,4 +214,19 @@ async function getAllAnomaliesForLang (
     }
     return anomalies
   }, [])
+}
+
+/**
+ * Constructs the encryption function for the given language.
+ *
+ * @param lang - The language code to generate the function for.
+ * @returns A function that encrypts a string.
+ */
+function encrypt (lang: keyof typeof langs): (source: string) => string {
+  return (source: string) => {
+    langs[lang].encrypt.forEach(encryptSettings => {
+      source = rotate(...encryptSettings)(source)
+    })
+    return source
+  }
 }
