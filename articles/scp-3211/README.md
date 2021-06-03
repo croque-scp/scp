@@ -1,8 +1,9 @@
 # SCP-3211
 
-This is the sub-repository for [SCP-3211](https://www.scpwiki.com/scp-3211),
-which is an article that describes a fictional anomalous entity that appears to
-be different for every person who sees it.
+This is the sub-repository for
+[SCP-3211](https://scp-wiki.wikidot.com/scp-3211), which is an article that
+describes a fictional anomalous entity that appears to be different for every
+person who sees it.
 
 Instead of passively describing this experience, the article is designed to
 simulate this effect for the reader.
