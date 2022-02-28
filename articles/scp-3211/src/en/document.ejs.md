@@ -509,6 +509,6 @@ closed-circuit monitoring several minutes later and called for help.
    retention of memories and the prevention of their modification even in the
    face of anomalies that seek to disrupt this..."
    -- Excerpt from _An Introduction to Antimemetic Counter-Measures_,
-   [Marion Wheeler](we-need-to-talk-about-fifty-five)
+   [Marion Wheeler](/we-need-to-talk-about-fifty-five)
 
 </footer>

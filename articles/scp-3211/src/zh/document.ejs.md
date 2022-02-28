@@ -390,6 +390,6 @@ if (base) { -%>收容间是空的。这里没有瑕疵。<%
 
 <p style="font-size: 130%"><b>脚注</b></p>
 
-1. “记忆强化，与记忆删除相反，一般用于辅助保留记忆，并防止它被篡改，即使当面对什么想破坏它的异常时也是如此……”——摘自_逆模因措施概论_ ，[Marion Wheeler](we-need-to-talk-about-fifty-five)
+1. “记忆强化，与记忆删除相反，一般用于辅助保留记忆，并防止它被篡改，即使当面对什么想破坏它的异常时也是如此……”——摘自_逆模因措施概论_ ，[Marion Wheeler](/we-need-to-talk-about-fifty-five)
 
 </footer>
