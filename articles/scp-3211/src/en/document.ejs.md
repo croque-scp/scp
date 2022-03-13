@@ -115,7 +115,7 @@ Several theories have been suggested:
 The mechanism through which SCP-3211 propagates this effect is currently
 <% if (base) { -%>
 unknown, though the current theory proposes that after the 6-minute threshold,
-SCP-3211 'injects' false memories over the original perception.
+SCP-3211 'injects' [false memories](/scp-5219) over the original perception.
 <% } else { -%>
 unknown.
 <% } %>
@@ -284,7 +284,7 @@ Dr. Jason Greaves, SCP-3211, experiment log... one?
 
 If you're hearing this and if, like me, you're souped-up on some heavy-ass
 mnestics, then you and me both know for sure that SCP-3211 <%=
-  base ?  "does not exist" : `is ${prose.informalDescription}`
+  base ?  "[does not exist](/scp-5507)" : `is ${prose.informalDescription}`
 %>. Why <%=
   prose.objectPronoun ?  prose.objectPronoun : "it"
 %>'s trying so hard to hide that from us, we'll never know.  But, if you're not

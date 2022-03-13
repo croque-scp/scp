@@ -8,8 +8,8 @@ export default new Anomaly(true, {
   informalDescription: "nothing",
   formalDescription: "nothing",
   writtenObservation: `
-    The containment chamber is empty. There's nothing to describe. I don't
-    understand why I have to write about an empty room.
+    [The containment chamber is empty](/scp-3942). There's nothing to describe.
+    I don't understand why I have to write about an empty room.
   `,
   data: {
     spectrophotometry: `
