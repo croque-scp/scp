@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body {
+        height: 100vh !important;
+      }
+    </style>
+
+    <script>
+      "use strict";
+      window.isScout = true;
+
+      function getController() {
+        for (const frame of Array.prototype.slice.call(parent)) {
+          console.log(frame);
+          try {
+            if (frame.isController) return frame;
+          } catch (error) {
+            if (!(error instanceof DOMException)) throw error;
+          }
+        }
+      }
+
+      (async () => {
+        const params = new URLSearchParams(location.search);
+
+        // Assertion ID being present means this scout is placed next to an assertion.
+        // When this scout reports, the corresponding assertion can be marked ready to be contradicted.
+        const assertionId = params.get("assertion");
+
+        // Contradiction ID being present means this scout is placed next to a contradiction.
+        // When this scout reports, the controller should trigger the next stage of the assertion with the matching ID.
+        const contradictionId = params.get("contradiction");
+
+        if (assertionId == null && contradictionId == null) {
+          throw new Error("Unconfigured scout :(");
+        }
+
+        const scoutName = `a:${assertionId};c:${contradictionId}`;
+
+        // Attempt to get the controller
+        let controller = getController();
+        for (let attempts = 0; attempts < 3; attempts += 1) {
+          if (controller) break;
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          controller = getController();
+        }
+        if (!controller) throw new Error("Failed to get controller");
+
+        // Assume that as soon as this scout is asked to load, it's ready to work
+        const observer = new IntersectionObserver(
+          (entries) => {
+            controller.postMessage({
+              flag: "test",
+              value: entries.some((entry) => entry.isIntersecting),
+            });
+          },
+          { threshold: 0 }
+        );
+        observer.observe(document.body);
+
+        // Listen to instructions coming from controller
+        addEventListener("message", (message) => {
+          if (message.origin !== location.origin) return;
+          if (message.data.scoutName !== scoutName) return;
+
+          if (message.data.instruction === "destroy") {
+            observer.disconnect();
+            location.replace("about:blank");
+          }
+        });
+      })();
+
+      // TODO: Pass parameters into IO that indicate where in the vertical length of the scout the target is. E.g. if it's on line 3 of 10 it might trigger when the top 30% is visible and detrigger when only the bottom 60% is visible
+    </script>
+  </head>
+
+  <body></body>
+</html>
