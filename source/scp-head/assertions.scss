@@ -1,0 +1,23 @@
+.article {
+  [class^="a_"] {
+    display: none;
+  }
+
+  .a_10 {
+    display: inline;
+  }
+}
+
+@for $i from 11 through 50 {
+  .controller[height*="1#{$i + 20}1"] + .article .a_#{$i} {
+    display: inline;
+  }
+
+  $prevs: ();
+  @for $j from 10 through $i - 1 {
+    $prevs: append($prevs, unquote(".a_#{$j}"), comma);
+  }
+  .controller[height*="1#{$i + 20}1"] + .article .a_#{$i} ~ :is(#{$prevs}) {
+    display: none;
+  }
+}
