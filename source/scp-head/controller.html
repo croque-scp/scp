@@ -73,10 +73,7 @@
         let message = "";
         for (const assertion of assertionStates) {
           if (assertion.assertionActive) {
-            message +=
-              "1" +
-              String(assertion.assertionId + 20) +
-              String(Number(assertion.assertionActive));
+            message += "1" + String(Number(assertion.assertionId) + 20);
           }
         }
         resize(message);
