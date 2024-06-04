@@ -18,7 +18,6 @@
 
       function getController() {
         for (const frame of Array.prototype.slice.call(parent)) {
-          console.log(frame);
           try {
             if (frame.isController) return frame;
           } catch (error) {
@@ -30,19 +29,30 @@
       (async () => {
         const params = new URLSearchParams(location.search);
 
-        // Assertion ID being present means this scout is placed next to an assertion.
-        // When this scout reports, the corresponding assertion can be marked ready to be contradicted.
-        const assertionId = params.get("assertion");
+        // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
+        const assertions = (params.get("assertion") || "0").split(",");
+        if (assertions.some((id) => !/^[0-9]+$/.test(id)))
+          throw new Error(`Invalid assertion ID ${id}`);
 
-        // Contradiction ID being present means this scout is placed next to a contradiction.
-        // When this scout reports, the controller should trigger the next stage of the assertion with the matching ID.
-        const contradictionId = params.get("contradiction");
+        // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
+        // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
+        const contradictions = (params.get("contradiction") || "0")
+          .split(",")
+          .map((contradiction) => {
+            if (contradiction.includes("?")) {
+              const [conditionId, contradictionId] = contradiction.split("?");
+              return { conditionId, contradictionId };
+            }
+            return { contradictionId: contradiction, conditionId: null };
+          });
+        if (contradictions.some((id) => !/^[0-9]+$/.test(id)))
+          throw new Error(`Invalid assertion ID ${id}`);
 
-        if (assertionId == null && contradictionId == null) {
+        if (!assertions.length && !contradictions.length) {
           throw new Error("Unconfigured scout :(");
         }
 
-        const scoutName = `a:${assertionId};c:${contradictionId}`;
+        const scoutName = location.search;
 
         // Attempt to get the controller
         let controller = getController();
@@ -51,14 +61,17 @@
           await new Promise((resolve) => setTimeout(resolve, 500));
           controller = getController();
         }
-        if (!controller) throw new Error("Failed to get controller");
+        if (!controller)
+          throw new Error(`Scout ${scoutName} failed to get controller`);
 
         // Assume that as soon as this scout is asked to load, it's ready to work
         const observer = new IntersectionObserver(
           (entries) => {
             controller.postMessage({
-              flag: "test",
-              value: entries.some((entry) => entry.isIntersecting),
+              scoutName,
+              isIntersecting: entries[0].isIntersecting,
+              assertions,
+              contradictions,
             });
           },
           { threshold: 0 }
@@ -76,8 +89,6 @@
           }
         });
       })();
-
-      // TODO: Pass parameters into IO that indicate where in the vertical length of the scout the target is. E.g. if it's on line 3 of 10 it might trigger when the top 30% is visible and detrigger when only the bottom 60% is visible
     </script>
   </head>
 
