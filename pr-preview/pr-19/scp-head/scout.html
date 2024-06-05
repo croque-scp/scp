@@ -31,22 +31,28 @@
 
         // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
         const assertions = (params.get("assertion") || "0").split(",");
-        if (assertions.some((id) => !/^[0-9]+$/.test(id)))
-          throw new Error(`Invalid assertion ID ${id}`);
 
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
+        // Contradiction condition ends in '^' if it should be triggered when invisible on the top edge; otherwise it is triggered when visible on the bottom edge
         const contradictions = (params.get("contradiction") || "0")
           .split(",")
           .map((contradiction) => {
+            const triggerMode = contradiction.endsWith("^")
+              ? "invisible-top"
+              : "visible";
+            contradiction = contradiction.replace(/\^$/, "");
+
             if (contradiction.includes("?")) {
               const [conditionId, contradictionId] = contradiction.split("?");
-              return { conditionId, contradictionId };
+              return { conditionId, contradictionId, triggerMode };
             }
-            return { contradictionId: contradiction, conditionId: null };
+            return {
+              contradictionId: contradiction,
+              conditionId: null,
+              triggerMode,
+            };
           });
-        if (contradictions.some((id) => !/^[0-9]+$/.test(id)))
-          throw new Error(`Invalid assertion ID ${id}`);
 
         if (!assertions.length && !contradictions.length) {
           throw new Error("Unconfigured scout :(");
@@ -69,7 +75,7 @@
           (entries) => {
             controller.postMessage({
               scoutName,
-              isIntersecting: entries[0].isIntersecting,
+              intersection: entries[0],
               assertions,
               contradictions,
             });

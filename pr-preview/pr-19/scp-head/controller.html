@@ -23,12 +23,13 @@
        * @typedef {Object} contradiction
        * @property {string} contradictionId
        * @property {string?} conditionId
+       * @propery {string} triggerMode
        */
 
       /**
        * @typedef {Object} scoutReport
        * @property {string} scoutName
-       * @property {boolean} isIntersecting
+       * @property {IntersectionObserverEntry} intersection
        * @property {string[]} assertions
        * @property {contradiction[]} contradictions
        */
@@ -69,8 +70,28 @@
         });
       }
 
+      function addQueuedContradiction(contradiction) {
+        if (
+          // Queue if there is no condition
+          contradiction.conditionId == null ||
+          // Queue if there is a condition that matches an active assertion
+          assertionStates.some(
+            (assertion) =>
+              assertion.assertionActive &&
+              assertion.assertionId === contradiction.conditionId
+          )
+        ) {
+          contradictionQueue.push(contradiction.contradictionId);
+        }
+      }
+
       function updateAssertions() {
         let message = "";
+        // Sort assertions for consistent order to minimise unique resize requests
+        assertionStates.sort((a, b) =>
+          a.assertionId.localeCompare(b.assertionId)
+        );
+
         for (const assertion of assertionStates) {
           if (assertion.assertionActive) {
             message += assertion.assertionId + "0";
@@ -89,24 +110,30 @@
         // Receive list of contradictions
         const scoutContradictions = message.data.contradictions;
 
+        // Trigger behaviour based on the contradiction trigger mode
+        for (const contradiction of scoutContradictions) {
+          if (contradiction.triggerMode === "visible") {
+            if (message.data.intersection.isIntersecting)
+              addQueuedContradiction(contradiction);
+          } else if ((contradiction.triggerMode = "invisible-top")) {
+            if (
+              !message.data.intersection.isIntersecting &&
+              message.data.intersection.boundingClientRect.top < 0
+            )
+              addQueuedContradiction(contradiction);
+          } else {
+            throw new Error(
+              `Unknown contradiction trigger mode: ${contradiction.triggerMode}`
+            );
+          }
+        }
+
         // Trigger behaviour based on whether the scout is intersecting
-        if (message.data.isIntersecting) {
+        if (message.data.intersection.isIntersecting) {
           // Future feature: mark last known intersection state of each assertion in order to delay contradictions
 
           // Add contradictions to the queue, if their conditions are met
           for (const contradiction of scoutContradictions) {
-            if (
-              // Queue if there is no condition
-              contradiction.conditionId == null ||
-              // Queue if there is a condition that matches an active assertion
-              assertionStates.some(
-                (assertion) =>
-                  assertion.assertionActive &&
-                  assertion.assertionId === contradiction.conditionId
-              )
-            ) {
-              contradictionQueue.push(contradiction.contradictionId);
-            }
           }
         }
 
