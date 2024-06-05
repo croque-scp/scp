@@ -166,7 +166,7 @@ You now have a copy of this repository on your computer. Navigate to the
 sub-repository you want to contribute to (for example, for SCP-3211):
 
 ```shell
-cd articles/scp-3211/
+cd build/scp-3211/
 ls
 ```
 
