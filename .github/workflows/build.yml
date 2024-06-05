@@ -1,0 +1,31 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - source/**
+      - .github/workflows/build.yml
+concurrency: build-${{ github.ref }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install & build projects
+        run: |
+          mkdir dist
+          for project in $(cd source && ls -d */); do
+            pushd source/$project
+            npm install
+            npm run build
+            popd
+            cp -r source/$project/dist dist/$project
+          done
+      - name: Deploy main
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          clean-exclude: pr-preview/

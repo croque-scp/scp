@@ -47,7 +47,7 @@ gulp.task('webpack', () => {
     \nThis file was generated for SCP-3211 and its translations in the
     international SCP community.
     \nSCP-3211-EN: https://scp-wiki.wikidot.com/scp-3211
-    \nSource: https://github.com/rossjrw/scp/tree/main/articles/scp-3211
+    \nSource: https://github.com/rossjrw/scp/tree/main/source/scp-3211
   `
 
   return gulp
