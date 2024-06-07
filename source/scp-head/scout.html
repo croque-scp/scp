@@ -9,6 +9,7 @@
       }
       body {
         height: 100vh !important;
+        width: 100vw !important;
       }
     </style>
 
@@ -26,16 +27,18 @@
         }
       }
 
-      (async () => {
+      addEventListener("DOMContentLoaded", async () => {
         const params = new URLSearchParams(location.search);
 
         // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
-        const assertions = (params.get("assertion") || "0").split(",");
+        const assertions = (params.get("assertion") || "")
+          .split(",")
+          .filter(Boolean);
 
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
         // Contradiction condition ends in '^' if it should be triggered when invisible on the top edge; otherwise it is triggered when visible on the bottom edge
-        const contradictions = (params.get("contradiction") || "0")
+        const contradictions = (params.get("contradiction") || "")
           .split(",")
           .map((contradiction) => {
             const triggerMode = contradiction.endsWith("^")
@@ -52,13 +55,15 @@
               conditionId: null,
               triggerMode,
             };
-          });
+          })
+          .filter((contradiction) => Boolean(contradiction.contradictionId));
 
         if (!assertions.length && !contradictions.length) {
           throw new Error("Unconfigured scout :(");
         }
 
         const scoutName = location.search;
+        console.debug(`Configured scout ${scoutName}`);
 
         // Attempt to get the controller
         let controller = getController();
@@ -75,7 +80,10 @@
           (entries) => {
             controller.postMessage({
               scoutName,
-              intersection: entries[0],
+              intersection: {
+                boundingClientRect: entries[0].boundingClientRect,
+                isIntersecting: entries[0].isIntersecting,
+              },
               assertions,
               contradictions,
             });
@@ -90,11 +98,12 @@
           if (message.data.scoutName !== scoutName) return;
 
           if (message.data.instruction === "destroy") {
+            console.debug(`Scout ${scoutName} received destroy order`);
             observer.disconnect();
             location.replace("about:blank");
           }
         });
-      })();
+      });
     </script>
   </head>
 
