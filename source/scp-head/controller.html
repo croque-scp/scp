@@ -7,11 +7,14 @@
 
       // TODO: Predict what the next resize request will be and prefetch it
 
-      const resize = window.resizeIframe.createResizeIframe(
-        document.referrer,
-        location.href.replace(/^.*\//, "/"),
-        0
-      );
+      let resize = () => {};
+      addEventListener("DOMContentLoaded", () => {
+        resize = window.resizeIframe.createResizeIframe(
+          document.referrer,
+          location.href.replace(/^.*\//, "/"),
+          0
+        );
+      });
 
       /**
        * @typedef {Object} assertionState
