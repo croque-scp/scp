@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://interwiki.scpwiki.com/resizeIframe.js"></script>
+    <style>
+      iframe,
+      #resizer-container {
+        display: block !important;
+      }
+    </style>
+    <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
     <script>
       window.isController = true;
 
       // TODO: Predict what the next resize request will be and prefetch it
-
-      let resize = () => {};
-      addEventListener("DOMContentLoaded", () => {
-        resize = window.resizeIframe.createResizeIframe(
-          document.referrer,
-          location.href.replace(/^.*\//, "/"),
-          0
-        );
-      });
 
       /**
        * @typedef {Object} assertionState
@@ -66,14 +63,20 @@
       }
 
       function processQueuedContradictions() {
+        console.debug("Assertion states", assertionStates);
+        console.debug("Processing queued contradictions");
         contradictionQueue = contradictionQueue.filter((contradiction) => {
           // Future feature: do not process a contradiction if its assertion was last known to be intersecting
           triggerContradiction(contradiction);
           return false;
         });
+        console.debug("Assertion states", assertionStates);
       }
 
       function addQueuedContradiction(contradiction) {
+        console.debug(
+          `Queueing contradiction ${contradiction.contradictionId}`
+        );
         if (
           // Queue if there is no condition
           contradiction.conditionId == null ||
@@ -88,7 +91,7 @@
         }
       }
 
-      function updateAssertions() {
+      function updateAssertions(resize) {
         let message = "";
         // Sort assertions for consistent order to minimise unique resize requests
         assertionStates.sort((a, b) =>
@@ -100,12 +103,16 @@
             message += assertion.assertionId + "0";
           }
         }
+        console.debug("Sending message", message);
         resize(message);
       }
 
-      addEventListener("message", (message) => {
+      const scoutMessageQueue = [];
+      function processScoutMessage(message, resize) {
         if (message.origin !== location.origin) return;
         if (!message.data.scoutName) return;
+
+        console.debug(`Received report from scout ${message.data.scoutName}`);
 
         // Receive list of assertions
         const scoutAssertions = message.data.assertions;
@@ -131,19 +138,10 @@
           }
         }
 
-        // Trigger behaviour based on whether the scout is intersecting
-        if (message.data.intersection.isIntersecting) {
-          // Future feature: mark last known intersection state of each assertion in order to delay contradictions
-
-          // Add contradictions to the queue, if their conditions are met
-          for (const contradiction of scoutContradictions) {
-          }
-        }
-
         processQueuedContradictions();
 
         // Communicate any assertion state changes to page
-        updateAssertions();
+        updateAssertions(resize);
 
         // If the scout is no longer useful, tell it to destroy itself
         // Right now that means if all of its contradictions have been processed
@@ -166,6 +164,27 @@
             scoutName: message.data.scoutName,
             instruction: "destroy",
           });
+        }
+      }
+
+      // Queue messages until load event
+      function queueScoutMessage(message) {
+        scoutMessageQueue.push(message);
+      }
+      addEventListener("message", queueScoutMessage);
+
+      addEventListener("load", () => {
+        const resize = window.resizeIframe.createResizeIframe(
+          "https://scp-sandbox-3.wikidot.com",
+          location.href.replace(/^.*\//, "/"),
+          100
+        );
+        removeEventListener("message", queueScoutMessage);
+        addEventListener("message", (message) => {
+          processScoutMessage(message, resize);
+        });
+        while (scoutMessageQueue.length > 0) {
+          processScoutMessage(scoutMessageQueue.shift(), resize);
         }
       });
     </script>
