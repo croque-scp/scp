@@ -28,6 +28,9 @@
       }
 
       addEventListener("DOMContentLoaded", async () => {
+        const scoutName = String(location.search);
+        console.debug(`Configuring scout ${scoutName}`);
+
         const params = new URLSearchParams(location.search);
 
         // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
@@ -38,32 +41,43 @@
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
         // Contradiction condition ends in '^' if it should be triggered when invisible on the top edge; otherwise it is triggered when visible on the bottom edge
+        // Either ID can start with a letter to select a channel; if not, the default channel (configured by the controller) is selected. If the main ID doesn't specify a channel it uses the channel specified by the condition.
         const contradictions = (params.get("contradiction") || "")
           .split(",")
-          .map((contradiction) => {
-            const triggerMode = contradiction.endsWith("^")
-              ? "invisible-top"
-              : "visible";
-            contradiction = contradiction.replace(/\^$/, "");
+          .filter(Boolean)
+          .map((contradictionText) => {
+            const contradictionRegex =
+              /^(?:([A-Z]?)([0-9]*)\?)?([A-Z]?)([0-9]+)(\^?)$/;
+            const match = contradictionText.match(contradictionRegex);
 
-            if (contradiction.includes("?")) {
-              const [conditionId, contradictionId] = contradiction.split("?");
-              return { conditionId, contradictionId, triggerMode };
-            }
-            return {
-              contradictionId: contradiction,
-              conditionId: null,
-              triggerMode,
+            if (match == null)
+              throw new Error(`Scout ${scoutName} contradictions don't match`);
+
+            const contradiction = {
+              conditionChannel: match[1] || null,
+              conditionId: match[2] == null ? null : Number(match[2]),
+              channel: match[3] || null,
+              id: Number(match[4]),
+              triggerMode: match[5] === "^" ? "invisible-top" : "visible",
             };
-          })
-          .filter((contradiction) => Boolean(contradiction.contradictionId));
+
+            // 'A5?10' -> 'A5?A10'
+            if (
+              contradiction.channel == null &&
+              contradiction.conditionChannel != null
+            )
+              contradiction.channel = contradiction.conditionChannel;
+            return contradiction;
+          });
 
         if (!assertions.length && !contradictions.length) {
           throw new Error("Unconfigured scout :(");
         }
 
-        const scoutName = location.search;
-        console.debug(`Configured scout ${scoutName}`);
+        console.debug(`Configured scout ${scoutName}`, {
+          assertions,
+          contradictions,
+        });
 
         // Attempt to get the controller
         let controller = getController();

@@ -1,23 +1,54 @@
+@mixin channel(
+  // Identifier for the channel (to be in the statement class)
+  $channel-id,
+  // Type of string match: ^, * or $
+  $match,
+  // Text to match in the assertion class before the ID
+  $before,
+  // Text to match in the assertion class after the ID
+  $after,
+  // The lowest possible assertion ID
+  $min-assertion,
+  // The highest possible assertion ID
+  $max-assertion
+) {
+  // Statement wrapper should include the channel ID
+  $channel: ".ch_#{$channel_id}";
+
+  @for $assertion from $min-assertion + 1 through $max-assertion {
+    $controller: '.controller[style#{$match}="#{$before}#{$assertion}#{$after}"]';
+
+    // Show the current assertion
+    #{$controller} + .article #{$channel} .a_#{$assertion} {
+      display: initial;
+    }
+
+    // Hide all previous assertions (in this statement)
+    $prevs: ();
+    @for $j from 10 through $assertion - 1 {
+      $prevs: append($prevs, unquote(".a_#{$j}"), comma);
+    }
+    #{$controller} + .article #{$channel} .a_#{$assertion} ~ :is(#{$prevs}) {
+      display: none;
+    }
+  }
+
+  // Display the first assertion in this channel
+  .controller + .article #{$channel} .a_#{$min-assertion} {
+    display: initial;
+  }
+}
+
 .article {
+  // Page should hide the article by default, so that assertions not yet intended to be visible are hidden while this CSS loads
+  visibility: visible !important;
+
+  // Hide all assertions by default
   [class^="a_"] {
     display: none;
   }
-
-  .a_10 {
-    display: inline;
-  }
 }
 
-@for $i from 11 through 50 {
-  .controller[style*="#{$i}0"] + .article .a_#{$i} {
-    display: inline;
-  }
-
-  $prevs: ();
-  @for $j from 10 through $i - 1 {
-    $prevs: append($prevs, unquote(".a_#{$j}"), comma);
-  }
-  .controller[style*="#{$i}0"] + .article .a_#{$i} ~ :is(#{$prevs}) {
-    display: none;
-  }
-}
+@include channel("A", "^", "", ".", 1, 9);
+@include channel("B", "*", ".", "0", 10, 50);
+@include channel("C", "^", "0", "5px", 1, 9);

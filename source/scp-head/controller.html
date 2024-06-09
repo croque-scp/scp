@@ -9,21 +9,24 @@
     </style>
     <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
     <script>
+      "use strict;";
       window.isController = true;
 
       // TODO: Predict what the next resize request will be and prefetch it
 
       /**
        * @typedef {Object} assertionState
-       * @property {string} assertionId
+       * @property {number} assertionId
        * @property {boolean} assertionActive
        */
 
       /**
-       * @typedef {Object} contradiction
-       * @property {string} contradictionId
-       * @property {string?} conditionId
-       * @propery {string} triggerMode
+       * @typedef {Object} scoutContradiction
+       * @property {number} id
+       * @property {string?} channel
+       * @property {number?} conditionId
+       * @property {string?} conditionChannel
+       * @property {string} triggerMode
        */
 
       /**
@@ -31,7 +34,7 @@
        * @property {string} scoutName
        * @property {IntersectionObserverEntry} intersection
        * @property {string[]} assertions
-       * @property {contradiction[]} contradictions
+       * @property {scoutContradiction[]} contradictions
        */
 
       /**
@@ -40,69 +43,141 @@
        * @property {string} blockingAssertionId
        */
 
-      const assertionStates = [
-        {
-          assertionId: "10",
-          assertionActive: true,
-        },
-      ];
+      class AssertionChannel {
+        /**
+         * @param {string} name
+         * @param {number} minId
+         * @param {number} maxId
+         */
+        constructor(name, minId, maxId) {
+          /** @type {string} */
+          this.name = name;
+          /** @type {number} */
+          this.minId = minId;
+          /** @type {number} */
+          this.maxId = maxId;
+
+          /** @type {Array.<assertionState>} */
+          this.assertionStates = [
+            {
+              assertionId: this.minId,
+              assertionActive: true,
+            },
+          ];
+        }
+
+        /**
+         * @returns {number}
+         */
+        getHighestActiveAssertion() {
+          return this.assertionStates.reduce((highest, state) => {
+            if (state.assertionActive && state.assertionId > highest)
+              return state.assertionId;
+            else return highest;
+          }, 0);
+        }
+      }
+
+      /** @type {Object.<string, AssertionChannel>} */
+      const assertionChannels = [
+        new AssertionChannel("A", 1, 9),
+        new AssertionChannel("B", 10, 50),
+        new AssertionChannel("C", 1, 9),
+      ].reduce((acc, channel) => ({ ...acc, [channel.name]: channel }), {});
+
+      const defaultAssertionChannel = "B";
+
+      /** @type {Array.<Contradiction>} */
       let contradictionQueue = [];
 
-      function triggerContradiction(contradictionId) {
-        const contradiction = assertionStates.find(
-          (assertion) => assertion.assertionId === contradictionId
-        );
-        if (contradiction) {
-          contradiction.assertionActive = true;
-        } else {
-          assertionStates.push({
-            assertionId: contradictionId,
-            assertionActive: true,
-          });
+      class Contradiction {
+        /**
+         * @param {number} id
+         * @param {string} triggerMode
+         * @param {string | null} channel
+         * @param {number | null} conditionId
+         * @param {string | null} conditionChannel
+         */
+        constructor(
+          id,
+          triggerMode,
+          channel,
+          conditionId = null,
+          conditionChannel = null
+        ) {
+          if (channel == null) channel = defaultAssertionChannel;
+          if (conditionChannel == null)
+            conditionChannel = defaultAssertionChannel;
+
+          /** @type {number} */
+          this.id = id;
+          /** @type {string} */
+          this.triggerMode = triggerMode;
+          /** @type {AssertionChannel} */
+          this.channel = assertionChannels[channel];
+          /** @type {number} */
+          this.conditionId = conditionId;
+          /** @type {string} */
+          this.conditionChannel = conditionChannel;
+        }
+
+        queue() {
+          if (
+            // Queue if there is no condition
+            this.conditionId == null ||
+            // Queue if there is a condition that matches an active assertion in the matching channel
+            this.channel.assertionStates.some(
+              (assertion) =>
+                assertion.assertionActive &&
+                assertion.assertionId === this.conditionId
+            )
+          ) {
+            contradictionQueue.push(this);
+            console.debug(`Queued contradiction ${this.id}`);
+          } else {
+            console.debug(`Did not queue contradiction ${this.id}`);
+          }
+        }
+
+        trigger() {
+          // Find the assertion in the matching channel and set it to active
+          const assertion = this.channel.assertionStates.find(
+            (assertion) => assertion.assertionId === this.id
+          );
+          if (assertion) {
+            assertion.assertionActive = true;
+          } else {
+            // Create it if undefined
+            this.channel.assertionStates.push({
+              assertionId: this.id,
+              assertionActive: true,
+            });
+          }
         }
       }
 
       function processQueuedContradictions() {
-        console.debug("Assertion states", assertionStates);
-        console.debug("Processing queued contradictions");
+        console.debug(
+          `Processing ${contradictionQueue.length} queued contradictions`
+        );
+        console.debug("Assertions before processing", assertionChannels);
         contradictionQueue = contradictionQueue.filter((contradiction) => {
-          // Future feature: do not process a contradiction if its assertion was last known to be intersecting
-          triggerContradiction(contradiction);
+          // TODO Filter out a contradiction if its assertion was last known to be intersecting
+          contradiction.trigger();
           return false;
         });
-        console.debug("Assertion states", assertionStates);
-      }
-
-      function addQueuedContradiction(contradiction) {
-        console.debug(
-          `Queueing contradiction ${contradiction.contradictionId}`
-        );
-        if (
-          // Queue if there is no condition
-          contradiction.conditionId == null ||
-          // Queue if there is a condition that matches an active assertion
-          assertionStates.some(
-            (assertion) =>
-              assertion.assertionActive &&
-              assertion.assertionId === contradiction.conditionId
-          )
-        ) {
-          contradictionQueue.push(contradiction.contradictionId);
-        }
+        console.debug("Assertions after processing", assertionChannels);
       }
 
       function updateAssertions(resize) {
-        let message = "";
-        // Sort assertions for consistent order to minimise unique resize requests
-        assertionStates.sort((a, b) =>
-          a.assertionId.localeCompare(b.assertionId)
-        );
-
-        for (const assertion of assertionStates) {
-          if (assertion.assertionActive) {
-            message += assertion.assertionId + "0";
-          }
-        }
+        const message = [
+          assertionChannels["A"].getHighestActiveAssertion(),
+          ".",
+          assertionChannels["B"].getHighestActiveAssertion(),
+          "0",
+          assertionChannels["C"].getHighestActiveAssertion(),
+          "5",
+        ].join("");
         console.debug("Sending message", message);
         resize(message);
       }
@@ -112,25 +187,37 @@
         if (message.origin !== location.origin) return;
         if (!message.data.scoutName) return;
 
-        console.debug(`Received report from scout ${message.data.scoutName}`);
+        /** @type {scoutReport} */
+        const scoutReport = message.data;
+
+        console.debug(`Received report from scout ${scoutReport.scoutName}`);
 
         // Receive list of assertions
-        const scoutAssertions = message.data.assertions;
+        const scoutAssertions = scoutReport.assertions;
 
         // Receive list of contradictions
-        const scoutContradictions = message.data.contradictions;
+        const scoutContradictions = scoutReport.contradictions.map(
+          (c) =>
+            new Contradiction(
+              c.id,
+              c.triggerMode,
+              c.channel,
+              c.conditionId,
+              c.conditionChannel
+            )
+        );
+        console.log(scoutContradictions);
 
         // Trigger behaviour based on the contradiction trigger mode
         for (const contradiction of scoutContradictions) {
           if (contradiction.triggerMode === "visible") {
-            if (message.data.intersection.isIntersecting)
-              addQueuedContradiction(contradiction);
+            if (scoutReport.intersection.isIntersecting) contradiction.queue();
           } else if ((contradiction.triggerMode = "invisible-top")) {
             if (
-              !message.data.intersection.isIntersecting &&
-              message.data.intersection.boundingClientRect.top < 0
+              !scoutReport.intersection.isIntersecting &&
+              scoutReport.intersection.boundingClientRect.top < 0
             )
-              addQueuedContradiction(contradiction);
+              contradiction.queue();
           } else {
             throw new Error(
               `Unknown contradiction trigger mode: ${contradiction.triggerMode}`
@@ -138,10 +225,12 @@
           }
         }
 
-        processQueuedContradictions();
+        if (contradictionQueue.length > 0) {
+          processQueuedContradictions();
 
-        // Communicate any assertion state changes to page
-        updateAssertions(resize);
+          // Communicate any assertion state changes to page
+          updateAssertions(resize);
+        }
 
         // If the scout is no longer useful, tell it to destroy itself
         // Right now that means if all of its contradictions have been processed
@@ -150,18 +239,18 @@
           scoutContradictions.every((contradiction) => {
             return (
               // Contradiction has made its way into the queue
-              contradictionQueue.includes(contradiction.contradictionId) ||
+              contradictionQueue.includes(contradiction) ||
               // Contradiction has already been applied
-              assertionStates.some(
+              contradiction.channel.assertionStates.some(
                 (assertion) =>
                   assertion.assertionActive &&
-                  assertion.assertionId === contradiction.contradictionId
+                  assertion.assertionId === contradiction.id
               )
             );
           })
         ) {
           message.source.postMessage({
-            scoutName: message.data.scoutName,
+            scoutName: scoutReport.scoutName,
             instruction: "destroy",
           });
         }
