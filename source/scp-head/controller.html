@@ -17,9 +17,9 @@
       /**
        * @typedef {Object} scoutContradiction
        * @property {number} id
-       * @property {string?} channel
+       * @property {string?} channelName
        * @property {number?} conditionId
-       * @property {string?} conditionChannel
+       * @property {string?} conditionChannelName
        * @property {string} triggerMode
        */
 
@@ -79,7 +79,7 @@
         new AssertionChannel("C", 1, 9),
       ].reduce((acc, channel) => ({ ...acc, [channel.name]: channel }), {});
 
-      const defaultAssertionChannel = "B";
+      const defaultAssertionChannel = assertionChannels["B"];
 
       /** @type {Array.<Contradiction>} */
       let contradictionQueue = [];
@@ -88,31 +88,55 @@
         /**
          * @param {number} id
          * @param {string} triggerMode
-         * @param {string | null} channel
+         * @param {string | null} channelName
          * @param {number | null} conditionId
-         * @param {string | null} conditionChannel
+         * @param {string | null} conditionChannelName
          */
         constructor(
           id,
           triggerMode,
-          channel,
+          channelName,
           conditionId = null,
-          conditionChannel = null
+          conditionChannelName = null
         ) {
-          if (channel == null) channel = defaultAssertionChannel;
-          if (conditionChannel == null)
-            conditionChannel = defaultAssertionChannel;
-
           /** @type {number} */
           this.id = id;
           /** @type {string} */
           this.triggerMode = triggerMode;
-          /** @type {AssertionChannel} */
-          this.channel = assertionChannels[channel];
-          /** @type {number} */
+
+          /** @type {number | null} */
           this.conditionId = conditionId;
+          /** @type {AssertionChannel | null} */
+          this.conditionChannel =
+            conditionChannelName != null
+              ? assertionChannels[conditionChannelName]
+              : defaultAssertionChannel;
+
+          if (
+            this.conditionId != null &&
+            (this.conditionId > this.conditionChannel.maxId ||
+              this.conditionId < this.conditionChannel.minId)
+          )
+            throw new Error(
+              `Contradiction ID ${this.conditionId}` +
+                `is out of range for channel ${this.conditionChannel.name}` +
+                `(${this.conditionChannel.minId} - ${this.conditionChannel.maxId})`
+            );
+
           /** @type {AssertionChannel} */
-          this.conditionChannel = assertionChannels[conditionChannel];
+          this.channel =
+            channelName != null
+              ? assertionChannels[channelName]
+              : this.conditionId != null
+              ? this.conditionChannel
+              : defaultAssertionChannel;
+
+          if (this.id > this.channel.maxId || this.id < this.channel.minId)
+            throw new Error(
+              `Contradiction ID ${this.id}` +
+                `is out of range for channel ${this.channel.name}` +
+                `(${this.channel.minId} - ${this.channel.maxId})`
+            );
         }
 
         queue() {
@@ -175,9 +199,9 @@
             new Contradiction(
               c.id,
               c.triggerMode,
-              c.channel,
+              c.channelName,
               c.conditionId,
-              c.conditionChannel
+              c.conditionChannelName
             )
         );
 
