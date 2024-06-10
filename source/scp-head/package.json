@@ -1,8 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir dist && sass assertions.scss dist/assertions.css && csso dist/assertions.css -o dist/assertions.css && cp *.html dist",
-    "dev": "rm -rf dist && mkdir dist && sass assertions.scss dist/assertions.css && cp *.html dist"
+    "build:cleanup": "rm -rf dist && mkdir dist",
+    "build:sass": "sass assertions.scss dist/assertions.css",
+    "build:minify": "csso dist/assertions.css -o dist/assertions.css",
+    "build:html": "cp *.html dist",
+    "build": "npm run build:cleanup && npm run build:sass && npm run build:minify && npm run build:html && npm run build:assets",
+    "dev": "npm run build:cleanup && npm run build:sass && npm run build:html && npm run build:assets"
   },
   "devDependencies": {
     "csso-cli": "^4.0.2",
