@@ -62,4 +62,4 @@
 
 @include channel("A", "^", "", ".", 1, 9);
 @include channel("B", "*", ".", "0", 10, 50);
-@include channel("C", "^", "0", "5px", 1, 9);
+@include channel("C", "$", "0", "px", 1, 9);
