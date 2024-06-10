@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && mkdir dist && sass assertions.scss | csso -o dist/assertions.css && cp *.html dist",
+    "build": "rm -rf dist && mkdir dist && sass assertions.scss dist/assertions.css && csso dist/assertions.css -o dist/assertions.css && cp *.html dist",
     "dev": "rm -rf dist && mkdir dist && sass assertions.scss dist/assertions.css && cp *.html dist"
   },
   "devDependencies": {
