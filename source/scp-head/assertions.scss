@@ -16,7 +16,18 @@
   $channel: ".ch_#{$channel_id}";
 
   @for $assertion from $min-assertion + 1 through $max-assertion {
-    $controller: '.controller[style#{$match}="#{$before}#{$assertion}#{$after}"]';
+    $controller: ".controller";
+
+    // Make this stage and all future stages apply these styles
+    $styles: ();
+    @for $i from $assertion through $max-assertion {
+      $styles: append(
+        $styles,
+        unquote('[style#{$match}="#{$before}#{$i}#{$after}"]'),
+        comma
+      );
+    }
+    $controller: "#{$controller}:is(#{$styles})";
 
     // Show the current assertion
     #{$controller} + .article #{$channel} .a_#{$assertion} {
