@@ -64,6 +64,7 @@
               assertionActive: true,
             },
           ];
+          // TODO: There's only one assertion state per channel now, so this doesn't need to be an array
         }
 
         /**
@@ -133,9 +134,6 @@
             )
           ) {
             contradictionQueue.push(this);
-            console.debug(`Queued contradiction ${this.id}`);
-          } else {
-            console.debug(`Did not queue contradiction ${this.id}`);
           }
         }
 
@@ -157,16 +155,18 @@
       }
 
       function processQueuedContradictions() {
-        console.debug(
-          `Processing ${contradictionQueue.length} queued contradictions`
-        );
-        console.debug("Assertions before processing", assertionChannels);
+        const queueLength = contradictionQueue.length;
         contradictionQueue = contradictionQueue.filter((contradiction) => {
           // TODO Filter out a contradiction if its assertion was last known to be intersecting
+          // (the queue will always be emptied every time currently)
           contradiction.trigger();
           return false;
         });
-        console.debug("Assertions after processing", assertionChannels);
+        console.debug(
+          `Processed ${
+            queueLength - contradictionQueue.length
+          }/${queueLength} queued contradictions`
+        );
       }
 
       function updateAssertions(resize) {
@@ -189,8 +189,6 @@
         /** @type {scoutReport} */
         const scoutReport = message.data;
 
-        console.debug(`Received report from scout ${scoutReport.scoutName}`);
-
         // Receive list of assertions
         const scoutAssertions = scoutReport.assertions;
 
@@ -205,7 +203,11 @@
               c.conditionChannel
             )
         );
-        console.log(scoutContradictions);
+
+        console.debug(`Received report from scout ${scoutReport.scoutName}`, {
+          scoutAssertions,
+          scoutContradictions,
+        });
 
         // Trigger behaviour based on the contradiction trigger mode
         for (const contradiction of scoutContradictions) {

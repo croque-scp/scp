@@ -28,9 +28,10 @@
       }
 
       addEventListener("DOMContentLoaded", async () => {
-        const scoutName = String(location.search);
-        console.debug(`Configuring scout ${scoutName}`);
-
+        const scoutName = String(location.search).replace(
+          /^\?|ontradictions?|ssertions?/g,
+          ""
+        );
         const params = new URLSearchParams(location.search);
 
         // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
