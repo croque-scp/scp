@@ -36,7 +36,7 @@
 
     // Hide all previous assertions (in this statement)
     $prevs: ();
-    @for $j from 10 through $assertion - 1 {
+    @for $j from $min-assertion through $assertion - 1 {
       $prevs: append($prevs, unquote(".a_#{$j}"), comma);
     }
     #{$controller} + .article #{$channel} .a_#{$assertion} ~ :is(#{$prevs}) {
