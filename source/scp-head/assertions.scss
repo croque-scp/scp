@@ -1,8 +1,6 @@
 @mixin channel(
   // Identifier for the channel (to be in the statement class)
   $channel-id,
-  // Type of string match: ^, * or $
-  $match,
   // Text to match in the assertion class before the ID
   $before,
   // Text to match in the assertion class after the ID
@@ -23,7 +21,7 @@
     @for $i from $assertion through $max-assertion {
       $styles: append(
         $styles,
-        unquote('[style#{$match}="#{$before}#{$i}#{$after}"]'),
+        unquote('[style*="#{$before}#{$i}#{$after}"]'),
         comma
       );
     }
@@ -60,6 +58,6 @@
   }
 }
 
-@include channel("A", "^", "", ".", 1, 9);
-@include channel("B", "*", ".", "0", 10, 50);
-@include channel("C", "$", "0", "px", 1, 9);
+@include channel("A", "", ".", 1, 9);
+@include channel("B", ".", "0", 10, 50);
+@include channel("C", "0", "px", 1, 9);
