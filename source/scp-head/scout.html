@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body {
+        height: 100vh !important;
+        width: 100vw !important;
+      }
+    </style>
+
+    <script>
+      "use strict";
+      window.isScout = true;
+
+      function getController() {
+        for (const frame of Array.prototype.slice.call(parent)) {
+          try {
+            if (frame.isController) return frame;
+          } catch (error) {
+            if (!(error instanceof DOMException)) throw error;
+          }
+        }
+      }
+
+      addEventListener("DOMContentLoaded", async () => {
+        const scoutName = String(location.search).replace(
+          /^\?|ontradictions?|ssertions?/g,
+          ""
+        );
+        const params = new URLSearchParams(location.search);
+
+        // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
+        const assertions = (params.get("assertion") || "")
+          .split(",")
+          .filter(Boolean);
+
+        // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
+        // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
+        // Contradiction condition ends in '^' if it should be triggered when invisible on the top edge; otherwise it is triggered when visible on the bottom edge
+        // Either ID can start with a letter to select a channel; if not, the default channel (configured by the controller) is selected. If the main ID doesn't specify a channel it uses the channel specified by the condition.
+        const contradictions = (params.get("contradiction") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((contradictionText) => {
+            const contradictionRegex =
+              /^(?:([A-Z]?)([0-9]*)\?)?([A-Z]?)([0-9]+)(\^?)$/;
+            const match = contradictionText.match(contradictionRegex);
+
+            if (match == null)
+              throw new Error(`Scout ${scoutName} contradictions don't match`);
+
+            const contradiction = {
+              conditionChannel: match[1] || null,
+              conditionId: match[2] == null ? null : Number(match[2]),
+              channel: match[3] || null,
+              id: Number(match[4]),
+              triggerMode: match[5] === "^" ? "invisible-top" : "visible",
+            };
+
+            // 'A5?10' -> 'A5?A10'
+            if (
+              contradiction.channel == null &&
+              contradiction.conditionChannel != null
+            )
+              contradiction.channel = contradiction.conditionChannel;
+            return contradiction;
+          });
+
+        if (!assertions.length && !contradictions.length) {
+          throw new Error("Unconfigured scout :(");
+        }
+
+        console.debug(`Configured scout ${scoutName}`, {
+          assertions,
+          contradictions,
+        });
+
+        // Attempt to get the controller
+        let controller = getController();
+        for (let attempts = 0; attempts < 3; attempts += 1) {
+          if (controller) break;
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          controller = getController();
+        }
+        if (!controller)
+          throw new Error(`Scout ${scoutName} failed to get controller`);
+
+        // Assume that as soon as this scout is asked to load, it's ready to work
+        const observer = new IntersectionObserver(
+          (entries) => {
+            controller.postMessage({
+              scoutName,
+              intersection: {
+                boundingClientRect: entries[0].boundingClientRect,
+                isIntersecting: entries[0].isIntersecting,
+              },
+              assertions,
+              contradictions,
+            });
+          },
+          { threshold: 0 }
+        );
+        observer.observe(document.body);
+
+        // Listen to instructions coming from controller
+        addEventListener("message", (message) => {
+          if (message.origin !== location.origin) return;
+          if (message.data.scoutName !== scoutName) return;
+
+          if (message.data.instruction === "destroy") {
+            console.debug(`Scout ${scoutName} received destroy order`);
+            observer.disconnect();
+            location.replace("about:blank");
+          }
+        });
+      });
+    </script>
+  </head>
+
+  <body></body>
+</html>
