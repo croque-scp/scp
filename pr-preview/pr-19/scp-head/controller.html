@@ -15,12 +15,6 @@
       // TODO: Predict what the next resize request will be and prefetch it
 
       /**
-       * @typedef {Object} assertionState
-       * @property {number} assertionId
-       * @property {boolean} assertionActive
-       */
-
-      /**
        * @typedef {Object} scoutContradiction
        * @property {number} id
        * @property {string?} channel
@@ -44,6 +38,8 @@
        */
 
       class AssertionChannel {
+        #activeAssertion;
+
         /**
          * @param {string} name
          * @param {number} minId
@@ -57,25 +53,22 @@
           /** @type {number} */
           this.maxId = maxId;
 
-          /** @type {Array.<assertionState>} */
-          this.assertionStates = [
-            {
-              assertionId: this.minId,
-              assertionActive: true,
-            },
-          ];
-          // TODO: There's only one assertion state per channel now, so this doesn't need to be an array
+          /** @type {number} */
+          this.#activeAssertion = this.minId;
         }
 
-        /**
-         * @returns {number}
-         */
-        getHighestActiveAssertion() {
-          return this.assertionStates.reduce((highest, state) => {
-            if (state.assertionActive && state.assertionId > highest)
-              return state.assertionId;
-            else return highest;
-          }, 0);
+        /** @param {number} value */
+        set activeAssertion(value) {
+          if (value < this.minId || value > this.maxId)
+            throw new Error(
+              `Assertion ID ${value} is out of range for channel ${this.name}`
+            );
+          this.#activeAssertion = value;
+        }
+
+        /** @returns {number} */
+        get activeAssertion() {
+          return this.#activeAssertion;
         }
       }
 
@@ -118,71 +111,55 @@
           this.channel = assertionChannels[channel];
           /** @type {number} */
           this.conditionId = conditionId;
-          /** @type {string} */
-          this.conditionChannel = conditionChannel;
+          /** @type {AssertionChannel} */
+          this.conditionChannel = assertionChannels[conditionChannel];
         }
 
         queue() {
-          if (
-            // Queue if there is no condition
+          const conditionsMatch =
             this.conditionId == null ||
-            // Queue if there is a condition that matches an active assertion in the matching channel
-            this.channel.assertionStates.some(
-              (assertion) =>
-                assertion.assertionActive &&
-                assertion.assertionId === this.conditionId
-            )
-          ) {
-            contradictionQueue.push(this);
-          }
+            this.conditionId <= this.conditionChannel.activeAssertion;
+          if (conditionsMatch) contradictionQueue.push(this);
         }
 
         trigger() {
-          // Find the assertion in the matching channel and set it to active
-          const assertion = this.channel.assertionStates.find(
-            (assertion) => assertion.assertionId === this.id
-          );
-          if (assertion) {
-            assertion.assertionActive = true;
-          } else {
-            // Create it if undefined
-            this.channel.assertionStates.push({
-              assertionId: this.id,
-              assertionActive: true,
-            });
-          }
+          // Increment the channel's active assertion - never decrement
+          if (this.channel.activeAssertion < this.id)
+            this.channel.activeAssertion = this.id;
         }
       }
 
       function processQueuedContradictions() {
+        console.debug(contradictionQueue);
         const queueLength = contradictionQueue.length;
         contradictionQueue = contradictionQueue.filter((contradiction) => {
           // TODO Filter out a contradiction if its assertion was last known to be intersecting
           // (the queue will always be emptied every time currently)
           contradiction.trigger();
+          // Remove from queue if triggered
           return false;
         });
         console.debug(
           `Processed ${
             queueLength - contradictionQueue.length
-          }/${queueLength} queued contradictions`
+          }/${queueLength} queued contradictions`,
+          contradictionQueue
         );
       }
 
-      function updateAssertions(resize) {
+      function sendAssertionState(resize) {
         const message = [
-          assertionChannels["A"].getHighestActiveAssertion(),
+          assertionChannels["A"].activeAssertion,
           ".",
-          assertionChannels["B"].getHighestActiveAssertion(),
+          assertionChannels["B"].activeAssertion,
           "0",
-          assertionChannels["C"].getHighestActiveAssertion(),
+          assertionChannels["C"].activeAssertion,
         ].join("");
-        console.debug("Sending message", message);
+        console.debug("Updating assertion state to", message);
         resize(message);
       }
 
-      const scoutMessageQueue = [];
-      function processScoutMessage(message, resize) {
+      function processScoutReport(message, resize) {
         if (message.origin !== location.origin) return;
         if (!message.data.scoutName) return;
 
@@ -230,38 +207,35 @@
           processQueuedContradictions();
 
           // Communicate any assertion state changes to page
-          updateAssertions(resize);
+          sendAssertionState(resize);
         }
 
         // If the scout is no longer useful, tell it to destroy itself
         // Right now that means if all of its contradictions have been processed
         // Future feature: AND its tracked assertions are all active
-        if (
-          scoutContradictions.every((contradiction) => {
+        const allContradictionsProcessed = scoutContradictions.every(
+          (contradiction) => {
             return (
               // Contradiction has made its way into the queue
               contradictionQueue.includes(contradiction) ||
               // Contradiction has already been applied
-              contradiction.channel.assertionStates.some(
-                (assertion) =>
-                  assertion.assertionActive &&
-                  assertion.assertionId === contradiction.id
-              )
+              contradiction.channel.activeAssertion >= contradiction.id
             );
-          })
-        ) {
+          }
+        );
+        if (allContradictionsProcessed)
           message.source.postMessage({
             scoutName: scoutReport.scoutName,
             instruction: "destroy",
           });
-        }
       }
 
       // Queue messages until load event
-      function queueScoutMessage(message) {
-        scoutMessageQueue.push(message);
+      const scoutReportQueue = [];
+      function queueScoutReport(message) {
+        scoutReportQueue.push(message);
       }
-      addEventListener("message", queueScoutMessage);
+      addEventListener("message", queueScoutReport);
 
       addEventListener("load", () => {
         const resize = window.resizeIframe.createResizeIframe(
@@ -269,12 +243,14 @@
           location.href.replace(/^.*\//, "/"),
           100
         );
-        removeEventListener("message", queueScoutMessage);
+        // Switch event listener to process new reports immediately
+        removeEventListener("message", queueScoutReport);
         addEventListener("message", (message) => {
-          processScoutMessage(message, resize);
+          processScoutReport(message, resize);
         });
-        while (scoutMessageQueue.length > 0) {
-          processScoutMessage(scoutMessageQueue.shift(), resize);
+        // Process all queued scout reports
+        while (scoutReportQueue.length > 0) {
+          processScoutReport(scoutReportQueue.shift(), resize);
         }
       });
     </script>
