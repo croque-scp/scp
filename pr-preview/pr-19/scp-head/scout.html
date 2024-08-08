@@ -55,19 +55,19 @@
               throw new Error(`Scout ${scoutName} contradictions don't match`);
 
             const contradiction = {
-              conditionChannel: match[1] || null,
+              conditionChannelName: match[1] || null,
               conditionId: match[2] == null ? null : Number(match[2]),
-              channel: match[3] || null,
+              channelName: match[3] || null,
               id: Number(match[4]),
               triggerMode: match[5] === "^" ? "invisible-top" : "visible",
             };
 
             // 'A5?10' -> 'A5?A10'
             if (
-              contradiction.channel == null &&
-              contradiction.conditionChannel != null
+              contradiction.channelName == null &&
+              contradiction.conditionChannelName != null
             )
-              contradiction.channel = contradiction.conditionChannel;
+              contradiction.channelName = contradiction.conditionChannelName;
             return contradiction;
           });
 
