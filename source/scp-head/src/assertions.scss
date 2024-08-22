@@ -46,6 +46,11 @@
   .controller + .article #{$channel} .a_#{$min-assertion} {
     display: initial;
   }
+
+  // Hide assertions marked as empty
+  .empty {
+    display: none;
+  }
 }
 
 .article {
