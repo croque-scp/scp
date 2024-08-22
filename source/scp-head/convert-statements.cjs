@@ -40,7 +40,7 @@ function replaceInlineStatement(match) {
         }
 
         return `[[span class="a_${assertion.stage}${
-          assertion.classes ? ` ${assertion.classes}` : ""
+          assertion.classes ? ` ${assertion.classes.trim()}` : ""
         }"]]${assertion.text}[[/span]]`;
       }),
     "[[/span]]",
@@ -63,7 +63,7 @@ function replaceBlockStatement(match) {
       .flatMap((assertion) => {
         return [
           `[[div class="a_${assertion.stage}${
-            assertion.classes ? ` ${assertion.classes}` : ""
+            assertion.classes ? ` ${assertion.classes.trim()}` : ""
           }"]]`,
           assertion.text.trim(),
           "[[/div]]",
@@ -86,19 +86,18 @@ function parseStatement(phrases) {
     .map((assertion) => {
       console.error("Parsing assertion", JSON.stringify(assertion));
       const match = assertion.match(
-        /(?:\s*([A-Z]?)([0-9]*)(?:( [ a-zA-Z0-9]+))?[:\n]\s*)?([\s\S]*?)$/
+        /(?:\s*([A-Z]?)([0-9]*)(?:( [ a-zA-Z0-9_-]+))?[:\n]\s*)?([\s\S]*?)$/
       );
       const channel = String(match[1] || defaultChannel);
       const stage = Number(match[2]) || 10;
-      const classes = String(match[3]);
-      const text = String(match[4]);
+      const classes = String(match[3] || "");
+      const text = String(match[4] || "");
 
       if (statementChannel === null) statementChannel = channel;
       else if (statementChannel !== channel) {
         console.error({ match, statementChannel, channel, stage, text });
         throw new Error("Inconsistent channel in statement");
       }
-
       return { stage, classes, text, channel: statementChannel };
     });
 
