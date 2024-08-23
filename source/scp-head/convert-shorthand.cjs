@@ -17,7 +17,7 @@ async function main() {
     if (!source) console.error("No input source");
     if (!process.env.SCOUTFILE) console.error("No scout file specified");
     console.error(
-      "Usage: (export SCOUTFILE=/scout.html; cat sourcefile | ./convert-statements.cjs)"
+      "Usage: (export SCOUTFILE=/scout.html; cat sourcefile | ./convert-shorthand.cjs)"
     );
     process.exit(1);
   }
