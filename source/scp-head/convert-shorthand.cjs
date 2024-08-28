@@ -62,7 +62,7 @@ function replaceInlineStatement(match) {
       .map((assertion) => {
         if (assertion.text.trim().length === 0) {
           // Zero-content spans are invalid wikitext - add a space and hide it later with a class
-          return `[[span class="a_${assertion.stage} empty"]] [[/span]]`;
+          return `[[span class="a_${assertion.stage} empty"]]_[[/span]]`;
         }
 
         return `[[span class="a_${assertion.stage}${

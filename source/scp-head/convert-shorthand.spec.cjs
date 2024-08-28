@@ -45,7 +45,7 @@ const it = {
   ],
   "can create an empty assertion": [
     `{test7}{28:}`,
-    `[[span class="ch_B"]][[span class="a_28 empty"]] [[/span]][[span class="a_10"]]test7[[/span]][[/span]]`,
+    `[[span class="ch_B"]][[span class="a_28 empty"]]_[[/span]][[span class="a_10"]]test7[[/span]][[/span]]`,
   ],
   "converts block statements": [
     `{{{A10:
@@ -117,7 +117,7 @@ const it = {
   ],
   "lets you put separate inline statements near each other": [
     `{10:}{11:}{12:} {A10:}{A11:}`,
-    `[[span class="ch_B"]][[span class="a_12 empty"]] [[/span]][[span class="a_11 empty"]] [[/span]][[span class="a_10 empty"]] [[/span]][[/span]] [[span class="ch_A"]][[span class="a_11 empty"]] [[/span]][[span class="a_10 empty"]] [[/span]][[/span]]`,
+    `[[span class="ch_B"]][[span class="a_12 empty"]]_[[/span]][[span class="a_11 empty"]]_[[/span]][[span class="a_10 empty"]]_[[/span]][[/span]] [[span class="ch_A"]][[span class="a_11 empty"]]_[[/span]][[span class="a_10 empty"]]_[[/span]][[/span]]`,
   ],
   "lets you put separate block statements near each other": [
     `{{{A10:
