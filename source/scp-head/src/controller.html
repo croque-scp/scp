@@ -37,7 +37,7 @@
        * @property {string} blockingAssertionId
        */
 
-      class AssertionChannel {
+      const AssertionChannel = class {
         #activeAssertion;
 
         /**
@@ -70,7 +70,7 @@
         get activeAssertion() {
           return this.#activeAssertion;
         }
-      }
+      };
 
       /** @type {Object.<string, AssertionChannel>} */
       const assertionChannels = [
@@ -84,7 +84,7 @@
       /** @type {Array.<Contradiction>} */
       let contradictionQueue = [];
 
-      class Contradiction {
+      const Contradiction = class {
         /**
          * @param {number} id
          * @param {string} triggerMode
@@ -151,7 +151,7 @@
           if (this.channel.activeAssertion < this.id)
             this.channel.activeAssertion = this.id;
         }
-      }
+      };
 
       function processQueuedContradictions() {
         console.debug(contradictionQueue);
