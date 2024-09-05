@@ -96,8 +96,8 @@
             controller.postMessage({
               scoutName,
               intersection: {
-                boundingClientRect: entries[0].boundingClientRect,
-                isIntersecting: entries[0].isIntersecting,
+                boundingClientRect: entries.at(-1).boundingClientRect,
+                isIntersecting: entries.at(-1).isIntersecting,
               },
               assertions,
               contradictions,
