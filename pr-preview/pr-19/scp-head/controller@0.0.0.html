@@ -9,8 +9,10 @@
     </style>
     <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
     <script>
-      "use strict;";
+      "use strict";
       window.isController = true;
+      window.debug =
+        (new URLSearchParams(location.search).get("debug") || "") === "true";
 
       // TODO: Predict what the next resize request will be and prefetch it
 
@@ -137,25 +139,46 @@
                 `is out of range for channel ${this.channel.name}` +
                 `(${this.channel.minId} - ${this.channel.maxId})`
             );
+
+          this.shortName =
+            this.conditionChannel.name +
+            this.conditionId +
+            "?" +
+            this.channel.name +
+            this.id;
         }
 
         queue() {
+          if (window.debug)
+            console.debug(
+              `Attempting to queue contradiction ${this.shortName}`,
+              this
+            );
           const conditionsMatch =
             this.conditionId == null ||
             this.conditionId <= this.conditionChannel.activeAssertion;
-          if (conditionsMatch) contradictionQueue.push(this);
+          if (conditionsMatch) {
+            contradictionQueue.push(this);
+            console.debug(`Queued contradiction ${this.shortName}`);
+          } else if (window.debug) {
+            console.debug(`Did not queue contradiction ${this.shortName}`);
+          }
         }
 
         trigger() {
           // Increment the channel's active assertion - never decrement
+          if (window.debug)
+            console.debug(`Triggering contradiction ${this.shortName}`, this);
           if (this.channel.activeAssertion < this.id)
             this.channel.activeAssertion = this.id;
         }
       };
 
       function processQueuedContradictions() {
-        console.debug(contradictionQueue);
-        const queueLength = contradictionQueue.length;
+        if (window.debug)
+          console.debug("Processing queued contradictions", [
+            ...contradictionQueue,
+          ]);
         contradictionQueue = contradictionQueue.filter((contradiction) => {
           // TODO Filter out a contradiction if its assertion was last known to be intersecting
           // (the queue will always be emptied every time currently)
@@ -163,12 +186,10 @@
           // Remove from queue if triggered
           return false;
         });
-        console.debug(
-          `Processed ${
-            queueLength - contradictionQueue.length
-          }/${queueLength} queued contradictions`,
-          contradictionQueue
-        );
+        if (window.debug)
+          console.debug("Processed queued contradictions", [
+            ...contradictionQueue,
+          ]);
       }
 
       function sendAssertionState(resize) {
@@ -208,18 +229,40 @@
         console.debug(`Received report from scout ${scoutReport.scoutName}`, {
           scoutAssertions,
           scoutContradictions,
+          scoutReport,
         });
 
         // Trigger behaviour based on the contradiction trigger mode
         for (const contradiction of scoutContradictions) {
           if (contradiction.triggerMode === "visible") {
-            if (scoutReport.intersection.isIntersecting) contradiction.queue();
+            if (scoutReport.intersection.isIntersecting) {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} visible: yes - queuing`
+                );
+              contradiction.queue();
+            } else {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} visible: no - not queuing`
+                );
+            }
           } else if ((contradiction.triggerMode = "invisible-top")) {
             if (
               !scoutReport.intersection.isIntersecting &&
               scoutReport.intersection.boundingClientRect.top < 0
-            )
+            ) {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} invisible-top: yes -  queuing`
+                );
               contradiction.queue();
+            } else {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} invisible-top: no - not queuing`
+                );
+            }
           } else {
             throw new Error(
               `Unknown contradiction trigger mode: ${contradiction.triggerMode}`
@@ -232,6 +275,9 @@
 
           // Communicate any assertion state changes to page
           sendAssertionState(resize);
+        } else {
+          if (window.debug)
+            console.debug("No queued contradictions to process");
         }
 
         // If the scout is no longer useful, tell it to destroy itself
@@ -257,13 +303,14 @@
       // Queue messages until load event
       const scoutReportQueue = [];
       function queueScoutReport(message) {
+        if (window.debug) console.debug("Received message before load event");
         scoutReportQueue.push(message);
       }
       addEventListener("message", queueScoutReport);
 
       addEventListener("load", () => {
         const resize = window.resizeIframe.createResizeIframe(
-          "https://scp-sandbox-3.wikidot.com",
+          document.referrer,
           location.href.replace(/^.*\//, "/"),
           100
         );
