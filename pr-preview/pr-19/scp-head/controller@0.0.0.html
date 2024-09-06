@@ -226,11 +226,12 @@
             )
         );
 
-        console.debug(`Received report from scout ${scoutReport.scoutName}`, {
-          scoutAssertions,
-          scoutContradictions,
-          scoutReport,
-        });
+        if (window.debug)
+          console.debug(`Received report from scout ${scoutReport.scoutName}`, {
+            scoutAssertions,
+            scoutContradictions,
+            scoutReport,
+          });
 
         // Trigger behaviour based on the contradiction trigger mode
         for (const contradiction of scoutContradictions) {

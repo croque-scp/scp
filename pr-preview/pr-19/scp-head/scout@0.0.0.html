@@ -158,7 +158,9 @@
 
             if (window.debug)
               console.debug(
-                `${scoutName}: ${edge} ${proximityChange} ${direction}`
+                `${scoutName}: ${edge} ${proximityChange} ${direction}`,
+                poleTop,
+                poleBottom
               );
 
             controller.postMessage({
