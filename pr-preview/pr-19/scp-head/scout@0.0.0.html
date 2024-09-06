@@ -152,7 +152,7 @@
             // Translate proximity change to direction based on screen edge
             const direction = {
               top: ["down", "up"],
-              bottom: ["up, down"],
+              bottom: ["up", "down"],
               unknown: [null, null],
             }[edge][Number(proximityChange > 0)];
 
