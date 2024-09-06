@@ -10,12 +10,20 @@
       body {
         height: 100vh !important;
         width: 100vw !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+      }
+      .scout__top,
+      .scout__bottom {
+        flex: 1;
       }
     </style>
 
     <script>
       "use strict";
       window.isScout = true;
+      window.debug = false;
 
       function getController() {
         for (const frame of Array.prototype.slice.call(parent)) {
@@ -33,6 +41,8 @@
           ""
         );
         const params = new URLSearchParams(location.search);
+
+        window.debug = (params.get("debug") || "") === "true";
 
         // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
         const assertions = (params.get("assertion") || "")
@@ -90,22 +100,95 @@
         if (!controller)
           throw new Error(`Scout ${scoutName} failed to get controller`);
 
-        // Assume that as soon as this scout is asked to load, it's ready to work
+        // Scout is split into two, like poles of a magnet, for direction detection
+        const poleTop = {
+          element: document.querySelector(".scout__top"),
+          lastIntersectionRatio: 0,
+          intersectionRatio: 0,
+        };
+        const poleBottom = {
+          element: document.querySelector(".scout__bottom"),
+          lastIntersectionRatio: 0,
+          intersectionRatio: 0,
+        };
+
         const observer = new IntersectionObserver(
           (entries) => {
-            controller.postMessage({
-              scoutName,
-              intersection: {
-                boundingClientRect: entries.at(-1).boundingClientRect,
-                isIntersecting: entries.at(-1).isIntersecting,
-              },
-              assertions,
-              contradictions,
-            });
+            if (window.debug) console.debug(entries);
+            entries.sort((a, b) => a.time - b.time);
+            for (const pole of [poleTop, poleBottom]) {
+              const entriesForPole = entries.filter(
+                (entry) => entry.target === pole.element
+              );
+
+              // If there's more than one entry for this pole, use the second-to-last entry for its last known state
+              if (entriesForPole.at(-2)) {
+                pole.intersectionRatio =
+                  entriesForPole.at(-2).intersectionRatio;
+              }
+
+              // Save each pole's current intersection ratio
+              pole.lastIntersectionRatio = pole.intersectionRatio;
+              if (entriesForPole.at(-1)) {
+                pole.intersectionRatio =
+                  entriesForPole.at(-1).intersectionRatio;
+              } else {
+                // No change - leave it as is
+              }
+            }
+
+            // Work out which edge of the screen the scout is on
+            const edge =
+              poleTop.intersectionRatio > poleBottom.intersectionRatio
+                ? "bottom"
+                : poleTop.intersectionRatio < poleBottom.intersectionRatio
+                ? "top"
+                : "unknown";
+
+            // Work out change in proximity - positive means the scout got closer to the reader (moving onto screen)
+            const proximityChange =
+              poleTop.intersectionRatio -
+              poleTop.lastIntersectionRatio +
+              poleBottom.intersectionRatio -
+              poleBottom.lastIntersectionRatio;
+
+            // Translate proximity change to direction based on screen edge
+            const direction = {
+              top: ["down", "up"],
+              bottom: ["up", "down"],
+              unknown: [null, null],
+            }[edge][Number(proximityChange > 0)];
+
+            if (window.debug)
+              console.debug(
+                `${scoutName}: ${edge} ${proximityChange} ${direction}`,
+                poleTop,
+                poleBottom
+              );
+
+            // Only send message when the middle threshold was crossed
+            if (
+              poleTop.lastIntersectionRatio === 0 ||
+              poleBottom.lastIntersectionRatio === 0
+            ) {
+              if (window.debug) console.debug(`${scoutName} sending`);
+              controller.postMessage({
+                scoutName,
+                intersection: {
+                  isIntersecting: Boolean(
+                    poleTop.intersectionRatio + poleBottom.intersectionRatio
+                  ),
+                  direction,
+                },
+                assertions,
+                contradictions,
+              });
+            }
           },
-          { threshold: 0 }
+          { threshold: [0, 1] }
         );
-        observer.observe(document.body);
+        observer.observe(poleTop.element);
+        observer.observe(poleBottom.element);
 
         // Listen to instructions coming from controller
         addEventListener("message", (message) => {
@@ -118,9 +201,17 @@
             location.replace("about:blank");
           }
         });
+
+        if (window.debug) {
+          poleTop.element.style.background = "red";
+          poleBottom.element.style.background = "blue";
+        }
       });
     </script>
   </head>
 
-  <body></body>
+  <body class="scout">
+    <div class="scout__top"></div>
+    <div class="scout__bottom"></div>
+  </body>
 </html>
