@@ -250,7 +250,7 @@
           } else if ((contradiction.triggerMode = "invisible-top")) {
             if (
               !scoutReport.intersection.isIntersecting &&
-              scoutReport.intersection.boundingClientRect.top < 0
+              scoutReport.intersection.direction === "up"
             ) {
               if (window.debug)
                 console.debug(
