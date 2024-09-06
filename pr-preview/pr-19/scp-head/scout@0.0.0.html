@@ -194,6 +194,11 @@
             location.replace("about:blank");
           }
         });
+
+        if (window.debug) {
+          poleTop.element.style.background = "red";
+          poleBottom.element.style.background = "blue";
+        }
       });
     </script>
   </head>
