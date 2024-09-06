@@ -49,7 +49,7 @@
 
   // Hide assertions marked as empty
   .empty {
-    display: none;
+    display: none !important;
   }
 }
 
