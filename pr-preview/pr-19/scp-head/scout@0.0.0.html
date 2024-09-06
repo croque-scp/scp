@@ -127,10 +127,12 @@
               }
 
               // Save each pole's current intersection ratio
+              pole.lastIntersectionRatio = pole.intersectionRatio;
               if (entriesForPole.at(-1)) {
-                pole.lastIntersectionRatio = pole.intersectionRatio;
                 pole.intersectionRatio =
                   entriesForPole.at(-1).intersectionRatio;
+              } else {
+                // No change - leave it as is
               }
             }
 
