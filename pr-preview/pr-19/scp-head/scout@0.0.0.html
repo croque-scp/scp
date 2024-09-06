@@ -114,6 +114,7 @@
 
         const observer = new IntersectionObserver(
           (entries) => {
+            if (window.debug) console.debug(entries);
             entries.sort((a, b) => a.time - b.time);
             for (const pole of [poleTop, poleBottom]) {
               const entriesForPole = entries.filter(
