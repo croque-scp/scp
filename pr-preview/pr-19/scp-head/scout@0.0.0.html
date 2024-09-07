@@ -112,8 +112,10 @@
           intersectionRatio: 0,
         };
 
+        let skipInitialRun = true;
         const observer = new IntersectionObserver(
           (entries) => {
+            if (skipInitialRun) return;
             if (window.debug) console.debug(entries);
             entries.sort((a, b) => a.time - b.time);
             for (const pole of [poleTop, poleBottom]) {
@@ -185,6 +187,7 @@
         );
         observer.observe(poleTop.element);
         observer.observe(poleBottom.element);
+        skipInitialRun = false;
 
         // Listen to instructions coming from controller
         addEventListener("message", (message) => {
