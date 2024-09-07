@@ -187,7 +187,10 @@
         );
         observer.observe(poleTop.element);
         observer.observe(poleBottom.element);
-        skipInitialRun = false;
+
+        setTimeout(() => {
+          skipInitialRun = false;
+        }, 200);
 
         // Listen to instructions coming from controller
         addEventListener("message", (message) => {
