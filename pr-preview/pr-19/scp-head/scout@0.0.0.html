@@ -145,8 +145,8 @@
                 ? "top"
                 : "unknown";
 
-            // Work out change in proximity - positive means the scout got closer to the reader (moving onto screen)
-            const proximityChange =
+            // Work out change in distance - negative means the scout got closer to the reader (moving onto screen)
+            const distanceChange =
               poleTop.intersectionRatio -
               poleTop.lastIntersectionRatio +
               poleBottom.intersectionRatio -
@@ -154,14 +154,14 @@
 
             // Translate proximity change to direction based on screen edge
             const direction = {
-              top: ["down", "up"],
-              bottom: ["up", "down"],
+              top: ["up", "down"],
+              bottom: ["down", "up"],
               unknown: [null, null],
-            }[edge][Number(proximityChange > 0)];
+            }[edge][Number(distanceChange > 0)];
 
             if (window.debug)
               console.debug(
-                `${scoutName}: ${edge} ${proximityChange} ${direction}`,
+                `${scoutName}: ${edge} ${distanceChange} ${direction}`,
                 poleTop,
                 poleBottom
               );
