@@ -169,9 +169,11 @@
               );
 
             // Use the outer thresholds to confirm direction and to reduce the chance of fast scrolling missing an intersection, but only send the report when the middle threshold has been crossed
-            // The centre threshold is being crossed if there is an imbalance in the ratios of the poles
-
-            if (poleTop.intersectionRatio !== poleBottom.intersectionRatio) {
+            // The centre threshold is being crossed if one of the intersections is 1
+            if (
+              poleTop.intersectionRatio === 1 ||
+              poleBottom.intersectionRatio === 1
+            ) {
               if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
                 scoutName,
