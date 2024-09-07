@@ -171,6 +171,7 @@
               poleTop.lastIntersectionRatio === 0 ||
               poleBottom.lastIntersectionRatio === 0
             ) {
+              if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
                 scoutName,
                 intersection: {
