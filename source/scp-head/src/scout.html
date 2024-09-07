@@ -112,6 +112,7 @@
           intersectionRatio: 0,
         };
 
+        let skipInitialRun = true;
         const observer = new IntersectionObserver(
           (entries) => {
             if (window.debug) console.debug(entries);
@@ -136,6 +137,8 @@
                 // No change - leave it as is
               }
             }
+
+            if (skipInitialRun) return;
 
             // Work out which edge of the screen the scout is on
             const edge =
@@ -167,9 +170,7 @@
               );
 
             // Use the outer thresholds to confirm direction and to reduce the chance of fast scrolling missing an intersection, but only send the report when the middle threshold has been crossed
-            // The centre threshold is being crossed if there is an imbalance in the ratios of the poles
-
-            if (poleTop.intersectionRatio !== poleBottom.intersectionRatio) {
+            if (entries.length === 2) {
               if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
                 scoutName,
@@ -185,6 +186,10 @@
         );
         observer.observe(poleTop.element);
         observer.observe(poleBottom.element);
+
+        setTimeout(() => {
+          skipInitialRun = false;
+        }, 200);
 
         // Listen to instructions coming from controller
         addEventListener("message", (message) => {
