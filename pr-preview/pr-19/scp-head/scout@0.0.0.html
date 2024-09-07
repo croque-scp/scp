@@ -166,17 +166,23 @@
                 poleBottom
               );
 
-            controller.postMessage({
-              scoutName,
-              intersection: {
-                isIntersecting: Boolean(
-                  poleTop.intersectionRatio + poleBottom.intersectionRatio
-                ),
-                direction,
-              },
-              assertions,
-              contradictions,
-            });
+            // Only send message when the middle threshold was crossed
+            if (
+              poleTop.lastIntersectionRatio === 0 ||
+              poleBottom.lastIntersectionRatio === 0
+            ) {
+              controller.postMessage({
+                scoutName,
+                intersection: {
+                  isIntersecting: Boolean(
+                    poleTop.intersectionRatio + poleBottom.intersectionRatio
+                  ),
+                  direction,
+                },
+                assertions,
+                contradictions,
+              });
+            }
           },
           { threshold: [0, 1] }
         );
