@@ -17,20 +17,21 @@
       // TODO: Predict what the next resize request will be and prefetch it
 
       /**
+       * @typedef {Object} scoutReport
+       * @property {string} scoutName
+       * @property {boolean} isIntersecting
+       * @property {string | null} direction
+       * @property {string[]} assertions
+       * @property {scoutContradiction[]} contradictions
+       */
+
+      /**
        * @typedef {Object} scoutContradiction
        * @property {number} id
        * @property {string?} channelName
        * @property {number?} conditionId
        * @property {string?} conditionChannelName
        * @property {string} triggerMode
-       */
-
-      /**
-       * @typedef {Object} scoutReport
-       * @property {string} scoutName
-       * @property {IntersectionObserverEntry} intersection
-       * @property {string[]} assertions
-       * @property {scoutContradiction[]} contradictions
        */
 
       /**
@@ -236,7 +237,7 @@
         // Trigger behaviour based on the contradiction trigger mode
         for (const contradiction of scoutContradictions) {
           if (contradiction.triggerMode === "visible") {
-            if (scoutReport.intersection.isIntersecting) {
+            if (scoutReport.isIntersecting) {
               if (window.debug)
                 console.debug(
                   `Scout ${scoutReport.scoutName} visible: yes - queuing`
@@ -249,10 +250,7 @@
                 );
             }
           } else if ((contradiction.triggerMode = "invisible-top")) {
-            if (
-              !scoutReport.intersection.isIntersecting &&
-              scoutReport.intersection.direction === "up"
-            ) {
+            if (!scoutReport.isIntersecting && scoutReport.direction === "up") {
               if (window.debug)
                 console.debug(
                   `Scout ${scoutReport.scoutName} invisible-top: yes -  queuing`
