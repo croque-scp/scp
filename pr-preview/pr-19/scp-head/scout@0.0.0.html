@@ -115,7 +115,6 @@
         let skipInitialRun = true;
         const observer = new IntersectionObserver(
           (entries) => {
-            if (skipInitialRun) return;
             if (window.debug) console.debug(entries);
             entries.sort((a, b) => a.time - b.time);
             for (const pole of [poleTop, poleBottom]) {
@@ -138,6 +137,8 @@
                 // No change - leave it as is
               }
             }
+
+            if (skipInitialRun) return;
 
             // Work out which edge of the screen the scout is on
             const edge =
