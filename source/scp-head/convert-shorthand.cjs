@@ -41,7 +41,6 @@ function replaceShorthand(source, scoutFile) {
     .replace(patterns.contradiction, (match) =>
       replaceContradiction(match, scoutFile)
     )
-    .replace(patterns.blockStatement, replaceBlockStatement)
     .replace(patterns.inlineStatement, replaceInlineStatement)
     .trim();
 }
@@ -71,32 +70,6 @@ function replaceInlineStatement(match) {
       }),
     "[[/span]]",
   ].join("");
-}
-
-/**
- * Replaces block statement shorthand with markup.
- *
- * @param {string} match - Matched block statement
- * @returns {string} - Converted block statement
- */
-function replaceBlockStatement(match) {
-  console.error("Replacing block statement");
-  const assertions = parseStatement(match.split(/{{{|}}}/));
-  return [
-    `[[div class="ch_${assertions[0].channel}"]]`,
-    ...assertions
-      .sort((a, b) => b.stage - a.stage)
-      .flatMap((assertion) => {
-        return [
-          `[[div class="a_${assertion.stage}${
-            assertion.classes ? " " + assertion.classes.trim() : ""
-          }"]]`,
-          assertion.text.trim(),
-          "[[/div]]",
-        ];
-      }),
-    "[[/div]]\n",
-  ].join("\n");
 }
 
 /**

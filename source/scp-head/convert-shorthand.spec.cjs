@@ -22,7 +22,7 @@ function verify(it) {
     }
     console.log(`Input: ${source}`);
     console.log(`Expected: ${expected}`);
-    console.log(`Got: ${result}`);
+    console.log(`Got:      ${result}`);
     throw new Error("Test failed");
   }
 }
@@ -47,34 +47,20 @@ const it = {
     `{test7}{28:}`,
     `[[span class="ch_B"]][[span class="a_28 empty"]]_[[/span]][[span class="a_10"]]test7[[/span]][[/span]]`,
   ],
-  "converts block statements": [
-    `{{{A10:
-    A
-    }}}
-    {{{A11:
-    B
-    }}}`,
-    `[[div class="ch_A"]]
-    [[div class="a_11"]]
-    B
-    [[/div]]
-    [[div class="a_10"]]
-    A
-    [[/div]]
-    [[/div]]`,
-  ],
   "doesn't fuck up syntax inside/outside block statements": [
     `[[span]]test[[/span]]
 
-    {{{
-    A
-    }}}
-    {{{11:
+    [[div class="ch_B"]]
+    [[div class="a_11"]]
     B
 
     [[div class="test"]]
     [[/div]]
-    }}}
+    [[/div]]
+    [[div class="a_10"]]
+    A
+    [[/div]]
+    [[/div]]
 
     [[span]]test[[/span]]`,
     `[[span]]test[[/span]]
@@ -94,15 +80,17 @@ const it = {
     [[span]]test[[/span]]`,
   ],
   "supports inline statements inside block statements": [
-    `{{{
-    test2
-    }}}
-    {{{20:
-    test3
-    }}}
-    {{{25:
+    `[[div class="ch_B"]]
+    [[div class="a_25"]]
     test4 {test5}{11: test6}
-    }}}`,
+    [[/div]]
+    [[div class="a_20"]]
+    test3
+    [[/div]]
+    [[div class="a_10"]]
+    test2
+    [[/div]]
+    [[/div]]`,
     `[[div class="ch_B"]]
     [[div class="a_25"]]
     test4 [[span class="ch_B"]][[span class="a_11"]]test6[[/span]][[span class="a_10"]]test5[[/span]][[/span]]
@@ -118,38 +106,6 @@ const it = {
   "lets you put separate inline statements near each other": [
     `{10:}{11:}{12:} {A10:}{A11:}`,
     `[[span class="ch_B"]][[span class="a_12 empty"]]_[[/span]][[span class="a_11 empty"]]_[[/span]][[span class="a_10 empty"]]_[[/span]][[/span]] [[span class="ch_A"]][[span class="a_11 empty"]]_[[/span]][[span class="a_10 empty"]]_[[/span]][[/span]]`,
-  ],
-  "lets you put separate block statements near each other": [
-    `{{{A10:
-    A
-    }}}
-    {{{A11:
-    B
-    }}}
-
-    {{{B10:
-    A
-    }}}
-    {{{B11:
-    B
-    }}}`,
-    `[[div class="ch_A"]]
-    [[div class="a_11"]]
-    B
-    [[/div]]
-    [[div class="a_10"]]
-    A
-    [[/div]]
-    [[/div]]
-
-    [[div class="ch_B"]]
-    [[div class="a_11"]]
-    B
-    [[/div]]
-    [[div class="a_10"]]
-    A
-    [[/div]]
-    [[/div]]`,
   ],
   "converts contradictions right": [
     `{=10}
