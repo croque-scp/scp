@@ -204,19 +204,76 @@
           ]);
       }
 
-      function sendAssertionState(resize) {
-        // Remove all preloaders
-        document
-          .querySelectorAll(".preload-iframe")
-          .forEach((iframe) => iframe.remove());
+      /**
+       * @param {Array.<string>} simulateFutureChannels - List of channel names to use the expected next assertion for, rather than the active assertion
+       */
+      function makeAssertionStates(simulateFutureChannels) {
+        if (simulateFutureChannels == null) simulateFutureChannels = [];
 
-        const assertionState = [
+        const currentAssertionState = [
           assertionChannels["A"].activeAssertion,
           ".",
           assertionChannels["B"].activeAssertion,
           "0",
           assertionChannels["C"].activeAssertion,
         ].join("");
+        if (simulateFutureChannels.length === 0) return [currentAssertionState];
+
+        const possibleAssertionStates = [];
+        if (simulateFutureChannels.includes("A")) {
+          const nextAssertion = assertionChannels["A"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                nextAssertion,
+                ".",
+                assertionChannels["B"].activeAssertion,
+                "0",
+                assertionChannels["C"].activeAssertion,
+              ].join("")
+            );
+          }
+        }
+        if (simulateFutureChannels.includes("B")) {
+          const nextAssertion = assertionChannels["B"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                assertionChannels["A"].activeAssertion,
+                ".",
+                nextAssertion,
+                "0",
+                assertionChannels["C"].activeAssertion,
+              ].join("")
+            );
+          }
+        }
+        if (simulateFutureChannels.includes("C")) {
+          const nextAssertion = assertionChannels["C"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                assertionChannels["A"].activeAssertion,
+                ".",
+                assertionChannels["B"].activeAssertion,
+                "0",
+                nextAssertion,
+              ].join("")
+            );
+          }
+        }
+        return possibleAssertionStates.filter(
+          (state) => state !== currentAssertionState
+        );
+      }
+
+      function sendAssertionState(resize) {
+        // Remove all preloaders
+        document
+          .querySelectorAll(".preload-iframe")
+          .forEach((iframe) => iframe.remove());
+
+        const assertionState = makeAssertionStates()[0];
         console.debug(
           `Updating assertion state to ${assertionState}`,
           assertionChannels
@@ -228,35 +285,12 @@
 
       function preloadNextAssertionState() {
         // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
-        const possibleAssertionStates = [];
-        for (const [channelName, channel] of Object.entries(
-          assertionChannels
-        )) {
-          if (channel.expectedNextAssertion) {
-            possibleAssertionStates.push(
-              [
-                assertionChannels["A"][
-                  channelName === "A"
-                    ? "activeAssertion"
-                    : "expectedNextAssertion"
-                ],
-                ".",
-                assertionChannels["B"][
-                  channelName === "B"
-                    ? "activeAssertion"
-                    : "expectedNextAssertion"
-                ],
-                "0",
-                assertionChannels["C"][
-                  channelName === "C"
-                    ? "activeAssertion"
-                    : "expectedNextAssertion"
-                ],
-              ].join("")
-            );
-          }
-        }
-        for (const possibleAssertionState of possibleAssertionStates) {
+
+        for (const possibleAssertionState of makeAssertionStates([
+          "A",
+          "B",
+          "C",
+        ])) {
           console.debug(`Preloading assertion state ${possibleAssertionState}`);
           const preloadIframe = document.createElement("iframe");
           // Iframe is fully sandboxed - allow-same-origin being implicitly false should prevent the controller being resized
