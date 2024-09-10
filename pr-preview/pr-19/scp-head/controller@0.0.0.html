@@ -297,7 +297,16 @@
       function processScoutRegistrationEvent(scoutReport) {
         // Store contradiction IDs in the corresponding channel to be used for preloading
         for (const c of scoutReport.contradictions) {
-          assertionChannels[c.channelName].knownUpcomingStages.push(c.id);
+          const contradiction = new Contradiction(
+            c.id,
+            c.triggerMode,
+            c.channelName,
+            c.conditionId,
+            c.conditionChannelName
+          );
+          assertionChannels[contradiction.channelName].knownUpcomingStages.add(
+            contradiction.id
+          );
         }
       }
 
