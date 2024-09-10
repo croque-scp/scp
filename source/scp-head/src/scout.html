@@ -100,6 +100,14 @@
         if (!controller)
           throw new Error(`Scout ${scoutName} failed to get controller`);
 
+        // Let the controller know that this scout exists
+        controller.postMessage({
+          eventName: "ScoutRegistration",
+          scoutName,
+          assertions,
+          contradictions,
+        });
+
         // Scout is split into two, like poles of a magnet, for direction detection
         const poleTop = {
           element: document.querySelector(".scout__top"),
@@ -173,6 +181,7 @@
             if (entries.length === 2) {
               if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
+                eventName: "ScoutIntersectionStateChange",
                 scoutName,
                 isIntersecting:
                   poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,

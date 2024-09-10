@@ -14,10 +14,9 @@
       window.debug =
         (new URLSearchParams(location.search).get("debug") || "") === "true";
 
-      // TODO: Predict what the next resize request will be and prefetch it
-
       /**
        * @typedef {Object} scoutReport
+       * @property {string} eventName
        * @property {string} scoutName
        * @property {boolean} isIntersecting
        * @property {string | null} direction
@@ -58,6 +57,9 @@
 
           /** @type {number} */
           this.#activeAssertion = this.minId;
+
+          /** @type {Set.<number>} */
+          this.knownUpcomingStages = new Set();
         }
 
         /** @param {number} value */
@@ -72,6 +74,15 @@
         /** @returns {number} */
         get activeAssertion() {
           return this.#activeAssertion;
+        }
+
+        /** @returns {number | null} */
+        get expectedNextAssertion() {
+          const upcomingAssertions = [...this.knownUpcomingStages].filter(
+            (n) => n > this.#activeAssertion
+          );
+          if (upcomingAssertions.length === 0) return null;
+          return Math.min(...upcomingAssertions);
         }
       };
 
@@ -193,25 +204,155 @@
           ]);
       }
 
-      function sendAssertionState(resize) {
-        const message = [
+      /**
+       * @param {Array.<string>} simulateFutureChannels - List of channel names to use the expected next assertion for, rather than the active assertion
+       */
+      function makeAssertionStates(simulateFutureChannels) {
+        if (simulateFutureChannels == null) simulateFutureChannels = [];
+
+        const currentAssertionState = [
           assertionChannels["A"].activeAssertion,
           ".",
           assertionChannels["B"].activeAssertion,
           "0",
           assertionChannels["C"].activeAssertion,
         ].join("");
-        console.debug("Updating assertion state to", message);
-        resize(message);
+        if (simulateFutureChannels.length === 0) return [currentAssertionState];
+
+        const possibleAssertionStates = [];
+        if (simulateFutureChannels.includes("A")) {
+          const nextAssertion = assertionChannels["A"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                nextAssertion,
+                ".",
+                assertionChannels["B"].activeAssertion,
+                "0",
+                assertionChannels["C"].activeAssertion,
+              ].join("")
+            );
+          }
+        }
+        if (simulateFutureChannels.includes("B")) {
+          const nextAssertion = assertionChannels["B"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                assertionChannels["A"].activeAssertion,
+                ".",
+                nextAssertion,
+                "0",
+                assertionChannels["C"].activeAssertion,
+              ].join("")
+            );
+          }
+        }
+        if (simulateFutureChannels.includes("C")) {
+          const nextAssertion = assertionChannels["C"].expectedNextAssertion;
+          if (nextAssertion != null) {
+            possibleAssertionStates.push(
+              [
+                assertionChannels["A"].activeAssertion,
+                ".",
+                assertionChannels["B"].activeAssertion,
+                "0",
+                nextAssertion,
+              ].join("")
+            );
+          }
+        }
+        return possibleAssertionStates.filter(
+          (state) => state !== currentAssertionState
+        );
       }
 
+      function sendAssertionState(resize) {
+        // Remove all preloaders
+        document
+          .querySelectorAll(".preload-iframe")
+          .forEach((iframe) => iframe.remove());
+
+        const assertionState = makeAssertionStates()[0];
+        console.debug(
+          `Updating assertion state to ${assertionState}`,
+          assertionChannels
+        );
+        resize(assertionState);
+
+        preloadNextAssertionState();
+      }
+
+      function preloadNextAssertionState() {
+        // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
+
+        for (const possibleAssertionState of makeAssertionStates([
+          "A",
+          "B",
+          "C",
+        ])) {
+          console.debug(`Preloading assertion state ${possibleAssertionState}`);
+          const preloadIframe = document.createElement("iframe");
+          // Iframe is fully sandboxed - allow-same-origin being implicitly false should prevent the controller being resized
+          preloadIframe.sandbox = true;
+          preloadIframe.classList.add("preload-iframe");
+          document.body.appendChild(preloadIframe);
+          preloadIframe.src =
+            document.referrer +
+            "/common--javascript/resize-iframe.html?" +
+            "#" +
+            possibleAssertionState +
+            "/" +
+            location.href.replace(/^.*\//, "/");
+        }
+      }
+
+      /**
+       * @param {MessageEvent<scoutReport>} message
+       * @param {function} resize
+       */
       function processScoutReport(message, resize) {
         if (message.origin !== location.origin) return;
-        if (!message.data.scoutName) return;
-
-        /** @type {scoutReport} */
         const scoutReport = message.data;
+        if (!scoutReport.scoutName) return;
 
+        switch (scoutReport.eventName) {
+          case "ScoutRegistration":
+            processScoutRegistrationEvent(scoutReport);
+            break;
+          case "ScoutIntersectionStateChange":
+            processScoutIntersectionEvent(scoutReport, resize, message);
+            break;
+          default:
+            throw new Error(`Unknown event: ${scoutReport.eventName}`);
+        }
+      }
+
+      /**
+       * @param {scoutReport} scoutReport
+       */
+      function processScoutRegistrationEvent(scoutReport) {
+        // Store contradiction IDs in the corresponding channel to be used for preloading
+        for (const c of scoutReport.contradictions) {
+          const contradiction = new Contradiction(
+            c.id,
+            c.triggerMode,
+            c.channelName,
+            c.conditionId,
+            c.conditionChannelName
+          );
+          assertionChannels[contradiction.channel.name].knownUpcomingStages.add(
+            contradiction.id
+          );
+        }
+      }
+
+      /**
+       * @param {scoutReport} scoutReport
+       * @param {function} resize
+       * @param {MessageEvent<scoutReport>} message
+       */
+      function processScoutIntersectionEvent(scoutReport, resize, message) {
         // Receive list of assertions
         const scoutAssertions = scoutReport.assertions;
 
