@@ -217,7 +217,10 @@
           "0",
           assertionChannels["C"].activeAssertion,
         ].join("");
-        console.debug("Updating assertion state to", assertionState);
+        console.debug(
+          `Updating assertion state to ${assertionState}`,
+          assertionChannels
+        );
         resize(assertionState);
 
         preloadNextAssertionState();
@@ -284,7 +287,7 @@
             processScoutRegistrationEvent(scoutReport);
             break;
           case "ScoutIntersectionStateChange":
-            processScoutIntersectionEvent(scoutReport, resize);
+            processScoutIntersectionEvent(scoutReport, resize, message);
             break;
           default:
             throw new Error(`Unknown event: ${scoutReport.eventName}`);
@@ -313,8 +316,9 @@
       /**
        * @param {scoutReport} scoutReport
        * @param {function} resize
+       * @param {MessageEvent<scoutReport>} message
        */
-      function processScoutIntersectionEvent(scoutReport, resize) {
+      function processScoutIntersectionEvent(scoutReport, resize, message) {
         // Receive list of assertions
         const scoutAssertions = scoutReport.assertions;
 
