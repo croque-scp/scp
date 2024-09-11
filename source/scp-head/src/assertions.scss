@@ -31,6 +31,7 @@
     #{$controller} + .article #{$channel} > .a_#{$assertion} {
       display: initial;
       visibility: visible;
+      opacity: 1;
     }
 
     // Hide all previous assertions (in this statement)
@@ -40,7 +41,8 @@
     }
     #{$controller} + .article #{$channel} > .a_#{$assertion} ~ :is(#{$prevs}) {
       display: none; // For non-.height-match
-      visibility: hidden; // For .height-match
+      visibility: hidden;
+      opacity: 0; // For .height-match
     }
   }
 
@@ -48,6 +50,7 @@
   .controller + .article #{$channel} > .a_#{$min-assertion} {
     display: initial;
     visibility: visible;
+    opacity: 1;
   }
 
   // Hide assertions marked as empty
@@ -66,6 +69,7 @@
   }
   :where(.height-match > [class^="a_"]) {
     visibility: hidden;
+    opacity: 0;
   }
 }
 
