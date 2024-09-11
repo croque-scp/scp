@@ -32,6 +32,7 @@
       display: initial;
       visibility: visible;
       opacity: 1;
+      pointer-events: initial;
     }
 
     // Hide all previous assertions (in this statement)
@@ -40,9 +41,14 @@
       $prevs: append($prevs, unquote(".a_#{$j}"), comma);
     }
     #{$controller} + .article #{$channel} > .a_#{$assertion} ~ :is(#{$prevs}) {
-      display: none; // For non-.height-match
-      visibility: hidden;
-      opacity: 0; // For .height-match
+      // For non-.height-match
+      display: none;
+      // For .height-match
+      &,
+      & * {
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
     }
   }
 
@@ -51,6 +57,7 @@
     display: initial;
     visibility: visible;
     opacity: 1;
+    pointer-events: initial;
   }
 
   // Hide assertions marked as empty
@@ -70,6 +77,7 @@
   :where(.height-match > [class^="a_"]) {
     visibility: hidden;
     opacity: 0;
+    pointer-events: none;
   }
 }
 
