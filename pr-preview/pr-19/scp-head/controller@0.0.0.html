@@ -14,7 +14,7 @@
       window.debug =
         (new URLSearchParams(location.search).get("debug") || "") === "true";
 
-      const preloadCallback = 0;
+      let preloadCallback = 0;
 
       /**
        * @typedef {Object} scoutReport
