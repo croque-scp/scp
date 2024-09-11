@@ -14,6 +14,8 @@
       window.debug =
         (new URLSearchParams(location.search).get("debug") || "") === "true";
 
+      let preloadCallback = 0;
+
       /**
        * @typedef {Object} scoutReport
        * @property {string} eventName
@@ -268,11 +270,6 @@
       }
 
       function sendAssertionState(resize) {
-        // Remove all preloaders
-        document
-          .querySelectorAll(".preload-iframe")
-          .forEach((iframe) => iframe.remove());
-
         const assertionState = makeAssertionStates()[0];
         console.debug(
           `Updating assertion state to ${assertionState}`,
@@ -280,20 +277,38 @@
         );
         resize(assertionState);
 
-        requestIdleCallback(preloadNextAssertionState);
+        preloadNextAssertionState();
       }
 
-      function preloadNextAssertionState() {
+      async function preloadNextAssertionState() {
         // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
 
-        for (const possibleAssertionState of makeAssertionStates([
-          "A",
-          "B",
-          "C",
-        ])) {
+        // Cancel any existing preload request
+        if (preloadCallback) {
+          cancelIdleCallback(preloadCallback);
+          preloadCallback = 0;
+        }
+
+        // Remove all preloaders
+        document
+          .querySelectorAll(".preload-iframe")
+          .forEach((iframe) => iframe.remove());
+
+        const possibleAssertionStates = makeAssertionStates(["A", "B", "C"]);
+
+        const preloadNextIframe = () => {
+          if (possibleAssertionStates.length > 0) {
+            requestIdleCallback(createPreloadIframes);
+          } else {
+            preloadCallback = 0;
+          }
+        };
+
+        const createPreloadIframes = () => {
+          const possibleAssertionState = possibleAssertionStates.shift();
           console.debug(`Preloading assertion state ${possibleAssertionState}`);
           const preloadIframe = document.createElement("iframe");
-          // Iframe is fully sandboxed - allow-same-origin being implicitly false should prevent the controller being resized
+          // Iframe is fully sandboxed: allow-same-origin is implicitly false, prevents the controller being resized
           preloadIframe.sandbox = true;
           preloadIframe.classList.add("preload-iframe");
           document.body.appendChild(preloadIframe);
@@ -304,7 +319,10 @@
             possibleAssertionState +
             "/" +
             location.href.replace(/^.*\//, "/");
-        }
+          preloadIframe.addEventListener("load", () => preloadNextIframe());
+        };
+
+        preloadCallback = preloadNextIframe();
       }
 
       /**
@@ -464,7 +482,7 @@
           while (scoutReportQueue.length > 0) {
             processScoutReport(scoutReportQueue.shift(), resize);
           }
-        } else requestIdleCallback(preloadNextAssertionState);
+        } else preloadNextAssertionState();
       });
     </script>
   </head>
