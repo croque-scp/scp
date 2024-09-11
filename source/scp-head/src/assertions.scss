@@ -80,9 +80,7 @@
 .height-match > [class^="a_"] {
   grid-column: 1 / -1;
   grid-row: 1 / -1;
-  display: flex !important;
-  flex-direction: column;
-  justify-content: space-between;
+  display: block !important;
 }
 
 @include channel("A", "", ".", 1, 9);
