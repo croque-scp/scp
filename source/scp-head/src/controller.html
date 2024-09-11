@@ -459,10 +459,12 @@
         addEventListener("message", (message) => {
           processScoutReport(message, resize);
         });
-        // Process all queued scout reports
-        while (scoutReportQueue.length > 0) {
-          processScoutReport(scoutReportQueue.shift(), resize);
-        }
+        if (scoutReportQueue.length > 0) {
+          // Process all queued scout reports
+          while (scoutReportQueue.length > 0) {
+            processScoutReport(scoutReportQueue.shift(), resize);
+          }
+        } else preloadNextAssertionState();
       });
     </script>
   </head>
