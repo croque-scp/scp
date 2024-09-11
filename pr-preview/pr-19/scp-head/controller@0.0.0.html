@@ -270,6 +270,8 @@
       }
 
       function sendAssertionState(resize) {
+        cancelPreloads();
+
         const assertionState = makeAssertionStates()[0];
         console.debug(
           `Updating assertion state to ${assertionState}`,
@@ -277,12 +279,12 @@
         );
         resize(assertionState);
 
-        preloadNextAssertionState();
+        setTimeout(() => {
+          preloadCallback = requestIdleCallback(preloadNextAssertionState);
+        }, 400);
       }
 
-      async function preloadNextAssertionState() {
-        // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
-
+      function cancelPreloads() {
         // Cancel any existing preload request
         if (preloadCallback) {
           cancelIdleCallback(preloadCallback);
@@ -293,7 +295,12 @@
         document
           .querySelectorAll(".preload-iframe")
           .forEach((iframe) => iframe.remove());
+      }
 
+      async function preloadNextAssertionState() {
+        cancelPreloads();
+
+        // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
         const possibleAssertionStates = makeAssertionStates(["A", "B", "C"]);
 
         const preloadNextIframe = () => {
