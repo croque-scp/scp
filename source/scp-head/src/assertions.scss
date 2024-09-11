@@ -28,8 +28,9 @@
     $controller: "#{$controller}:is(#{$styles})";
 
     // Show the current assertion
-    #{$controller} + .article #{$channel} .a_#{$assertion} {
+    #{$controller} + .article #{$channel} > .a_#{$assertion} {
       display: initial;
+      visibility: visible;
     }
 
     // Hide all previous assertions (in this statement)
@@ -37,14 +38,16 @@
     @for $j from $min-assertion through $assertion - 1 {
       $prevs: append($prevs, unquote(".a_#{$j}"), comma);
     }
-    #{$controller} + .article #{$channel} .a_#{$assertion} ~ :is(#{$prevs}) {
-      display: none;
+    #{$controller} + .article #{$channel} > .a_#{$assertion} ~ :is(#{$prevs}) {
+      display: none; // For non-.height-match
+      visibility: hidden; // For .height-match
     }
   }
 
   // Display the first assertion in this channel
-  .controller + .article #{$channel} .a_#{$min-assertion} {
+  .controller + .article #{$channel} > .a_#{$min-assertion} {
     display: initial;
+    visibility: visible;
   }
 
   // Hide assertions marked as empty
@@ -53,16 +56,31 @@
   }
 }
 
-.article {
+:where(.article) {
   // Page should hide the article by default, so that assertions not yet intended to be visible are hidden while this CSS loads
   visibility: visible !important;
 
   // Hide all assertions by default
-  [class^="a_"] {
+  :where(:not(.height-match) > [class^="a_"]) {
     display: none;
   }
+  :where(.height-match > [class^="a_"]) {
+    visibility: hidden;
+  }
+}
+
+.height-match {
+  display: grid;
+}
+
+.height-match > [class^="a_"] {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @include channel("A", "", ".", 1, 9);
 @include channel("B", ".", "0", 10, 50);
-@include channel("C", "0", "px", 1, 9);
+@include channel("C", "0", "px", 1, 2);
