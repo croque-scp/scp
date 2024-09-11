@@ -280,7 +280,7 @@
         );
         resize(assertionState);
 
-        preloadNextAssertionState();
+        requestIdleCallback(preloadNextAssertionState);
       }
 
       function preloadNextAssertionState() {
@@ -464,7 +464,7 @@
           while (scoutReportQueue.length > 0) {
             processScoutReport(scoutReportQueue.shift(), resize);
           }
-        } else preloadNextAssertionState();
+        } else requestIdleCallback(preloadNextAssertionState);
       });
     </script>
   </head>
