@@ -16,6 +16,11 @@
 
       let preloadCallback = 0;
 
+      // Shim for idle callbacks (Safari)
+      window.requestIdleCallback =
+        window.requestIdleCallback || ((cb) => setTimeout(cb, 0));
+      window.cancelIdleCallback = window.cancelIdleCallback || clearTimeout;
+
       /**
        * @typedef {Object} scoutReport
        * @property {string} eventName
