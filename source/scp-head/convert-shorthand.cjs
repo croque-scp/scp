@@ -105,7 +105,7 @@ function replaceContradiction(match, scoutFile) {
   const contradictions = match.slice(2, -1);
   return [
     "[[embed]]",
-    `<iframe src="${scoutFile}?contradiction=${contradictions}" loading="lazy"></iframe>`,
+    `<iframe src="${scoutFile}?contradiction=${contradictions}" loading="lazy" class="scout"></iframe>`,
     "[[/embed]]",
   ].join("\n");
 }
