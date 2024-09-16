@@ -38,6 +38,10 @@ module.exports = { replaceShorthand };
  */
 function replaceShorthand(source, scoutFile) {
   return source
+    .replace(
+      /(SCP-[0-9]{4}-[0-9])\[([a-z]+)\]/g,
+      "{A1 croqstyle-img-footnote img-head-$2-angle: $1}{A6 croqstyle-img-footnote img-head-$2-straight: $1}{A7 croqstyle-img-footnote img-head-$2-angle: $1}"
+    )
     .replace(patterns.contradiction, (match) =>
       replaceContradiction(match, scoutFile)
     )
