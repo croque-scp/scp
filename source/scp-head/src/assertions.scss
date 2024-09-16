@@ -29,7 +29,7 @@
 
     // Show the current assertion
     #{$controller} + .article #{$channel} > .a_#{$assertion} {
-      display: initial;
+      display: revert;
       visibility: visible;
       opacity: 1;
       pointer-events: initial;
@@ -54,7 +54,7 @@
 
   // Display the first assertion in this channel
   .controller + .article #{$channel} > .a_#{$min-assertion} {
-    display: initial;
+    display: revert;
     visibility: visible;
     opacity: 1;
     pointer-events: initial;
