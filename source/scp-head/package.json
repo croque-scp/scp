@@ -2,9 +2,9 @@
   "version": "0.0.0",
   "scripts": {
     "build:cleanup": "rm -rf dist && mkdir dist",
-    "build:sass": "sass src/assertions.scss dist/assertions@$npm_package_version.css",
-    "build:minify": "csso dist/assertions@$npm_package_version.css -o dist/assertions@$npm_package_version.css",
-    "build:html": "for file in src/*.html; do cp $file dist/$(basename ${file%.html})@$npm_package_version.html; done",
+    "build:sass": "sass src/assertions.scss dist/assertions-v$(echo $npm_package_version | cut -d. -f1).css",
+    "build:minify": "csso dist/assertions-v$(echo $npm_package_version | cut -d. -f1).css -o dist/assertions-v$(echo $npm_package_version | cut -d. -f1).css",
+    "build:html": "for file in src/*.html; do cp $file dist/$(basename ${file%.html})-v$(echo $npm_package_version | cut -d. -f1).html; done",
     "build:assets": "cp assets/resized/*.webp dist",
     "build": "npm run build:cleanup && npm run build:sass && npm run build:minify && npm run build:html && npm run build:assets",
     "dev": "npm run build:cleanup && npm run build:sass && npm run build:html && npm run build:assets"
