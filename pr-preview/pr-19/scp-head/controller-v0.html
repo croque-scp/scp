@@ -99,7 +99,7 @@
           this.knownStages = new Set();
 
           // Create a manual control section for this channel
-          const controlSection = document.createElement("div");
+          const controlSection = document.getElementById("manual-control");
           controlSection.appendChild(
             Object.assign(document.createElement("h2"), {
               textContent: `Channel ${this.name}`,
@@ -114,8 +114,8 @@
               "click",
               () => (this.activeAssertion = stageId)
             );
+            controlSection.appendChild(stageControl);
           }
-          document.getElementById("manual-control").appendChild(controlSection);
         }
 
         /** @param {number} value */
