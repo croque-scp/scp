@@ -2,6 +2,13 @@
 <html>
   <head>
     <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
       iframe,
       #resizer-container {
         display: block !important;
@@ -13,6 +20,7 @@
         flex-wrap: wrap;
         gap: 0.4rem;
         height: 16rem;
+        background: #fff3;
       }
       #manual-control h2 {
         flex: 1 0 100%;
@@ -37,6 +45,11 @@
       }
       #manual-control a.registered {
         opacity: 1;
+      }
+
+      iframe {
+        width: 10px;
+        height: 10px;
       }
     </style>
     <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
