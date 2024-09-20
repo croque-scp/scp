@@ -12,6 +12,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0.4rem;
+        height: 16rem;
       }
       #manual-control h2 {
         flex: 1 0 100%;
@@ -26,8 +27,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 1rem;
-        width: 1rem;
+        height: 1.5rem;
+        width: 2rem;
         opacity: 0.3;
       }
       #manual-control a.active {
@@ -49,6 +50,7 @@
       window.isController = true;
       window.debug =
         (new URLSearchParams(location.search).get("debug") || "") === "true";
+      window.resize = () => {};
 
       let preloadCallback = 0;
 
@@ -116,10 +118,10 @@
             stageControl.textContent = stageId;
             stageControl.dataset.channelName = this.name;
             stageControl.dataset.stageId = stageId;
-            stageControl.addEventListener(
-              "click",
-              () => (this.activeAssertion = stageId)
-            );
+            stageControl.addEventListener("click", () => {
+              this.activeAssertion = stageId;
+              sendAssertionState();
+            });
             controlSection.appendChild(stageControl);
           }
         }
@@ -360,7 +362,7 @@
         );
       }
 
-      function sendAssertionState(resize) {
+      function sendAssertionState() {
         cancelPreloads();
 
         const assertionState = makeAssertionStates()[0];
@@ -368,7 +370,7 @@
           `Updating assertion state to ${assertionState}`,
           assertionChannels
         );
-        resize(assertionState);
+        window.resize(assertionState);
 
         setTimeout(() => {
           preloadCallback = requestIdleCallback(preloadNextAssertionState);
@@ -425,9 +427,8 @@
 
       /**
        * @param {MessageEvent<scoutReport>} message
-       * @param {function} resize
        */
-      function processScoutReport(message, resize) {
+      function processScoutReport(message) {
         if (message.origin !== location.origin) return;
         const scoutReport = message.data;
         if (!scoutReport.scoutName) return;
@@ -437,7 +438,7 @@
             processScoutRegistrationEvent(scoutReport);
             break;
           case "ScoutIntersectionStateChange":
-            processScoutIntersectionEvent(scoutReport, resize, message);
+            processScoutIntersectionEvent(scoutReport, message);
             break;
           default:
             throw new Error(`Unknown event: ${scoutReport.eventName}`);
@@ -465,10 +466,9 @@
 
       /**
        * @param {scoutReport} scoutReport
-       * @param {function} resize
        * @param {MessageEvent<scoutReport>} message
        */
-      function processScoutIntersectionEvent(scoutReport, resize, message) {
+      function processScoutIntersectionEvent(scoutReport, message) {
         // Receive list of assertions
         const scoutAssertions = scoutReport.assertions;
 
@@ -530,7 +530,7 @@
           processQueuedContradictions();
 
           // Communicate any assertion state changes to page
-          sendAssertionState(resize);
+          sendAssertionState();
         } else {
           if (window.debug)
             console.debug("No queued contradictions to process");
@@ -565,20 +565,18 @@
       addEventListener("message", queueScoutReport);
 
       addEventListener("load", () => {
-        const resize = window.resizeIframe.createResizeIframe(
+        window.resize = window.resizeIframe.createResizeIframe(
           document.referrer,
           location.href.replace(/^.*\//, "/"),
           100
         );
         // Switch event listener to process new reports immediately
         removeEventListener("message", queueScoutReport);
-        addEventListener("message", (message) => {
-          processScoutReport(message, resize);
-        });
+        addEventListener("message", (message) => processScoutReport(message));
         if (scoutReportQueue.length > 0) {
           // Process all queued scout reports
           while (scoutReportQueue.length > 0) {
-            processScoutReport(scoutReportQueue.shift(), resize);
+            processScoutReport(scoutReportQueue.shift());
           }
         } else preloadNextAssertionState();
       });
