@@ -150,15 +150,15 @@
         setManualControlStyles() {
           // Wipe all stages
           document
-            .querySelectorAll(`[data-channel-name=${this.name}]`)
+            .querySelectorAll(`[data-channel-name='${this.name}']`)
             .forEach((stageControl) => stageControl.classList.remove("active"));
 
           // Set active stage
           document
             .querySelector(
-              `[data-channel-name=${this.name}][data-stage-id=${
+              `[data-channel-name='${this.name}'][data-stage-id='${
                 this.#activeAssertion
-              }]`
+              }']`
             )
             .classList.add("active");
 
@@ -166,7 +166,7 @@
           this.knownStages.forEach((stageId) =>
             document
               .querySelector(
-                `[data-channel-name=${this.name}][data-stage-id=${stageId}]`
+                `[data-channel-name='${this.name}'][data-stage-id='${stageId}']`
               )
               .classList.add("registerd")
           );
