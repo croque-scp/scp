@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      body {
+        height: 100vh !important;
+        width: 100vw !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+      }
+      .scout__top,
+      .scout__bottom {
+        flex: 1;
+      }
+    </style>
+
+    <script>
+      "use strict";
+      window.isScout = true;
+      window.debug = false;
+
+      function getController() {
+        for (const frame of Array.prototype.slice.call(parent)) {
+          try {
+            if (frame.isController) return frame;
+          } catch (error) {
+            if (!(error instanceof DOMException)) throw error;
+          }
+        }
+      }
+
+      addEventListener("DOMContentLoaded", async () => {
+        const scoutName = String(location.search).replace(
+          /^\?|ontradictions?|ssertions?/g,
+          ""
+        );
+        const params = new URLSearchParams(location.search);
+
+        window.debug = (params.get("debug") || "") === "true";
+
+        // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
+        const assertions = (params.get("assertion") || "")
+          .split(",")
+          .filter(Boolean);
+
+        // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
+        // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
+        // Contradiction condition ends in '^' if it should be triggered when invisible on the top edge; otherwise it is triggered when visible on the bottom edge
+        // Either ID can start with a letter to select a channel; if not, the default channel (configured by the controller) is selected. If the main ID doesn't specify a channel it uses the channel specified by the condition.
+        const contradictions = (params.get("contradiction") || "")
+          .split(",")
+          .filter(Boolean)
+          .map((contradictionText) => {
+            const contradictionRegex =
+              /^(?:([A-Z]?)([0-9]*)\?)?([A-Z]?)([0-9]+)(\^?)$/;
+            const match = contradictionText.match(contradictionRegex);
+
+            if (match == null)
+              throw new Error(`Scout ${scoutName} contradictions don't match`);
+
+            const contradiction = {
+              conditionChannelName: match[1] || null,
+              conditionId: match[2] == null ? null : Number(match[2]),
+              channelName: match[3] || null,
+              id: Number(match[4]),
+              triggerMode: match[5] === "^" ? "invisible-top" : "visible",
+            };
+
+            // 'A5?10' -> 'A5?A10'
+            if (
+              contradiction.channelName == null &&
+              contradiction.conditionChannelName != null
+            )
+              contradiction.channelName = contradiction.conditionChannelName;
+            return contradiction;
+          });
+
+        if (!assertions.length && !contradictions.length) {
+          throw new Error("Unconfigured scout :(");
+        }
+
+        console.debug(`Configured scout ${scoutName}`, {
+          assertions,
+          contradictions,
+        });
+
+        // Attempt to get the controller
+        let controller = getController();
+        for (let attempts = 0; attempts < 3; attempts += 1) {
+          if (controller) break;
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          controller = getController();
+        }
+        if (!controller)
+          throw new Error(`Scout ${scoutName} failed to get controller`);
+
+        // Let the controller know that this scout exists
+        controller.postMessage({
+          eventName: "ScoutRegistration",
+          scoutName,
+          assertions,
+          contradictions,
+        });
+
+        // Scout is split into two, like poles of a magnet, for direction detection
+        const poleTop = {
+          element: document.querySelector(".scout__top"),
+          lastIntersectionRatio: 0,
+          intersectionRatio: 0,
+        };
+        const poleBottom = {
+          element: document.querySelector(".scout__bottom"),
+          lastIntersectionRatio: 0,
+          intersectionRatio: 0,
+        };
+
+        let skipInitialRun = true;
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (window.debug) console.debug(entries);
+            entries.sort((a, b) => a.time - b.time);
+            for (const pole of [poleTop, poleBottom]) {
+              const entriesForPole = entries.filter(
+                (entry) => entry.target === pole.element
+              );
+
+              // If there's more than one entry for this pole, use the second-to-last entry for its last known state
+              if (entriesForPole.at(-2)) {
+                pole.intersectionRatio =
+                  entriesForPole.at(-2).intersectionRatio;
+              }
+
+              // Save each pole's current intersection ratio
+              pole.lastIntersectionRatio = pole.intersectionRatio;
+              if (entriesForPole.at(-1)) {
+                pole.intersectionRatio =
+                  entriesForPole.at(-1).intersectionRatio;
+              } else {
+                // No change - leave it as is
+              }
+            }
+
+            if (skipInitialRun) return;
+
+            // Work out which edge of the screen the scout is on
+            const edge =
+              poleTop.intersectionRatio > poleBottom.intersectionRatio
+                ? "bottom"
+                : poleTop.intersectionRatio < poleBottom.intersectionRatio
+                ? "top"
+                : "unknown";
+
+            // Work out change in distance - negative means the scout got closer to the reader (moving onto screen)
+            const distanceChange =
+              poleTop.intersectionRatio -
+              poleTop.lastIntersectionRatio +
+              poleBottom.intersectionRatio -
+              poleBottom.lastIntersectionRatio;
+
+            // Translate proximity change to direction based on screen edge
+            const direction = {
+              top: ["up", "down"],
+              bottom: ["down", "up"],
+              unknown: [null, null],
+            }[edge][Number(distanceChange > 0)];
+
+            if (window.debug)
+              console.debug(
+                `${scoutName}: ${edge} ${distanceChange} ${direction}`,
+                poleTop,
+                poleBottom
+              );
+
+            // Use the outer thresholds to confirm direction and to reduce the chance of fast scrolling missing an intersection, but only send the report when the middle threshold has been crossed
+            if (entries.length === 2) {
+              if (window.debug) console.debug(`${scoutName} sending`);
+              controller.postMessage({
+                eventName: "ScoutIntersectionStateChange",
+                scoutName,
+                isIntersecting:
+                  poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,
+                direction,
+                assertions,
+                contradictions,
+              });
+            }
+          },
+          { threshold: [0, 1] }
+        );
+        observer.observe(poleTop.element);
+        observer.observe(poleBottom.element);
+
+        setTimeout(() => {
+          skipInitialRun = false;
+        }, 200);
+
+        // Listen to instructions coming from controller
+        addEventListener("message", (message) => {
+          if (message.origin !== location.origin) return;
+          if (message.data.scoutName !== scoutName) return;
+
+          if (message.data.instruction === "destroy") {
+            console.debug(`Scout ${scoutName} received destroy order`);
+            observer.disconnect();
+            location.replace("about:blank");
+          }
+        });
+
+        if (window.debug) {
+          poleTop.element.style.background = "red";
+          poleBottom.element.style.background = "blue";
+        }
+      });
+    </script>
+  </head>
+
+  <body class="scout">
+    <div class="scout__top"></div>
+    <div class="scout__bottom"></div>
+  </body>
+</html>
