@@ -6,8 +6,38 @@
       #resizer-container {
         display: block !important;
       }
+
+      #manual-control {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.2rem;
+      }
+      #manual-control a {
+        border: thin solid black;
+        background: white;
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 1rem;
+        width: 1rem;
+        opacity: 0.3;
+      }
+      #manual-control a.active {
+        background: black;
+        color: white;
+      }
+      #manual-control a.registered {
+        opacity: 1;
+      }
     </style>
     <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
+  </head>
+
+  <body>
+    <main id="manual-control"></main>
+
     <script>
       "use strict";
       window.isController = true;
@@ -66,7 +96,26 @@
           this.#activeAssertion = this.minId;
 
           /** @type {Set.<number>} */
-          this.knownUpcomingStages = new Set();
+          this.knownStages = new Set();
+
+          // Create a manual control section for this channel
+          const controlSection = document.createElement("div");
+          controlSection.appendChild(
+            Object.assign(document.createElement("h2"), {
+              textContent: `Channel ${this.name}`,
+            })
+          );
+          for (let stageId = this.minId; stageId <= this.maxId; stageId++) {
+            const stageControl = document.createElement("a");
+            stageControl.textContent = stageId;
+            stageControl.dataset.channelName = this.name;
+            stageControl.dataset.stageId = stageId;
+            stageControl.addEventListener(
+              "click",
+              () => (this.activeAssertion = stageId)
+            );
+          }
+          document.getElementById("manual-control").appendChild(controlSection);
         }
 
         /** @param {number} value */
@@ -76,6 +125,7 @@
               `Assertion ID ${value} is out of range for channel ${this.name}`
             );
           this.#activeAssertion = value;
+          this.setManualControlStyles();
         }
 
         /** @returns {number} */
@@ -85,11 +135,41 @@
 
         /** @returns {number | null} */
         get expectedNextAssertion() {
-          const upcomingAssertions = [...this.knownUpcomingStages].filter(
+          const upcomingAssertions = [...this.knownStages].filter(
             (n) => n > this.#activeAssertion
           );
           if (upcomingAssertions.length === 0) return null;
           return Math.min(...upcomingAssertions);
+        }
+
+        addKnownStage(stageId) {
+          this.knownStages.add(stageId);
+          this.setManualControlStyles();
+        }
+
+        setManualControlStyles() {
+          // Wipe all stages
+          document
+            .querySelectorAll(`[data-channel-name=${this.name}]`)
+            .forEach((stageControl) => stageControl.classList.remove("active"));
+
+          // Set active stage
+          document
+            .querySelector(
+              `[data-channel-name=${this.name}][data-stage-id=${
+                this.#activeAssertion
+              }]`
+            )
+            .classList.add("active");
+
+          // Set known stages
+          this.knownStages.forEach((stageId) =>
+            document
+              .querySelector(
+                `[data-channel-name=${this.name}][data-stage-id=${stageId}]`
+              )
+              .classList.add("registerd")
+          );
         }
       };
 
@@ -371,7 +451,7 @@
             c.conditionId,
             c.conditionChannelName
           );
-          assertionChannels[contradiction.channel.name].knownUpcomingStages.add(
+          assertionChannels[contradiction.channel.name].addKnownStage(
             contradiction.id
           );
         }
@@ -497,7 +577,5 @@
         } else preloadNextAssertionState();
       });
     </script>
-  </head>
-
-  <body></body>
+  </body>
 </html>
