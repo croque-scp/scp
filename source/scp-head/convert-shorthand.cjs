@@ -46,6 +46,8 @@ function replaceShorthand(source, scoutFile) {
       replaceContradiction(match, scoutFile)
     )
     .replace(patterns.inlineStatement, replaceInlineStatement)
+    .replace(/\[\[tt\]\]/g, "{{")
+    .replace(/\[\[\/tt\]\]/g, "}}")
     .trim();
 }
 
