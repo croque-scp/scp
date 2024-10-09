@@ -389,6 +389,9 @@
           this.currentTask = requestIdleCallback(async () => {
             console.debug(`Preloading assertion state ${snapshot}`);
 
+            // Delay upfront so the real iframe gets priority
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
             await new Promise((resolve) => {
               const preloadIframe = document.createElement("iframe");
               this.frames.push({ snapshot, frame: preloadIframe });
@@ -411,9 +414,6 @@
             });
 
             this.queue.shift();
-
-            await new Promise((resolve) => setTimeout(resolve, 300));
-
             this.preloadNext();
           });
         }
@@ -532,6 +532,9 @@
             contradiction.id
           );
         }
+
+        // Run preloader again in case the new scout is next for a channel
+        preloadQueue.enqueueStates(makeAssertionStates(true));
       }
 
       /**
