@@ -532,6 +532,9 @@
             contradiction.id
           );
         }
+
+        // Run preloader again in case the new scout is next for a channel
+        preloadQueue.enqueueStates(makeAssertionStates(true));
       }
 
       /**
