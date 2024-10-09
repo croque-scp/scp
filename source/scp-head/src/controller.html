@@ -411,6 +411,9 @@
             });
 
             this.queue.shift();
+
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
             this.preloadNext();
           });
         }
