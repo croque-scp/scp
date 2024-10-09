@@ -18,6 +18,12 @@
       .scout__bottom {
         flex: 1;
       }
+      .scout__top {
+        background: red;
+      }
+      .scout__bottom {
+        background: blue;
+      }
     </style>
 
     <script>
@@ -211,11 +217,6 @@
             location.replace("about:blank");
           }
         });
-
-        if (window.debug) {
-          poleTop.element.style.background = "red";
-          poleBottom.element.style.background = "blue";
-        }
       });
     </script>
   </head>
