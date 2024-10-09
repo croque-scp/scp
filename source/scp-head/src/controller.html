@@ -407,7 +407,7 @@
                 "#" +
                 snapshotToSize(snapshot) +
                 "/" +
-                location.href.replace(/^.*\//, "/");
+                location.href.replace(/^.*\//, "/").replace(/^\/+/, "");
             });
 
             this.queue.shift();
