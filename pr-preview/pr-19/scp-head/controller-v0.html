@@ -61,6 +61,7 @@
 
   <body>
     <main id="manual-control" aria-hidden="true" tabindex="-1"></main>
+    <aside id="preload-container" aria-hidden="true" tabindex="-1"></aside>
 
     <script>
       "use strict";
@@ -68,13 +69,6 @@
       window.debug =
         (new URLSearchParams(location.search).get("debug") || "") === "true";
       window.resize = () => {};
-
-      let preloadCallback = 0;
-
-      // Shim for idle callbacks (Safari)
-      window.requestIdleCallback =
-        window.requestIdleCallback || ((cb) => setTimeout(cb, 0));
-      window.cancelIdleCallback = window.cancelIdleCallback || clearTimeout;
 
       /**
        * @typedef {Object} scoutReport
@@ -298,6 +292,132 @@
         }
       };
 
+      // Shim for idle callbacks (Safari)
+      window.requestIdleCallback =
+        window.requestIdleCallback || ((cb) => setTimeout(cb, 0));
+      window.cancelIdleCallback = window.cancelIdleCallback || clearTimeout;
+
+      /** @typedef {[number, number, number]} assertionSnapshot */
+      // ^ Would need to be rewritten if more than 3 channels were added
+
+      /**
+       * @param {assertionSnapshot} snap
+       * @return {string}
+       */
+      const snapshotToSize = (snap) => `${snap[0]}.${snap[1]}0${snap[2]}`;
+      /**
+       * @param {assertionSnapshot} snap1
+       * @param {assertionSnapshot} snap2
+       * @return {boolean}
+       */
+      const snapshotsEqual = (snap1, snap2) =>
+        snap1[0] === snap2[0] && snap1[1] === snap2[1] && snap1[2] === snap2[2];
+
+      const PreloadQueue = class {
+        constructor() {
+          /** @type {Array.<{snapshot: assertionSnapshot, frame: HTMLIFrameElement}>} */
+          this.frames = [];
+          /** @type {Array.<assertionSnapshot>} */
+          this.queue = [];
+
+          // Whether the preloader is currently doing anything
+          this.running = false;
+          // Idle callback number for the current preload
+          this.currentTask = 0;
+        }
+
+        /**
+         * Takes future possible assertion states and adds them to the preload queue.
+         * Also removes no-longer-possible states from the queue and preload, assuming that the states given are all those that are now possible.
+         * @param {Array.<assertionSnapshot>} snapshots - The future states to enqueue
+         */
+        enqueueStates(snapshots) {
+          // Cancel the current task if its state is no longer possible
+          if (
+            this.running &&
+            this.queue.length > 0 &&
+            !snapshots.some((s) => snapshotsEqual(s, this.queue[0]))
+          ) {
+            window.cancelIdleCallback(this.currentTask);
+            this.running = false;
+          }
+
+          // Remove queue entries if their states are no longer possible
+          this.queue = this.queue.filter((queued) =>
+            snapshots.some((s) => snapshotsEqual(s, queued))
+          );
+
+          // Remove preloaded frames if their states are no longer possible
+          this.frames = this.frames.filter((frame) => {
+            const valid = snapshots.some((s) =>
+              snapshotsEqual(s, frame.snapshot)
+            );
+
+            if (!valid) {
+              frame.frame.remove();
+              delete frame.frame;
+            }
+
+            return valid;
+          });
+
+          // Add new states that are not already queued/preloaded to queue
+          for (const snapshot of snapshots) {
+            if (
+              !this.queue.some((q) => snapshotsEqual(q, snapshot)) &&
+              !this.frames.some((f) => snapshotsEqual(f.snapshot, snapshot))
+            ) {
+              console.debug(`Queuing new state ${snapshot} for preload`);
+              this.queue.push(snapshot);
+            }
+          }
+
+          if (!this.running) this.preloadNext();
+        }
+
+        async preloadNext() {
+          this.running = true;
+
+          if (this.queue.length === 0) {
+            this.running = false;
+            return;
+          }
+          // Read the next task from the queue
+          const snapshot = this.queue[0];
+
+          // Using idle callback, schedule the preload for when the browser isn't doing anything
+          this.currentTask = requestIdleCallback(async () => {
+            console.debug(`Preloading assertion state ${snapshot}`);
+
+            await new Promise((resolve) => {
+              const preloadIframe = document.createElement("iframe");
+              this.frames.push({ snapshot, frame: preloadIframe });
+              preloadIframe.addEventListener("load", () => resolve());
+
+              // Iframe is fully sandboxed: allow-same-origin is implicitly false, prevents the controller being resized
+              preloadIframe.sandbox = true;
+
+              preloadIframe.classList.add("preload-iframe");
+              document
+                .getElementById("preload-container")
+                .appendChild(preloadIframe);
+              preloadIframe.src =
+                document.referrer +
+                "/common--javascript/resize-iframe.html?" +
+                "#" +
+                snapshotToSize(snapshot) +
+                "/" +
+                location.href.replace(/^.*\//, "/");
+            });
+
+            this.queue.shift();
+            this.preloadNext();
+          });
+        }
+      };
+
+      const preloadQueue = new PreloadQueue();
+
       function processQueuedContradictions() {
         if (window.debug)
           console.debug("Processing queued contradictions", [
@@ -317,129 +437,59 @@
       }
 
       /**
-       * @param {Array.<string>} simulateFutureChannels - List of channel names to use the expected next assertion for, rather than the active assertion
+       * @param {boolean} simulateFutureChannels - Whether to simulate, for each channel, what the next state will be
+       * @return {Array.<assertionSnapshot>} - List containing snapshots; only the of the current state if no simulation was requested, otherwise of all possible next states (one per channel)
        */
-      function makeAssertionStates(simulateFutureChannels) {
-        if (simulateFutureChannels == null) simulateFutureChannels = [];
-
+      function makeAssertionStates(simulate) {
         const currentAssertionState = [
           assertionChannels["A"].activeAssertion,
-          ".",
           assertionChannels["B"].activeAssertion,
-          "0",
           assertionChannels["C"].activeAssertion,
-        ].join("");
-        if (simulateFutureChannels.length === 0) return [currentAssertionState];
+        ];
+        if (!simulate) return [currentAssertionState];
 
         const possibleAssertionStates = [];
-        if (simulateFutureChannels.includes("A")) {
-          const nextAssertion = assertionChannels["A"].expectedNextAssertion;
-          if (nextAssertion != null) {
-            possibleAssertionStates.push(
-              [
-                nextAssertion,
-                ".",
-                assertionChannels["B"].activeAssertion,
-                "0",
-                assertionChannels["C"].activeAssertion,
-              ].join("")
-            );
-          }
+        // Do channel B first, it's the default i.e. most likely to increment
+        nextAssertion = assertionChannels["B"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            assertionChannels["A"].activeAssertion,
+            nextAssertion,
+            assertionChannels["C"].activeAssertion,
+          ]);
         }
-        if (simulateFutureChannels.includes("B")) {
-          const nextAssertion = assertionChannels["B"].expectedNextAssertion;
-          if (nextAssertion != null) {
-            possibleAssertionStates.push(
-              [
-                assertionChannels["A"].activeAssertion,
-                ".",
-                nextAssertion,
-                "0",
-                assertionChannels["C"].activeAssertion,
-              ].join("")
-            );
-          }
+        let nextAssertion = assertionChannels["A"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            nextAssertion,
+            assertionChannels["B"].activeAssertion,
+            assertionChannels["C"].activeAssertion,
+          ]);
         }
-        if (simulateFutureChannels.includes("C")) {
-          const nextAssertion = assertionChannels["C"].expectedNextAssertion;
-          if (nextAssertion != null) {
-            possibleAssertionStates.push(
-              [
-                assertionChannels["A"].activeAssertion,
-                ".",
-                assertionChannels["B"].activeAssertion,
-                "0",
-                nextAssertion,
-              ].join("")
-            );
-          }
+        nextAssertion = assertionChannels["C"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            assertionChannels["A"].activeAssertion,
+            assertionChannels["B"].activeAssertion,
+            nextAssertion,
+          ]);
         }
+        // If a channel failed to simulate, don't return it
         return possibleAssertionStates.filter(
-          (state) => state !== currentAssertionState
+          (state) => !snapshotsEqual(state, currentAssertionState)
         );
       }
 
       function sendAssertionState() {
-        cancelPreloads();
-
         const assertionState = makeAssertionStates()[0];
         console.debug(
           `Updating assertion state to ${assertionState}`,
           assertionChannels
         );
-        window.resize(assertionState);
+        window.resize(snapshotToSize(assertionState));
 
-        setTimeout(() => {
-          preloadCallback = requestIdleCallback(preloadNextAssertionState);
-        }, 400);
-      }
-
-      function cancelPreloads() {
-        // Cancel any existing preload request
-        if (preloadCallback) {
-          cancelIdleCallback(preloadCallback);
-          preloadCallback = 0;
-        }
-
-        // Remove all preloaders
-        document
-          .querySelectorAll(".preload-iframe")
-          .forEach((iframe) => iframe.remove());
-      }
-
-      async function preloadNextAssertionState() {
-        cancelPreloads();
-
-        // Work out each of the possible next assertion states, assuming that each channel is equally likely to advance to its next stage
-        const possibleAssertionStates = makeAssertionStates(["A", "B", "C"]);
-
-        const preloadNextIframe = () => {
-          if (possibleAssertionStates.length > 0) {
-            requestIdleCallback(createPreloadIframes);
-          } else {
-            preloadCallback = 0;
-          }
-        };
-
-        const createPreloadIframes = () => {
-          const possibleAssertionState = possibleAssertionStates.shift();
-          console.debug(`Preloading assertion state ${possibleAssertionState}`);
-          const preloadIframe = document.createElement("iframe");
-          // Iframe is fully sandboxed: allow-same-origin is implicitly false, prevents the controller being resized
-          preloadIframe.sandbox = true;
-          preloadIframe.classList.add("preload-iframe");
-          document.body.appendChild(preloadIframe);
-          preloadIframe.src =
-            document.referrer +
-            "/common--javascript/resize-iframe.html?" +
-            "#" +
-            possibleAssertionState +
-            "/" +
-            location.href.replace(/^.*\//, "/");
-          preloadIframe.addEventListener("load", () => preloadNextIframe());
-        };
-
-        preloadCallback = preloadNextIframe();
+        // Preload possible future states
+        preloadQueue.enqueueStates(makeAssertionStates(true));
       }
 
       /**
@@ -555,7 +605,6 @@
 
         // If the scout is no longer useful, tell it to destroy itself
         // Right now that means if all of its contradictions have been processed
-        // Future feature: AND its tracked assertions are all active
         const allContradictionsProcessed = scoutContradictions.every(
           (contradiction) => {
             return (
@@ -595,7 +644,7 @@
           while (scoutReportQueue.length > 0) {
             processScoutReport(scoutReportQueue.shift());
           }
-        } else preloadNextAssertionState();
+        } else preloadQueue.enqueueStates(makeAssertionStates(true));
       });
     </script>
   </body>
