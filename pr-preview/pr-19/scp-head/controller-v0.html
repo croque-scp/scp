@@ -407,10 +407,13 @@
                 "#" +
                 snapshotToSize(snapshot) +
                 "/" +
-                location.href.replace(/^.*\//, "/");
+                location.href.replace(/^.*\//, "/").replace(/^\/+/, "");
             });
 
             this.queue.shift();
+
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
             this.preloadNext();
           });
         }
