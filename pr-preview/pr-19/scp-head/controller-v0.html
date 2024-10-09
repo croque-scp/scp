@@ -450,7 +450,7 @@
 
         const possibleAssertionStates = [];
         // Do channel B first, it's the default i.e. most likely to increment
-        nextAssertion = assertionChannels["B"].expectedNextAssertion;
+        let nextAssertion = assertionChannels["B"].expectedNextAssertion;
         if (nextAssertion != null) {
           possibleAssertionStates.push([
             assertionChannels["A"].activeAssertion,
@@ -458,7 +458,7 @@
             assertionChannels["C"].activeAssertion,
           ]);
         }
-        let nextAssertion = assertionChannels["A"].expectedNextAssertion;
+        nextAssertion = assertionChannels["A"].expectedNextAssertion;
         if (nextAssertion != null) {
           possibleAssertionStates.push([
             nextAssertion,
