@@ -16,17 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install & build projects
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine changed projects
+        id: changes
+        run: |
+          CHANGED_PROJECTS=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD -- 'source/*' | cut -d/ -f2 | sort -u)
+          echo "CHANGED_PROJECTS=$CHANGED_PROJECTS" >> $GITHUB_ENV
+
+      - name: Install & build changed projects
         run: |
           mkdir dist
-          for project in $(cd source && ls -d */); do
+          for project in $CHANGED_PROJECTS; do
             pushd source/$project
             npm install
             npm run build
             popd
             cp -r source/$project/dist dist/$project
           done
+
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:

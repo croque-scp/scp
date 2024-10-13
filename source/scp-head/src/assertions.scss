@@ -1,0 +1,97 @@
+@mixin channel(
+  // Identifier for the channel (to be in the statement class)
+  $channel-id,
+  // Text to match in the assertion class before the ID
+  $before,
+  // Text to match in the assertion class after the ID
+  $after,
+  // The lowest possible assertion ID
+  $min-assertion,
+  // The highest possible assertion ID
+  $max-assertion
+) {
+  // Statement wrapper should include the channel ID
+  $channel: ".ch_#{$channel_id}";
+
+  @for $assertion from $min-assertion + 1 through $max-assertion {
+    $controller: ".controller";
+
+    // Make this stage and all future stages apply these styles
+    $styles: ();
+    @for $i from $assertion through $max-assertion {
+      $styles: append(
+        $styles,
+        unquote('[style*="#{$before}#{$i}#{$after}"]'),
+        comma
+      );
+    }
+    $controller: "#{$controller}:is(#{$styles})";
+
+    // Show the current assertion
+    #{$controller} + .article #{$channel} > .a_#{$assertion} {
+      display: revert;
+      visibility: visible;
+      opacity: 1;
+      pointer-events: initial;
+    }
+
+    // Hide all previous assertions (in this statement)
+    $prevs: ();
+    @for $j from $min-assertion through $assertion - 1 {
+      $prevs: append($prevs, unquote(".a_#{$j}"), comma);
+    }
+    #{$controller} + .article #{$channel} > .a_#{$assertion} ~ :is(#{$prevs}) {
+      // For non-.height-match
+      display: none;
+      // For .height-match
+      &,
+      & * {
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+    }
+  }
+
+  // Display the first assertion in this channel
+  .controller + .article #{$channel} > .a_#{$min-assertion} {
+    display: revert;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: initial;
+  }
+
+  // Hide assertions marked as empty
+  .empty {
+    display: none !important;
+  }
+}
+
+:where(.article) {
+  // Page should hide the article by default, so that assertions not yet intended to be visible are hidden while this CSS loads
+  visibility: visible !important;
+
+  // Hide all assertions by default
+  :where(:not(.height-match) > [class^="a_"]) {
+    display: none;
+  }
+  :where(.height-match > [class^="a_"]) {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.height-match {
+  display: grid;
+  align-items: center;
+}
+
+.height-match > [class^="a_"] {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  display: block !important;
+}
+
+@include channel("A", "", ".", 1, 9);
+@include channel("B", ".", "0", 10, 50);
+@include channel("C", "0", "px", 1, 2);

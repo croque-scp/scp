@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      iframe,
+      #resizer-container {
+        display: block !important;
+      }
+
+      #manual-control {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        height: 220px;
+        background: #fff8;
+        border: thin solid black;
+        padding: 0.5rem;
+        box-sizing: border-box;
+      }
+      #manual-control h2 {
+        flex: 1 0 100%;
+        font-size: 1rem;
+        line-height: 1;
+        margin: 0.5rem 0;
+      }
+      #manual-control a {
+        border: thin solid black;
+        background: white;
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 1.5rem;
+        width: 2rem;
+        opacity: 0.3;
+        cursor: pointer;
+      }
+      #manual-control a.active {
+        background: black;
+        color: white;
+      }
+      #manual-control a.registered {
+        opacity: 1;
+      }
+
+      iframe {
+        width: 10px;
+        height: 10px;
+      }
+    </style>
+    <script src="https://interwiki.scpwiki.com/resizeIframe.js" defer></script>
+  </head>
+
+  <body>
+    <main id="manual-control" aria-hidden="true" tabindex="-1"></main>
+    <aside id="preload-container" aria-hidden="true" tabindex="-1"></aside>
+
+    <script>
+      "use strict";
+      window.isController = true;
+      window.debug =
+        (new URLSearchParams(location.search).get("debug") || "") === "true";
+      window.resize = () => {};
+
+      /**
+       * @typedef {Object} scoutReport
+       * @property {string} eventName
+       * @property {string} scoutName
+       * @property {boolean} isIntersecting
+       * @property {string | null} direction
+       * @property {string[]} assertions
+       * @property {scoutContradiction[]} contradictions
+       */
+
+      /**
+       * @typedef {Object} scoutContradiction
+       * @property {number} id
+       * @property {string?} channelName
+       * @property {number?} conditionId
+       * @property {string?} conditionChannelName
+       * @property {string} triggerMode
+       */
+
+      /**
+       * @typedef {Object} queuedContradiction
+       * @property {string} contradictionId
+       * @property {string} blockingAssertionId
+       */
+
+      const AssertionChannel = class {
+        #activeAssertion;
+
+        /**
+         * @param {string} name
+         * @param {number} minId
+         * @param {number} maxId
+         */
+        constructor(name, minId, maxId) {
+          /** @type {string} */
+          this.name = name;
+          /** @type {number} */
+          this.minId = minId;
+          /** @type {number} */
+          this.maxId = maxId;
+
+          /** @type {number} */
+          this.#activeAssertion = this.minId;
+
+          /** @type {Set.<number>} */
+          this.knownStages = new Set();
+
+          // Create a manual control section for this channel
+          const controlSection = document.getElementById("manual-control");
+          controlSection.appendChild(
+            Object.assign(document.createElement("h2"), {
+              textContent: `Channel ${this.name}`,
+            })
+          );
+          for (let stageId = this.minId; stageId <= this.maxId; stageId++) {
+            const stageControl = document.createElement("a");
+            stageControl.textContent = stageId;
+            stageControl.dataset.channelName = this.name;
+            stageControl.dataset.stageId = stageId;
+            stageControl.addEventListener("click", () => {
+              this.activeAssertion = stageId;
+              sendAssertionState();
+            });
+            controlSection.appendChild(stageControl);
+          }
+        }
+
+        /** @param {number} value */
+        set activeAssertion(value) {
+          if (value < this.minId || value > this.maxId)
+            throw new Error(
+              `Assertion ID ${value} is out of range for channel ${this.name}`
+            );
+          this.#activeAssertion = value;
+          this.setManualControlStyles();
+        }
+
+        /** @returns {number} */
+        get activeAssertion() {
+          return this.#activeAssertion;
+        }
+
+        /** @returns {number | null} */
+        get expectedNextAssertion() {
+          const upcomingAssertions = [...this.knownStages].filter(
+            (n) => n > this.#activeAssertion
+          );
+          if (upcomingAssertions.length === 0) return null;
+          return Math.min(...upcomingAssertions);
+        }
+
+        addKnownStage(stageId) {
+          this.knownStages.add(stageId);
+          this.setManualControlStyles();
+        }
+
+        setManualControlStyles() {
+          // Wipe all stages
+          document
+            .querySelectorAll(`[data-channel-name='${this.name}']`)
+            .forEach((stageControl) => stageControl.classList.remove("active"));
+
+          // Set active stage
+          document
+            .querySelector(
+              `[data-channel-name='${this.name}'][data-stage-id='${
+                this.#activeAssertion
+              }']`
+            )
+            .classList.add("active");
+
+          // Set known stages
+          this.knownStages.forEach((stageId) =>
+            document
+              .querySelector(
+                `[data-channel-name='${this.name}'][data-stage-id='${stageId}']`
+              )
+              .classList.add("registered")
+          );
+        }
+      };
+
+      /** @type {Object.<string, AssertionChannel>} */
+      const assertionChannels = [
+        new AssertionChannel("A", 1, 9),
+        new AssertionChannel("B", 10, 50),
+        new AssertionChannel("C", 1, 9),
+      ].reduce((acc, channel) => ({ ...acc, [channel.name]: channel }), {});
+
+      const defaultAssertionChannel = assertionChannels["B"];
+
+      /** @type {Array.<Contradiction>} */
+      let contradictionQueue = [];
+
+      const Contradiction = class {
+        /**
+         * @param {number} id
+         * @param {string} triggerMode
+         * @param {string | null} channelName
+         * @param {number | null} conditionId
+         * @param {string | null} conditionChannelName
+         */
+        constructor(
+          id,
+          triggerMode,
+          channelName,
+          conditionId = null,
+          conditionChannelName = null
+        ) {
+          /** @type {number} */
+          this.id = id;
+          /** @type {string} */
+          this.triggerMode = triggerMode;
+
+          /** @type {number | null} */
+          this.conditionId = conditionId;
+          /** @type {AssertionChannel | null} */
+          this.conditionChannel =
+            conditionChannelName != null
+              ? assertionChannels[conditionChannelName]
+              : defaultAssertionChannel;
+
+          if (
+            this.conditionId != null &&
+            (this.conditionId > this.conditionChannel.maxId ||
+              this.conditionId < this.conditionChannel.minId)
+          )
+            throw new Error(
+              `Contradiction ID ${this.conditionId}` +
+                `is out of range for channel ${this.conditionChannel.name}` +
+                `(${this.conditionChannel.minId} - ${this.conditionChannel.maxId})`
+            );
+
+          /** @type {AssertionChannel} */
+          this.channel =
+            channelName != null
+              ? assertionChannels[channelName]
+              : this.conditionId != null
+              ? this.conditionChannel
+              : defaultAssertionChannel;
+
+          if (this.id > this.channel.maxId || this.id < this.channel.minId)
+            throw new Error(
+              `Contradiction ID ${this.id}` +
+                `is out of range for channel ${this.channel.name}` +
+                `(${this.channel.minId} - ${this.channel.maxId})`
+            );
+
+          this.shortName =
+            this.conditionChannel.name +
+            this.conditionId +
+            "?" +
+            this.channel.name +
+            this.id;
+        }
+
+        queue() {
+          if (window.debug)
+            console.debug(
+              `Attempting to queue contradiction ${this.shortName}`,
+              this
+            );
+          const conditionsMatch =
+            this.conditionId == null ||
+            this.conditionId <= this.conditionChannel.activeAssertion;
+          if (conditionsMatch) {
+            contradictionQueue.push(this);
+            console.debug(`Queued contradiction ${this.shortName}`);
+          } else if (window.debug) {
+            console.debug(`Did not queue contradiction ${this.shortName}`);
+          }
+        }
+
+        trigger() {
+          // Increment the channel's active assertion - never decrement
+          if (window.debug)
+            console.debug(`Triggering contradiction ${this.shortName}`, this);
+          if (this.channel.activeAssertion < this.id)
+            this.channel.activeAssertion = this.id;
+        }
+      };
+
+      // Shim for idle callbacks (Safari)
+      window.requestIdleCallback =
+        window.requestIdleCallback || ((cb) => setTimeout(cb, 0));
+      window.cancelIdleCallback = window.cancelIdleCallback || clearTimeout;
+
+      /** @typedef {[number, number, number]} assertionSnapshot */
+      // ^ Would need to be rewritten if more than 3 channels were added
+
+      /**
+       * @param {assertionSnapshot} snap
+       * @return {string}
+       */
+      const snapshotToSize = (snap) => `${snap[0]}.${snap[1]}0${snap[2]}`;
+      /**
+       * @param {assertionSnapshot} snap1
+       * @param {assertionSnapshot} snap2
+       * @return {boolean}
+       */
+      const snapshotsEqual = (snap1, snap2) =>
+        snap1[0] === snap2[0] && snap1[1] === snap2[1] && snap1[2] === snap2[2];
+
+      const PreloadQueue = class {
+        constructor() {
+          /** @type {Array.<{snapshot: assertionSnapshot, frame: HTMLIFrameElement}>} */
+          this.frames = [];
+          /** @type {Array.<assertionSnapshot>} */
+          this.queue = [];
+
+          // Whether the preloader is currently doing anything
+          this.running = false;
+          // Idle callback number for the current preload
+          this.currentTask = 0;
+        }
+
+        /**
+         * Takes future possible assertion states and adds them to the preload queue.
+         * Also removes no-longer-possible states from the queue and preload, assuming that the states given are all those that are now possible.
+         * @param {Array.<assertionSnapshot>} snapshots - The future states to enqueue
+         */
+        enqueueStates(snapshots) {
+          // Cancel the current task if its state is no longer possible
+          if (
+            this.running &&
+            this.queue.length > 0 &&
+            !snapshots.some((s) => snapshotsEqual(s, this.queue[0]))
+          ) {
+            window.cancelIdleCallback(this.currentTask);
+            this.running = false;
+          }
+
+          // Remove queue entries if their states are no longer possible
+          this.queue = this.queue.filter((queued) =>
+            snapshots.some((s) => snapshotsEqual(s, queued))
+          );
+
+          // Remove preloaded frames if their states are no longer possible
+          this.frames = this.frames.filter((frame) => {
+            const valid = snapshots.some((s) =>
+              snapshotsEqual(s, frame.snapshot)
+            );
+
+            if (!valid) {
+              frame.frame.remove();
+              delete frame.frame;
+            }
+
+            return valid;
+          });
+
+          // Add new states that are not already queued/preloaded to queue
+          for (const snapshot of snapshots) {
+            if (
+              !this.queue.some((q) => snapshotsEqual(q, snapshot)) &&
+              !this.frames.some((f) => snapshotsEqual(f.snapshot, snapshot))
+            ) {
+              console.debug(`Queuing new state ${snapshot} for preload`);
+              this.queue.push(snapshot);
+            }
+          }
+
+          if (!this.running) this.preloadNext();
+        }
+
+        async preloadNext() {
+          this.running = true;
+
+          if (this.queue.length === 0) {
+            this.running = false;
+            return;
+          }
+          // Read the next task from the queue
+          const snapshot = this.queue[0];
+
+          // Using idle callback, schedule the preload for when the browser isn't doing anything
+          this.currentTask = requestIdleCallback(async () => {
+            console.debug(`Preloading assertion state ${snapshot}`);
+
+            // Delay upfront so the real iframe gets priority
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            await new Promise((resolve) => {
+              const preloadIframe = document.createElement("iframe");
+              this.frames.push({ snapshot, frame: preloadIframe });
+              preloadIframe.addEventListener("load", () => resolve());
+
+              // Iframe is fully sandboxed: allow-same-origin is implicitly false, prevents the controller being resized
+              preloadIframe.sandbox = true;
+
+              preloadIframe.classList.add("preload-iframe");
+              document
+                .getElementById("preload-container")
+                .appendChild(preloadIframe);
+              preloadIframe.src =
+                document.referrer +
+                "/common--javascript/resize-iframe.html?" +
+                "#" +
+                snapshotToSize(snapshot) +
+                "/" +
+                location.href.replace(/^.*\//, "/").replace(/^\/+/, "");
+            });
+
+            this.queue.shift();
+            this.preloadNext();
+          });
+        }
+      };
+
+      const preloadQueue = new PreloadQueue();
+
+      function processQueuedContradictions() {
+        if (window.debug)
+          console.debug("Processing queued contradictions", [
+            ...contradictionQueue,
+          ]);
+        contradictionQueue = contradictionQueue.filter((contradiction) => {
+          // TODO Filter out a contradiction if its assertion was last known to be intersecting
+          // (the queue will always be emptied every time currently)
+          contradiction.trigger();
+          // Remove from queue if triggered
+          return false;
+        });
+        if (window.debug)
+          console.debug("Processed queued contradictions", [
+            ...contradictionQueue,
+          ]);
+      }
+
+      /**
+       * @param {boolean} simulateFutureChannels - Whether to simulate, for each channel, what the next state will be
+       * @return {Array.<assertionSnapshot>} - List containing snapshots; only the of the current state if no simulation was requested, otherwise of all possible next states (one per channel)
+       */
+      function makeAssertionStates(simulate) {
+        const currentAssertionState = [
+          assertionChannels["A"].activeAssertion,
+          assertionChannels["B"].activeAssertion,
+          assertionChannels["C"].activeAssertion,
+        ];
+        if (!simulate) return [currentAssertionState];
+
+        const possibleAssertionStates = [];
+        // Do channel B first, it's the default i.e. most likely to increment
+        let nextAssertion = assertionChannels["B"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            assertionChannels["A"].activeAssertion,
+            nextAssertion,
+            assertionChannels["C"].activeAssertion,
+          ]);
+        }
+        nextAssertion = assertionChannels["A"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            nextAssertion,
+            assertionChannels["B"].activeAssertion,
+            assertionChannels["C"].activeAssertion,
+          ]);
+        }
+        nextAssertion = assertionChannels["C"].expectedNextAssertion;
+        if (nextAssertion != null) {
+          possibleAssertionStates.push([
+            assertionChannels["A"].activeAssertion,
+            assertionChannels["B"].activeAssertion,
+            nextAssertion,
+          ]);
+        }
+        // If a channel failed to simulate, don't return it
+        return possibleAssertionStates.filter(
+          (state) => !snapshotsEqual(state, currentAssertionState)
+        );
+      }
+
+      function sendAssertionState() {
+        const assertionState = makeAssertionStates()[0];
+        console.debug(
+          `Updating assertion state to ${assertionState}`,
+          assertionChannels
+        );
+        window.resize(snapshotToSize(assertionState));
+
+        // Preload possible future states
+        preloadQueue.enqueueStates(makeAssertionStates(true));
+      }
+
+      /**
+       * @param {MessageEvent<scoutReport>} message
+       */
+      function processScoutReport(message) {
+        if (message.origin !== location.origin) return;
+        const scoutReport = message.data;
+        if (!scoutReport.scoutName) return;
+
+        switch (scoutReport.eventName) {
+          case "ScoutRegistration":
+            processScoutRegistrationEvent(scoutReport);
+            break;
+          case "ScoutIntersectionStateChange":
+            processScoutIntersectionEvent(scoutReport, message);
+            break;
+          default:
+            throw new Error(`Unknown event: ${scoutReport.eventName}`);
+        }
+      }
+
+      /**
+       * @param {scoutReport} scoutReport
+       */
+      function processScoutRegistrationEvent(scoutReport) {
+        // Store contradiction IDs in the corresponding channel to be used for preloading
+        for (const c of scoutReport.contradictions) {
+          const contradiction = new Contradiction(
+            c.id,
+            c.triggerMode,
+            c.channelName,
+            c.conditionId,
+            c.conditionChannelName
+          );
+          assertionChannels[contradiction.channel.name].addKnownStage(
+            contradiction.id
+          );
+        }
+
+        // Run preloader again in case the new scout is next for a channel
+        preloadQueue.enqueueStates(makeAssertionStates(true));
+      }
+
+      /**
+       * @param {scoutReport} scoutReport
+       * @param {MessageEvent<scoutReport>} message
+       */
+      function processScoutIntersectionEvent(scoutReport, message) {
+        // Receive list of assertions
+        const scoutAssertions = scoutReport.assertions;
+
+        // Receive list of contradictions
+        const scoutContradictions = scoutReport.contradictions.map(
+          (c) =>
+            new Contradiction(
+              c.id,
+              c.triggerMode,
+              c.channelName,
+              c.conditionId,
+              c.conditionChannelName
+            )
+        );
+
+        if (window.debug)
+          console.debug(`Received report from scout ${scoutReport.scoutName}`, {
+            scoutAssertions,
+            scoutContradictions,
+            scoutReport,
+          });
+
+        // Trigger behaviour based on the contradiction trigger mode
+        for (const contradiction of scoutContradictions) {
+          if (contradiction.triggerMode === "visible") {
+            if (scoutReport.isIntersecting) {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} visible: yes - queuing`
+                );
+              contradiction.queue();
+            } else {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} visible: no - not queuing`
+                );
+            }
+          } else if ((contradiction.triggerMode = "invisible-top")) {
+            if (!scoutReport.isIntersecting && scoutReport.direction === "up") {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} invisible-top: yes -  queuing`
+                );
+              contradiction.queue();
+            } else {
+              if (window.debug)
+                console.debug(
+                  `Scout ${scoutReport.scoutName} invisible-top: no - not queuing`
+                );
+            }
+          } else {
+            throw new Error(
+              `Unknown contradiction trigger mode: ${contradiction.triggerMode}`
+            );
+          }
+        }
+
+        if (contradictionQueue.length > 0) {
+          processQueuedContradictions();
+
+          // Communicate any assertion state changes to page
+          sendAssertionState();
+        } else {
+          if (window.debug)
+            console.debug("No queued contradictions to process");
+        }
+
+        // If the scout is no longer useful, tell it to destroy itself
+        // Right now that means if all of its contradictions have been processed
+        const allContradictionsProcessed = scoutContradictions.every(
+          (contradiction) => {
+            return (
+              // Contradiction has made its way into the queue
+              contradictionQueue.includes(contradiction) ||
+              // Contradiction has already been applied
+              contradiction.channel.activeAssertion >= contradiction.id
+            );
+          }
+        );
+        if (allContradictionsProcessed)
+          message.source.postMessage({
+            scoutName: scoutReport.scoutName,
+            instruction: "destroy",
+          });
+      }
+
+      // Queue messages until load event
+      const scoutReportQueue = [];
+      function queueScoutReport(message) {
+        if (window.debug) console.debug("Received message before load event");
+        scoutReportQueue.push(message);
+      }
+      addEventListener("message", queueScoutReport);
+
+      addEventListener("load", () => {
+        window.resize = window.resizeIframe.createResizeIframe(
+          document.referrer,
+          location.href.replace(/^.*\//, "/"),
+          100
+        );
+        // Switch event listener to process new reports immediately
+        removeEventListener("message", queueScoutReport);
+        addEventListener("message", (message) => processScoutReport(message));
+        if (scoutReportQueue.length > 0) {
+          // Process all queued scout reports
+          while (scoutReportQueue.length > 0) {
+            processScoutReport(scoutReportQueue.shift());
+          }
+        } else preloadQueue.enqueueStates(makeAssertionStates(true));
+      });
+    </script>
+  </body>
+</html>
