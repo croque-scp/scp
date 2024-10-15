@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "build:cleanup": "rm -rf dist && mkdir dist",
     "build:sass": "sass src/assertions.scss dist/assertions-v$(echo $npm_package_version | cut -d. -f1).css",
