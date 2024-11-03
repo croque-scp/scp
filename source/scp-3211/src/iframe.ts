@@ -190,9 +190,11 @@ function nextSection (toSection: section) {
 
     // Construct the anomaly
     const anomalyElement = document.createElement('div')
-    anomalyElement.innerHTML = decrypt(applyPatch(
+    const patch = applyPatch(
       reference.join("\n"), anomalies[anomaly]
-    )).replace(/--(?!\S*\/)/g, "—")
+    )
+    if (!patch) throw new Error("Patch failed")
+    anomalyElement.innerHTML = decrypt(patch).replace(/--(?!\S*\/)/g, "—")
 
     // Handle table
     anomalyElement.querySelectorAll("table").forEach(table => {
