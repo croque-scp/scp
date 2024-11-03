@@ -62,7 +62,7 @@ details:last-of-type:not([open]) {
   text-align: center;
   display: block;
   font-size: 3.33rem;
-  font-size: min(3.33rem, 10vw);
+  font-size: clamp(2.22rem, 10vw, 3.33rem);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
