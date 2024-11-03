@@ -52,6 +52,7 @@ details:last-of-type:not([open]) {
   position: relative;
   z-index: 1;
   margin-bottom: calc(-91px - 3em);
+  right: max(0px, 200px - 50%);
 }
 
 /* Position the warning text over the SCP logo */
