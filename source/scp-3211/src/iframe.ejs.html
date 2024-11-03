@@ -1,38 +1,58 @@
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base target="_top">
+<script>
+  document.head.appendChild(
+    Object.assign(document.createElement("meta"), {
+      name: "viewport",
+      content: "width=device-width, initial-scale=1.0"
+    })
+  );
+  document.head.appendChild(
+    Object.assign(document.createElement("base"), {
+      target: "_top",
+    })
+  );
+  document.head.appendChild(
+    Object.assign(document.createElement("link"), {
+      href: "https://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css",
+      rel: "stylesheet",
+    })
+  );
+  document.head.appendChild(
+    Object.assign(document.createElement("link"), {
+      href: "https://scp-wiki.wikidot.com/component:theme/code/1",
+      rel: "stylesheet",
+    })
+  );
+  document.head.appendChild(
+    Object.assign(document.createElement("link"), {
+      href: "https://scp-wiki.wdfiles.com/local--code/component%3Acroqstyle/1",
+      rel: "stylesheet",
+    })
+  );
+</script>
 
-  <link href="https://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css" rel="stylesheet" />
-  <link href="https://scp-wiki.wikidot.com/component:theme/code/1" rel="stylesheet" />
-  <link href="https://scp-wiki.wdfiles.com/local--code/component%3Acroqstyle/1" rel="stylesheet" />
+<style type="text/css">
+  <%- css %>
+</style>
 
-  <style type="text/css">
-    <%- css %>
-  </style>
+<script type="text/javascript">
+  window.anomalies = <%- deltas %>
+  window.reference = <%- reference %>
+  window.lang = <%- lang %>
+</script>
 
-  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js" defer></script>
+<script src="<%- fileUrl %>3211@<%- version %>.js" defer></script>
 
-  <script type="text/javascript">
-    window.anomalies = <%- deltas %>
-    window.reference = <%- reference %>
-    window.lang = <%- lang %>
-  </script>
+<section id="buttons" class="hidden">
+  <%- buttons %>
+</section>
 
-  <script src="<%- fileUrl %>3211@<%- version %>.js" defer></script>
-</head>
-<body>
-  <section id="buttons" class="hidden">
-    <%- buttons %>
-  </section>
+<section id="warning">
+  <%- warning %>
+</section>
 
-  <section id="warning">
-    <%- warning %>
-  </section>
+<section id="loading" class="hidden">
+  <%- loading %>
+</section>
 
-  <section id="loading" class="hidden">
-    <%- loading %>
-  </section>
-
-  <section id="anomaly" class="hidden"/>
-</body>
+<section id="anomaly" class="hidden"/>
