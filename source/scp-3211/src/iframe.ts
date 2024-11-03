@@ -17,6 +17,8 @@ type cookies = {
   "seen": "true" | "false" // Tracks whether user has seen base anomaly
   "timerExpiresAt": string // Time that timer will end (or has ended)
 }
+// Namespace cookie name for easy identification
+const namespace = (cookieName: string) => `scp3211-${cookieName}`
 
 const readTime = 360
 let read = false
@@ -44,8 +46,8 @@ const preferredStorageMethod = (() => {
 function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
   console.log(`[${preferredStorageMethod}] Saving ${value} to ${key}`);
   ({
-    cookies: () => Cookies.set(key, value, { expires: 356 }),
-    localStorage: () => localStorage.setItem(key, value)
+    cookies: () => Cookies.set(namespace(key), value, { expires: 356 }),
+    localStorage: () => localStorage.setItem(namespace(key), value)
   })[preferredStorageMethod]()
   document.getElementById("anomalyCookie")!.textContent = anomaly
   document.getElementById("otherCookies")!.textContent = (
@@ -60,8 +62,8 @@ function remember <C extends keyof cookies> (key: C, value: cookies[C]): void {
  */
 function recall <C extends keyof cookies> (key: C): cookies[C] {
   return <cookies[C]>({
-    cookies: () => Cookies.get(key),
-    localStorage: () => localStorage.getItem(key)
+    cookies: () => Cookies.get(namespace(key)),
+    localStorage: () => localStorage.getItem(namespace(key))
   })[preferredStorageMethod]()
 }
 
@@ -73,8 +75,8 @@ function recall <C extends keyof cookies> (key: C): cookies[C] {
 function forget (key: keyof cookies): void {
   console.log(`Forgot ${key} (was ${recall(key)})`);
   ({
-    cookies: () => Cookies.remove(key),
-    localStorage: () => localStorage.removeItem(key)
+    cookies: () => Cookies.remove(namespace(key)),
+    localStorage: () => localStorage.removeItem(namespace(key))
   })[preferredStorageMethod]()
 }
 
