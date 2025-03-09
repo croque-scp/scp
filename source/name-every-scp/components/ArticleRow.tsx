@@ -1,7 +1,6 @@
-import { ChangeEvent, useState } from "react";
-
 import { ScpArticle } from "../app/types";
 import { useCombobox } from "downshift";
+import { useState } from "react";
 
 export default function ArticleRow({
   article,
@@ -20,7 +19,6 @@ export default function ArticleRow({
     getInputProps,
     highlightedIndex,
     getItemProps,
-    selectedItem,
     selectItem,
   } = useCombobox({
     items: inputItems,
@@ -37,16 +35,16 @@ export default function ArticleRow({
     <tr>
       <td className="pt-1">{article.title}</td>
       <td className="relative flex flex-col pt-1">
-        <div className="flex w-full gap-0.5">
+        <div className="flex w-full">
           <input
             {...getInputProps()}
-            className="flex-auto rounded border border-gray-300 bg-white px-1 text-sm text-gray-800 enabled:shadow enabled:hover:border-gray-400 disabled:animate-[var(--animate-success-ping)] disabled:border-gray-200"
+            className="flex-auto rounded-l border border-gray-300 bg-white px-1 text-sm text-gray-800 hover:border-gray-400 enabled:shadow-sm disabled:animate-[var(--animate-success-ping)] disabled:border-gray-200"
             disabled={correct}
           />
           <button
             {...getToggleButtonProps()}
             title="Show options"
-            className="flex-none rounded border border-gray-300 px-2 py-1 text-gray-800 hover:border-gray-400 enabled:shadow enabled:hover:border-gray-400 disabled:border-gray-200 disabled:text-gray-400"
+            className="z-0 mr-0.5 flex-none rounded-r border border-l-0 border-gray-300 bg-white px-2 py-1 text-gray-800 hover:border-gray-400 active:shadow-none enabled:shadow-sm disabled:border-gray-200 disabled:text-gray-400"
             disabled={correct}
           >
             {isOpen ? <>&uarr;</> : <>&darr;</>}
@@ -54,7 +52,7 @@ export default function ArticleRow({
           <button
             onClick={() => selectItem(null)}
             title="Clear input"
-            className="flex-none rounded border border-gray-300 px-2 py-1 hover:border-gray-400 enabled:shadow enabled:hover:border-gray-400 disabled:border-gray-200 disabled:text-gray-400"
+            className="flex-none rounded border border-gray-300 px-2 py-1 hover:border-gray-400 enabled:shadow-sm active:enabled:shadow-none disabled:border-gray-200 disabled:text-gray-400"
             disabled={correct}
           >
             &times;
@@ -67,7 +65,7 @@ export default function ArticleRow({
           {isOpen &&
             inputItems.map((item, index) => (
               <li
-                className={`cursor-pointer select-none px-1 ${highlightedIndex === index ? "bg-blue-200" : "bg-white"}`}
+                className={`cursor-pointer select-none pl-3 pr-1 -indent-2 ${highlightedIndex === index ? "bg-blue-200" : "bg-white"}`}
                 key={`${item}${index}`}
                 {...getItemProps({ item, index })}
               >

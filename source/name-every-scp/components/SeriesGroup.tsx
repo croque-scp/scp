@@ -24,9 +24,10 @@ export default function SeriesGroup({
             >
               <span className="series-name">
                 SCP Series {seriesNameToNumber(seriesName)}
-              </span>
+              </span>{" "}
               &middot; (<span className="series-completion"></span>)
               <span className="series-collapse__state" hidden={groupOpen}>
+                {" "}
                 &middot; (Collapsed)
               </span>
             </button>

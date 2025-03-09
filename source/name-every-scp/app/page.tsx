@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import BigSearch from "../components/BigSearch";
 import { ScpArticle } from "./types";
 import SeriesTable from "../components/SeriesTable";
 import { getArticles } from "./getArticles";
@@ -34,7 +35,8 @@ export default function Quiz() {
   }
 
   return (
-    <main>
+    <main className="mx-auto max-w-2xl px-2">
+      <BigSearch articles={articles}></BigSearch>
       <SeriesTable articles={articles}></SeriesTable>
     </main>
   );
