@@ -1,21 +1,47 @@
+import { useRef, useState } from "react";
+
 import { ScpArticle } from "../app/types";
 import { useCombobox } from "downshift";
-import { useState } from "react";
+
+function isOnscreen<E extends HTMLElement>(element: E): Promise<boolean> {
+  return new Promise((resolve) => {
+    const observer = new IntersectionObserver((entries) => {
+      resolve(entries[0].isIntersecting);
+      observer.disconnect();
+    });
+    observer.observe(element);
+  });
+}
 
 export default function ArticleRow({
   article,
   titlesInSeries,
   onSolve,
+  onOffscreenSolve,
 }: {
   article: ScpArticle;
   titlesInSeries: string[];
   onSolve: (article: ScpArticle) => void;
+  onOffscreenSolve: () => void;
 }) {
   const [inputItems, setInputItems] = useState(titlesInSeries);
   const [selectedItem, setSelectedItem] = useState("");
+  const row = useRef<HTMLTableRowElement>(null);
+
+  function handleInternalSolve() {
+    onSolve(article);
+  }
+
+  async function handleExternalSolve() {
+    setSelectedItem(article.altTitle);
+
+    if (row.current && !(await isOnscreen(row.current))) {
+      onOffscreenSolve();
+    }
+  }
 
   if (article.solved && selectedItem !== article.altTitle) {
-    setSelectedItem(article.altTitle);
+    handleExternalSolve();
   }
 
   const {
@@ -42,7 +68,7 @@ export default function ArticleRow({
         !article.solved &&
         inputValue.toLowerCase() === article.altTitle.toLowerCase()
       ) {
-        onSolve(article);
+        handleInternalSolve();
       }
     },
     onStateChange(changes) {
@@ -53,7 +79,7 @@ export default function ArticleRow({
   });
 
   return (
-    <tr>
+    <tr ref={row}>
       <td className="pt-1">{article.title}</td>
       <td className="pt-1">{article.solved ? "✔️" : ""}</td>
       <td className="relative flex flex-col pt-1">
