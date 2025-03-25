@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 export default function BigSearchMatch({
   title,
@@ -8,11 +8,13 @@ export default function BigSearchMatch({
   altTitle: ReactNode;
 }) {
   return (
-    <span className="flex gap-0.5 rounded border bg-gray-100 p-0.5">
-      <span className="rounded border bg-white px-[0.25rem] pb-[0.15rem] pt-[0.25rem]">
+    <span className="flex gap-0.5 rounded border border-gray-300 p-0.5">
+      <span className="rounded-xl border bg-gray-100 px-[0.4rem] pb-[0.05rem] pt-[0.15rem] font-bold">
         {title}
       </span>
-      <span className="rounded border bg-white px-[0.25rem] pb-[0.15rem] pt-[0.25rem]">
+      <span
+        className={`px-[0.25rem] pb-[0.15rem] pt-[0.25rem] text-xs first-line:text-sm`}
+      >
         {altTitle}
       </span>
     </span>
@@ -20,9 +22,9 @@ export default function BigSearchMatch({
 }
 
 export function YesMatch({ children }: { children: ReactNode }) {
-  return <span className="bg-green-200">{children}</span>;
+  return <>{children}</>;
 }
 
 export function NoMatch({ children }: { children: ReactNode }) {
-  return <span className="blur-[3px]">{children}</span>;
+  return <span className="tracking-tight blur-[3px]">{children}</span>;
 }

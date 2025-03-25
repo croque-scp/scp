@@ -1,8 +1,15 @@
+import { ScpArticle, SolveArticleHandler } from "@/app/types";
+
 import ArticleRow from "./ArticleRow";
-import { ScpArticle } from "@/app/types";
 import SeriesGroup from "./SeriesGroup";
 
-export default function SeriesTable({ articles }: { articles: ScpArticle[] }) {
+export default function SeriesTable({
+  articles,
+  onSolveArticle,
+}: {
+  articles: ScpArticle[];
+  onSolveArticle: SolveArticleHandler;
+}) {
   // Get unique series names from the article list
   const seriesNames = [...new Set(articles.map((a) => a.seriesName))];
 
@@ -20,11 +27,17 @@ export default function SeriesTable({ articles }: { articles: ScpArticle[] }) {
         key={article.slug}
         article={article}
         titlesInSeries={titlesInSeries}
+        onSolve={onSolveArticle}
       ></ArticleRow>
     ));
 
     return (
-      <SeriesGroup key={seriesName} seriesName={seriesName}>
+      <SeriesGroup
+        key={seriesName}
+        seriesName={seriesName}
+        count={articlesInSeries.length}
+        solvedCount={articlesInSeries.filter((a) => a.solved).length}
+      >
         {articleRows}
       </SeriesGroup>
     );
@@ -35,8 +48,8 @@ export default function SeriesTable({ articles }: { articles: ScpArticle[] }) {
       <thead>
         <tr>
           <th>SCP number</th>
-          <th>Title</th>
           <th></th>
+          <th>Title</th>
         </tr>
       </thead>
       {seriesGroups}

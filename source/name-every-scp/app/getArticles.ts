@@ -1,4 +1,5 @@
 import { ScpArticle } from "./types";
+import uFuzzy from "@leeoniya/ufuzzy";
 
 const fetchJson = async (url: string) => await (await fetch(url)).json();
 
@@ -77,8 +78,10 @@ export async function getArticles(
       articles.push({
         title,
         altTitle,
+        altTitleSearchable: uFuzzy.latinize(altTitle),
         seriesName,
         slug: new URL(linkElement.href).pathname,
+        solved: false,
       });
     }
   }

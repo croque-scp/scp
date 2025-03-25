@@ -11,6 +11,16 @@ export default function Quiz() {
   const [articles, setArticles] = useState<ScpArticle[]>([]);
   const [loading, setLoading] = useState("Loading...");
 
+  function handleSolveArticle(solvedArticle: ScpArticle) {
+    setArticles((articles) =>
+      articles.map((article) => {
+        if (article.slug === solvedArticle.slug)
+          return { ...article, solved: true };
+        return article;
+      }),
+    );
+  }
+
   useEffect(() => {
     (async () => {
       const articles = await getArticles(
@@ -35,9 +45,15 @@ export default function Quiz() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-2">
-      <BigSearch articles={articles}></BigSearch>
-      <SeriesTable articles={articles}></SeriesTable>
+    <main id="main" className="mx-auto max-w-2xl px-2">
+      <BigSearch
+        articles={articles}
+        onSolveArticle={handleSolveArticle}
+      ></BigSearch>
+      <SeriesTable
+        articles={articles}
+        onSolveArticle={handleSolveArticle}
+      ></SeriesTable>
     </main>
   );
 }
