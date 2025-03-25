@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-size: 0.95rem;
+  font-feature-settings: "case", "ss01", "ss04";
+}
+
+:root {
+  --animate-success-ping: success-ping 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes success-ping {
+  0% {
+    box-shadow: 0px 0px 0px 0px rgba(50, 205, 50, 0.1);
+  }
+  100% {
+    box-shadow: 0px 0px 0px 10rem transparent;
+  }
+}
