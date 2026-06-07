@@ -70,6 +70,15 @@
         (new URLSearchParams(location.search).get("debug") || "") === "true";
       window.resize = () => {};
 
+      // articleId is expeected to be unique per article per wiki domain
+      // Shared IDs risk corrupting each other
+      const articleId = new URLSearchParams(location.search).get("articleId");
+      const storageKey = articleId
+        ? `assertions:${document.referrer.replace(/\/$/, "")}/${articleId}`
+        : null;
+
+      // initialAssertions sets the starting state for each channel before any scroll input using a syntax similar to scout contradictions, e.g. "A2" starts channel A at assertion 2.
+      // All channels always start at assertion 1 before the controller loads, so this can be used to show a blank state before an initial contradiction (e.g. through loading persistent state)
       const initialAssertions = (
         new URLSearchParams(location.search).get("initialAssertions") || ""
       )
@@ -79,8 +88,15 @@
           const match = text.match(/^([A-Z])([0-9]+)$/);
           if (!match)
             throw new Error(`Invalid initialAssertions value: ${text}`);
-          return { channelName: match[1], id: Number(match[2]) };
+          return { channelName: match[1], assertion: Number(match[2]) };
         });
+
+      // Hard fail if initialAssertions is given without articleId
+      // initialAssertions doesn't actually need an articleId, but persistent state does need both, but we won't know whether this article needs peristent state until we see a persistent scout, which might not be for ages - so fail quickly here just in case
+      if (initialAssertions.length > 0 && !articleId)
+        throw new Error(
+          "initialAssertions requires articleId to be set. Both are required together. articleId must be unique and include your username.",
+        );
 
       /**
        * @typedef {Object} scoutReport
@@ -306,10 +322,15 @@
           if (this.channel.activeAssertion < this.id) {
             this.channel.activeAssertion = this.id;
             if (this.persist) {
-              const key = `assertions:${document.referrer}`;
-              const stored = JSON.parse(localStorage.getItem(key) || "{}");
+              if (!storageKey)
+                throw new Error(
+                  "persist=true reached trigger() without a storageKey, should have been caught in processScoutReport",
+                );
+              const stored = JSON.parse(
+                localStorage.getItem(storageKey) || "{}",
+              );
               stored[this.channel.name] = this.id;
-              localStorage.setItem(key, JSON.stringify(stored));
+              localStorage.setItem(storageKey, JSON.stringify(stored));
               document.querySelector("#manual-control .clear").hidden = false;
             }
           }
@@ -525,6 +546,16 @@
         const scoutReport = message.data;
         if (!scoutReport.scoutName) return;
 
+        // persist=true requires both articleId and initialAssertions. This is
+        // also the only place that guarantees storageKey is non-null by the
+        // time trigger() runs. Hard fail: no partial effects if either missing.
+        if (scoutReport.persist && (!articleId || !initialAssertions.length)) {
+          console.error(
+            `Scout "${scoutReport.scoutName}" has persist=true but the controller is missing one of articleId or initialAssertions. Both are required together. articleId must be unique and include your username. No effects from this scout applied.`,
+          );
+          return;
+        }
+
         switch (scoutReport.eventName) {
           case "ScoutRegistration":
             processScoutRegistrationEvent(scoutReport);
@@ -598,7 +629,7 @@
                   `Scout ${scoutReport.scoutName} visible: no - not queuing`,
                 );
             }
-          } else if ((contradiction.triggerMode = "invisible-top")) {
+          } else if (contradiction.triggerMode === "invisible-top") {
             if (!scoutReport.isIntersecting && scoutReport.direction === "up") {
               if (window.debug)
                 console.debug(
@@ -657,17 +688,17 @@
 
       addEventListener("load", () => {
         // Apply initial assertions, then localStorage floors (localStorage wins if higher)
-        for (const { channelName, id } of initialAssertions) {
+        for (const { channelName, assertion } of initialAssertions) {
           if (
             assertionChannels[channelName] &&
-            assertionChannels[channelName].activeAssertion < id
+            assertionChannels[channelName].activeAssertion < assertion
           ) {
-            assertionChannels[channelName].activeAssertion = id;
+            assertionChannels[channelName].activeAssertion = assertion;
           }
         }
-        const stored = JSON.parse(
-          localStorage.getItem(`assertions:${document.referrer}`) || "{}",
-        );
+        const stored = storageKey
+          ? JSON.parse(localStorage.getItem(storageKey) || "{}")
+          : {};
         for (const [channelName, floor] of Object.entries(stored)) {
           if (
             assertionChannels[channelName] &&
@@ -689,7 +720,7 @@
         clearButton.classList.add("registered", "clear");
         clearButton.hidden = Object.keys(stored).length === 0;
         clearButton.addEventListener("click", () => {
-          localStorage.removeItem(`assertions:${document.referrer}`);
+          if (storageKey) localStorage.removeItem(storageKey);
           clearButton.hidden = true;
         });
         document.getElementById("manual-control").prepend(clearButton);
