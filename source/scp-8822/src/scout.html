@@ -49,6 +49,7 @@
         const params = new URLSearchParams(location.search);
 
         window.debug = (params.get("debug") || "") === "true";
+        const persist = params.get("persist") === "true";
 
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
@@ -103,6 +104,7 @@
           eventName: "ScoutRegistration",
           scoutName,
           contradictions,
+          persist,
         });
 
         // Scout is split into two, like poles of a magnet, for direction detection
@@ -184,6 +186,7 @@
                   poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,
                 direction,
                 contradictions,
+                persist,
               });
             }
           },

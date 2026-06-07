@@ -210,6 +210,7 @@
          * @param {string | null} channelName
          * @param {number | null} conditionId
          * @param {string | null} conditionChannelName
+         * @param {boolean} persist
          */
         constructor(
           id,
@@ -217,6 +218,7 @@
           channelName,
           conditionId = null,
           conditionChannelName = null,
+          persist = false,
         ) {
           /** @type {number} */
           this.id = id;
@@ -263,6 +265,9 @@
             "?" +
             this.channel.name +
             this.id;
+
+          /** @type {boolean} */
+          this.persist = persist;
         }
 
         queue() {
@@ -286,8 +291,16 @@
           // Increment the channel's active assertion - never decrement
           if (window.debug)
             console.debug(`Triggering contradiction ${this.shortName}`, this);
-          if (this.channel.activeAssertion < this.id)
+          if (this.channel.activeAssertion < this.id) {
             this.channel.activeAssertion = this.id;
+            if (this.persist) {
+              const key = `assertions:${document.referrer}`;
+              const stored = JSON.parse(localStorage.getItem(key) || "{}");
+              stored[this.channel.name] = this.id;
+              localStorage.setItem(key, JSON.stringify(stored));
+              document.querySelector("#manual-control .clear").hidden = false;
+            }
+          }
         }
       };
 
@@ -548,12 +561,12 @@
               c.channelName,
               c.conditionId,
               c.conditionChannelName,
+              scoutReport.persist || false,
             ),
         );
 
         if (window.debug)
           console.debug(`Received report from scout ${scoutReport.scoutName}`, {
-            scoutAssertions,
             scoutContradictions,
             scoutReport,
           });
@@ -636,6 +649,33 @@
           location.href.replace(/^.*\//, "/"),
           100,
         );
+
+        // Restore persisted assertion floors
+        const stored = JSON.parse(
+          localStorage.getItem(`assertions:${document.referrer}`) || "{}",
+        );
+        let anyRestored = false;
+        for (const [channelName, floor] of Object.entries(stored)) {
+          if (
+            assertionChannels[channelName] &&
+            assertionChannels[channelName].activeAssertion < floor
+          ) {
+            assertionChannels[channelName].activeAssertion = floor;
+            anyRestored = true;
+          }
+        }
+        if (anyRestored) sendAssertionState();
+
+        const clearButton = document.createElement("a");
+        clearButton.textContent = "clear persistent state";
+        clearButton.classList.add("registered", "clear");
+        clearButton.hidden = Object.keys(stored).length === 0;
+        clearButton.addEventListener("click", () => {
+          localStorage.removeItem(`assertions:${document.referrer}`);
+          clearButton.hidden = true;
+        });
+        document.getElementById("manual-control").appendChild(clearButton);
+
         // Switch event listener to process new reports immediately
         removeEventListener("message", queueScoutReport);
         addEventListener("message", (message) => processScoutReport(message));
