@@ -39,7 +39,7 @@
         justify-content: center;
         align-items: center;
         height: 1.5rem;
-        width: 2rem;
+        padding-inline: 0.5rem;
         opacity: 0.3;
         cursor: pointer;
       }
@@ -674,7 +674,7 @@
           localStorage.removeItem(`assertions:${document.referrer}`);
           clearButton.hidden = true;
         });
-        document.getElementById("manual-control").appendChild(clearButton);
+        document.getElementById("manual-control").prepend(clearButton);
 
         // Switch event listener to process new reports immediately
         removeEventListener("message", queueScoutReport);
