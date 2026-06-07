@@ -94,7 +94,9 @@
       // Hard fail if initialAssertions is given without articleId
       // initialAssertions doesn't actually need an articleId, but persistent state does need both, but we won't know whether this article needs peristent state until we see a persistent scout, which might not be for ages - so fail quickly here just in case
       if (initialAssertions.length > 0 && !articleId)
-        throw new Error("initialAssertions requires articleId to be set");
+        throw new Error(
+          "initialAssertions requires articleId to be set. Both are required together. articleId must be unique and include your username.",
+        );
 
       /**
        * @typedef {Object} scoutReport
