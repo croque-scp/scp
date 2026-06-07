@@ -70,6 +70,18 @@
         (new URLSearchParams(location.search).get("debug") || "") === "true";
       window.resize = () => {};
 
+      const initialAssertions = (
+        new URLSearchParams(location.search).get("initialAssertions") || ""
+      )
+        .split(",")
+        .filter(Boolean)
+        .map((text) => {
+          const match = text.match(/^([A-Z])([0-9]+)$/);
+          if (!match)
+            throw new Error(`Invalid initialAssertions value: ${text}`);
+          return { channelName: match[1], id: Number(match[2]) };
+        });
+
       /**
        * @typedef {Object} scoutReport
        * @property {string} eventName
@@ -644,27 +656,33 @@
       addEventListener("message", queueScoutReport);
 
       addEventListener("load", () => {
-        window.resize = window.resizeIframe.createResizeIframe(
-          document.referrer,
-          location.href.replace(/^.*\//, "/"),
-          100,
-        );
-
-        // Restore persisted assertion floors
+        // Apply initial assertions, then localStorage floors (localStorage wins if higher)
+        for (const { channelName, id } of initialAssertions) {
+          if (
+            assertionChannels[channelName] &&
+            assertionChannels[channelName].activeAssertion < id
+          ) {
+            assertionChannels[channelName].activeAssertion = id;
+          }
+        }
         const stored = JSON.parse(
           localStorage.getItem(`assertions:${document.referrer}`) || "{}",
         );
-        let anyRestored = false;
         for (const [channelName, floor] of Object.entries(stored)) {
           if (
             assertionChannels[channelName] &&
             assertionChannels[channelName].activeAssertion < floor
           ) {
             assertionChannels[channelName].activeAssertion = floor;
-            anyRestored = true;
           }
         }
-        if (anyRestored) sendAssertionState();
+
+        window.resize = window.resizeIframe.createResizeIframe(
+          document.referrer,
+          location.href.replace(/^.*\//, "/"),
+          100,
+        );
+        sendAssertionState();
 
         const clearButton = document.createElement("a");
         clearButton.textContent = "clear persistent state";
@@ -679,12 +697,9 @@
         // Switch event listener to process new reports immediately
         removeEventListener("message", queueScoutReport);
         addEventListener("message", (message) => processScoutReport(message));
-        if (scoutReportQueue.length > 0) {
-          // Process all queued scout reports
-          while (scoutReportQueue.length > 0) {
-            processScoutReport(scoutReportQueue.shift());
-          }
-        } else preloadQueue.enqueueStates(makeAssertionStates(true));
+        while (scoutReportQueue.length > 0) {
+          processScoutReport(scoutReportQueue.shift());
+        }
       });
     </script>
   </body>
