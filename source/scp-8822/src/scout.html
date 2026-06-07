@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <style>
@@ -43,17 +43,13 @@
 
       addEventListener("DOMContentLoaded", async () => {
         const scoutName = String(location.search).replace(
-          /^\?|ontradictions?|ssertions?/g,
-          ""
+          /^\?|ontradictions?/g,
+          "",
         );
         const params = new URLSearchParams(location.search);
 
         window.debug = (params.get("debug") || "") === "true";
-
-        // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
-        const assertions = (params.get("assertion") || "")
-          .split(",")
-          .filter(Boolean);
+        const persist = params.get("persist") === "true";
 
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
@@ -87,14 +83,11 @@
             return contradiction;
           });
 
-        if (!assertions.length && !contradictions.length) {
+        if (!contradictions.length) {
           throw new Error("Unconfigured scout :(");
         }
 
-        console.debug(`Configured scout ${scoutName}`, {
-          assertions,
-          contradictions,
-        });
+        console.debug(`Configured scout ${scoutName}`, { contradictions });
 
         // Attempt to get the controller
         let controller = getController();
@@ -110,8 +103,8 @@
         controller.postMessage({
           eventName: "ScoutRegistration",
           scoutName,
-          assertions,
           contradictions,
+          persist,
         });
 
         // Scout is split into two, like poles of a magnet, for direction detection
@@ -133,7 +126,7 @@
             entries.sort((a, b) => a.time - b.time);
             for (const pole of [poleTop, poleBottom]) {
               const entriesForPole = entries.filter(
-                (entry) => entry.target === pole.element
+                (entry) => entry.target === pole.element,
               );
 
               // If there's more than one entry for this pole, use the second-to-last entry for its last known state
@@ -159,8 +152,8 @@
               poleTop.intersectionRatio > poleBottom.intersectionRatio
                 ? "bottom"
                 : poleTop.intersectionRatio < poleBottom.intersectionRatio
-                ? "top"
-                : "unknown";
+                  ? "top"
+                  : "unknown";
 
             // Work out change in distance - negative means the scout got closer to the reader (moving onto screen)
             const distanceChange =
@@ -180,7 +173,7 @@
               console.debug(
                 `${scoutName}: ${edge} ${distanceChange} ${direction}`,
                 poleTop,
-                poleBottom
+                poleBottom,
               );
 
             // Use the outer thresholds to confirm direction and to reduce the chance of fast scrolling missing an intersection, but only send the report when the middle threshold has been crossed
@@ -192,12 +185,12 @@
                 isIntersecting:
                   poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,
                 direction,
-                assertions,
                 contradictions,
+                persist,
               });
             }
           },
-          { threshold: [0, 1] }
+          { threshold: [0, 1] },
         );
         observer.observe(poleTop.element);
         observer.observe(poleBottom.element);
