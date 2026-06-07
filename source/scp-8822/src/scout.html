@@ -43,17 +43,12 @@
 
       addEventListener("DOMContentLoaded", async () => {
         const scoutName = String(location.search).replace(
-          /^\?|ontradictions?|ssertions?/g,
+          /^\?|ontradictions?/g,
           "",
         );
         const params = new URLSearchParams(location.search);
 
         window.debug = (params.get("debug") || "") === "true";
-
-        // Assertion syntax: comma-separated list of assertion IDs that this scout records visibility for
-        const assertions = (params.get("assertion") || "")
-          .split(",")
-          .filter(Boolean);
 
         // Contradiction sytax: comma-separated list of contradiction IDs and/or conditions that this scout uses to invalidate assertions
         // A contradiction condition is e.g. "24?31" which means "trigger contradiction 31 if assertion 24 is active"
@@ -87,14 +82,11 @@
             return contradiction;
           });
 
-        if (!assertions.length && !contradictions.length) {
+        if (!contradictions.length) {
           throw new Error("Unconfigured scout :(");
         }
 
-        console.debug(`Configured scout ${scoutName}`, {
-          assertions,
-          contradictions,
-        });
+        console.debug(`Configured scout ${scoutName}`, { contradictions });
 
         // Attempt to get the controller
         let controller = getController();
@@ -110,7 +102,6 @@
         controller.postMessage({
           eventName: "ScoutRegistration",
           scoutName,
-          assertions,
           contradictions,
         });
 
@@ -192,7 +183,6 @@
                 isIntersecting:
                   poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,
                 direction,
-                assertions,
                 contradictions,
               });
             }

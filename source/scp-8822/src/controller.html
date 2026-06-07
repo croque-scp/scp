@@ -76,7 +76,6 @@
        * @property {string} scoutName
        * @property {boolean} isIntersecting
        * @property {string | null} direction
-       * @property {string[]} assertions
        * @property {scoutContradiction[]} contradictions
        */
 
@@ -427,8 +426,6 @@
             ...contradictionQueue,
           ]);
         contradictionQueue = contradictionQueue.filter((contradiction) => {
-          // TODO Filter out a contradiction if its assertion was last known to be intersecting
-          // (the queue will always be emptied every time currently)
           contradiction.trigger();
           // Remove from queue if triggered
           return false;
@@ -542,9 +539,6 @@
        * @param {MessageEvent<scoutReport>} message
        */
       function processScoutIntersectionEvent(scoutReport, message) {
-        // Receive list of assertions
-        const scoutAssertions = scoutReport.assertions;
-
         // Receive list of contradictions
         const scoutContradictions = scoutReport.contradictions.map(
           (c) =>
