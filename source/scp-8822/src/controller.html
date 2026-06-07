@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <style>
@@ -122,7 +122,7 @@
           controlSection.appendChild(
             Object.assign(document.createElement("h2"), {
               textContent: `Channel ${this.name}`,
-            })
+            }),
           );
           for (let stageId = this.minId; stageId <= this.maxId; stageId++) {
             const stageControl = document.createElement("a");
@@ -141,7 +141,7 @@
         set activeAssertion(value) {
           if (value < this.minId || value > this.maxId)
             throw new Error(
-              `Assertion ID ${value} is out of range for channel ${this.name}`
+              `Assertion ID ${value} is out of range for channel ${this.name}`,
             );
           this.#activeAssertion = value;
           this.setManualControlStyles();
@@ -155,7 +155,7 @@
         /** @returns {number | null} */
         get expectedNextAssertion() {
           const upcomingAssertions = [...this.knownStages].filter(
-            (n) => n > this.#activeAssertion
+            (n) => n > this.#activeAssertion,
           );
           if (upcomingAssertions.length === 0) return null;
           return Math.min(...upcomingAssertions);
@@ -177,7 +177,7 @@
             .querySelector(
               `[data-channel-name='${this.name}'][data-stage-id='${
                 this.#activeAssertion
-              }']`
+              }']`,
             )
             .classList.add("active");
 
@@ -185,9 +185,9 @@
           this.knownStages.forEach((stageId) =>
             document
               .querySelector(
-                `[data-channel-name='${this.name}'][data-stage-id='${stageId}']`
+                `[data-channel-name='${this.name}'][data-stage-id='${stageId}']`,
               )
-              .classList.add("registered")
+              .classList.add("registered"),
           );
         }
       };
@@ -217,7 +217,7 @@
           triggerMode,
           channelName,
           conditionId = null,
-          conditionChannelName = null
+          conditionChannelName = null,
         ) {
           /** @type {number} */
           this.id = id;
@@ -240,7 +240,7 @@
             throw new Error(
               `Contradiction ID ${this.conditionId}` +
                 `is out of range for channel ${this.conditionChannel.name}` +
-                `(${this.conditionChannel.minId} - ${this.conditionChannel.maxId})`
+                `(${this.conditionChannel.minId} - ${this.conditionChannel.maxId})`,
             );
 
           /** @type {AssertionChannel} */
@@ -248,14 +248,14 @@
             channelName != null
               ? assertionChannels[channelName]
               : this.conditionId != null
-              ? this.conditionChannel
-              : defaultAssertionChannel;
+                ? this.conditionChannel
+                : defaultAssertionChannel;
 
           if (this.id > this.channel.maxId || this.id < this.channel.minId)
             throw new Error(
               `Contradiction ID ${this.id}` +
                 `is out of range for channel ${this.channel.name}` +
-                `(${this.channel.minId} - ${this.channel.maxId})`
+                `(${this.channel.minId} - ${this.channel.maxId})`,
             );
 
           this.shortName =
@@ -270,7 +270,7 @@
           if (window.debug)
             console.debug(
               `Attempting to queue contradiction ${this.shortName}`,
-              this
+              this,
             );
           const conditionsMatch =
             this.conditionId == null ||
@@ -344,13 +344,13 @@
 
           // Remove queue entries if their states are no longer possible
           this.queue = this.queue.filter((queued) =>
-            snapshots.some((s) => snapshotsEqual(s, queued))
+            snapshots.some((s) => snapshotsEqual(s, queued)),
           );
 
           // Remove preloaded frames if their states are no longer possible
           this.frames = this.frames.filter((frame) => {
             const valid = snapshots.some((s) =>
-              snapshotsEqual(s, frame.snapshot)
+              snapshotsEqual(s, frame.snapshot),
             );
 
             if (!valid) {
@@ -479,7 +479,7 @@
         }
         // If a channel failed to simulate, don't return it
         return possibleAssertionStates.filter(
-          (state) => !snapshotsEqual(state, currentAssertionState)
+          (state) => !snapshotsEqual(state, currentAssertionState),
         );
       }
 
@@ -487,7 +487,7 @@
         const assertionState = makeAssertionStates()[0];
         console.debug(
           `Updating assertion state to ${assertionState}`,
-          assertionChannels
+          assertionChannels,
         );
         window.resize(snapshotToSize(assertionState));
 
@@ -526,10 +526,10 @@
             c.triggerMode,
             c.channelName,
             c.conditionId,
-            c.conditionChannelName
+            c.conditionChannelName,
           );
           assertionChannels[contradiction.channel.name].addKnownStage(
-            contradiction.id
+            contradiction.id,
           );
         }
 
@@ -553,8 +553,8 @@
               c.triggerMode,
               c.channelName,
               c.conditionId,
-              c.conditionChannelName
-            )
+              c.conditionChannelName,
+            ),
         );
 
         if (window.debug)
@@ -570,31 +570,31 @@
             if (scoutReport.isIntersecting) {
               if (window.debug)
                 console.debug(
-                  `Scout ${scoutReport.scoutName} visible: yes - queuing`
+                  `Scout ${scoutReport.scoutName} visible: yes - queuing`,
                 );
               contradiction.queue();
             } else {
               if (window.debug)
                 console.debug(
-                  `Scout ${scoutReport.scoutName} visible: no - not queuing`
+                  `Scout ${scoutReport.scoutName} visible: no - not queuing`,
                 );
             }
           } else if ((contradiction.triggerMode = "invisible-top")) {
             if (!scoutReport.isIntersecting && scoutReport.direction === "up") {
               if (window.debug)
                 console.debug(
-                  `Scout ${scoutReport.scoutName} invisible-top: yes -  queuing`
+                  `Scout ${scoutReport.scoutName} invisible-top: yes -  queuing`,
                 );
               contradiction.queue();
             } else {
               if (window.debug)
                 console.debug(
-                  `Scout ${scoutReport.scoutName} invisible-top: no - not queuing`
+                  `Scout ${scoutReport.scoutName} invisible-top: no - not queuing`,
                 );
             }
           } else {
             throw new Error(
-              `Unknown contradiction trigger mode: ${contradiction.triggerMode}`
+              `Unknown contradiction trigger mode: ${contradiction.triggerMode}`,
             );
           }
         }
@@ -619,7 +619,7 @@
               // Contradiction has already been applied
               contradiction.channel.activeAssertion >= contradiction.id
             );
-          }
+          },
         );
         if (allContradictionsProcessed)
           message.source.postMessage({
@@ -640,7 +640,7 @@
         window.resize = window.resizeIframe.createResizeIframe(
           document.referrer,
           location.href.replace(/^.*\//, "/"),
-          100
+          100,
         );
         // Switch event listener to process new reports immediately
         removeEventListener("message", queueScoutReport);
