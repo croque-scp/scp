@@ -443,7 +443,7 @@
               preloadIframe.addEventListener("load", () => resolve());
 
               // Iframe is fully sandboxed: allow-same-origin is implicitly false, prevents the controller being resized
-              preloadIframe.sandbox = true;
+              preloadIframe.setAttribute("sandbox", "");
 
               preloadIframe.classList.add("preload-iframe");
               document
