@@ -176,14 +176,33 @@
                 poleBottom,
               );
 
-            // Use the outer thresholds to confirm direction and to reduce the chance of fast scrolling missing an intersection, but only send the report when the middle threshold has been crossed
-            if (entries.length === 2) {
+            // Both poles cross their thresholds simultaneously only when the viewport boundary
+            // aligns with the scout's midpoint; entries.length === 2 detects that case.
+            // On Chrome Windows with fractional DPR (e.g. 1.25 from 125% OS scaling),
+            // intersectionRatio never reaches exactly 1.0 cross-iframe, so threshold-1 never
+            // fires. The three extra conditions detect the same crossing via threshold-0 only.
+            const midpointCrossed =
+              entries.length === 2 ||
+              // Exit from top: poleTop just became invisible while poleBottom is still visible
+              (poleTop.lastIntersectionRatio > 0 &&
+                poleTop.intersectionRatio === 0 &&
+                poleBottom.intersectionRatio > 0) ||
+              // Entry from bottom: poleBottom just became visible while poleTop already was
+              (poleBottom.lastIntersectionRatio === 0 &&
+                poleBottom.intersectionRatio > 0 &&
+                poleTop.intersectionRatio > 0) ||
+              // Entry from top: poleTop just became visible while poleBottom already was
+              (poleTop.lastIntersectionRatio === 0 &&
+                poleTop.intersectionRatio > 0 &&
+                poleBottom.intersectionRatio > 0);
+            if (midpointCrossed) {
               if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
                 eventName: "ScoutIntersectionStateChange",
                 scoutName,
                 isIntersecting:
-                  poleTop.intersectionRatio + poleBottom.intersectionRatio >= 1,
+                  poleTop.intersectionRatio > 0 &&
+                  poleBottom.intersectionRatio > 0,
                 direction,
                 contradictions,
                 persist,
