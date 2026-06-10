@@ -194,7 +194,11 @@
               // Entry from top: poleTop just became visible while poleBottom already was
               (poleTop.lastIntersectionRatio === 0 &&
                 poleTop.intersectionRatio > 0 &&
-                poleBottom.intersectionRatio > 0);
+                poleBottom.intersectionRatio > 0) ||
+              // Exit from bottom: poleBottom just became invisible while poleTop is still visible
+              (poleBottom.lastIntersectionRatio > 0 &&
+                poleBottom.intersectionRatio === 0 &&
+                poleTop.intersectionRatio > 0);
             if (midpointCrossed) {
               if (window.debug) console.debug(`${scoutName} sending`);
               controller.postMessage({
