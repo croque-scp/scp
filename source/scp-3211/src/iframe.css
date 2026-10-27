@@ -129,38 +129,32 @@ details:last-of-type:not([open]) {
 
 /* Fancy buttons from SCP-3939 */
 .choices a {
-  height: 30px;
-  border: 1px solid #b01;
-  border-right: 1px solid transparent;
-  line-height: 30px;
+  margin-inline: auto;
+  width: max-content;
+  padding: 8px 10px;
   position: relative;
-  background: white;
-  z-index: 8;
-  margin-bottom: 0.5em;
-  float: left;
-  clear: both;
-  padding-left: 7px;
-  margin-left: calc(50% - 38px);
-  margin-right: auto;
+  display: block;
+  clip-path: polygon(0 -5%, 150% -5%, 150% 105%, 0 105%);
+  border-left: thin solid #b01;
   cursor: pointer;
 }
-
-.choices a::before {
+.choices a::before, .choices a::after {
   content: "";
   position: absolute;
-  border: 16px solid transparent;
-  border-left: 16px solid #b01;
-  right: -33px;
-  top: -1px;
-  z-index: 6;
+  height: 51%;
+  width: 105%;
+  left: 0;
+  box-sizing: border-box;
+  border: thin solid #b01;
+  border-left-width: 0;
 }
-
-.choices a::after {
-  content: "";
-  position: absolute;
-  border: 15px solid transparent;
-  border-left: 15px solid white;
-  right: -31px;
+.choices a::before {
   top: 0;
-  z-index: 7;
+  transform: skew(35deg);
+  border-bottom-width: 0;
+}
+.choices a::after {
+  bottom: 0;
+  transform: skew(-35deg);
+  border-top-width: 0;
 }
